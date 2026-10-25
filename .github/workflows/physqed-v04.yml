@@ -1,0 +1,48 @@
+name: PHYSQED 0.4 Receipt Gate Regression
+on:
+  push:
+    paths:
+      - "projects/physqed/**"
+      - ".github/workflows/physqed-v04.yml"
+  pull_request:
+    paths:
+      - "projects/physqed/**"
+      - ".github/workflows/physqed-v04.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python-receipt-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install independent symbolic auditor
+        run: python -m pip install sympy==1.14.0
+      - name: Run regression and adversarial suite
+        run: python -m unittest discover -s projects/physqed/tests -v
+      - name: Independent oscillator differential audit
+        run: |
+          python projects/physqed/audit_conservation.py
+          python projects/physqed/audit_sympy.py
+      - name: Assert CI evidence cannot be self-awarded
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'projects/physqed')
+          from proof_receipt import issue_review, make_receipt
+          from semantic_lock import read_json
+          root=Path('.')
+          contract=read_json('projects/physqed/fixtures/oscillator_contract.json')
+          test_key=bytes(range(32)) # TEST ONLY. Never genuine reviewer authority.
+          review=issue_review(root,contract,test_key,'synthetic-ci-test')
+          result=make_receipt(root,contract,review,test_key)
+          assert result['status']=='REVIEW_LOCK_VERIFIED__LEAN_CI_NOT_CONFIRMED'
+          assert result['lean_kernel_verified'] is False
+          assert result['physical_law_proven'] is False
+          print('PASS: no live evidence, no kernel claim')
+          PY

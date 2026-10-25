@@ -1,0 +1,99 @@
+{
+  "schema": "physqed-method-gate-v0.5",
+  "claim_id": "SyntheticOscillatorUnitCheck",
+  "claim_text": "Synthetic, dimensionless test: independent toy methods reproduce the target scalar value 2.0.",
+  "input_sha256": "a6fc21f940af91bb104fc8451819463ad5d02eb1d413e4f566407cef79b907f0",
+  "context_sha256": "f544955b24e693b545db191e5125d86ae1f2467d1e13aa10ed1f63789b020264",
+  "comparison": {
+    "absolute_tolerance": "0.00030",
+    "require_distinct_equation_families": true,
+    "require_distinct_implementations": true
+  },
+  "methods": [
+    {
+      "method_id": "symbolic",
+      "method_family": "exact_algebra",
+      "equation_family": "polynomial_identity",
+      "implementation_id": "toy_exact_A",
+      "source_sha256": "90a58ce2cedbc212ff838cfba93dbbfc6afe80b3d1b083e05a3fcbcb1c8acb71",
+      "input_sha256": "a6fc21f940af91bb104fc8451819463ad5d02eb1d413e4f566407cef79b907f0",
+      "context_sha256": "f544955b24e693b545db191e5125d86ae1f2467d1e13aa10ed1f63789b020264",
+      "status": "completed",
+      "result": {
+        "re": "2.0",
+        "im": "0"
+      },
+      "absolute_error_budget": "0",
+      "error_budget_class": "exact_symbolic",
+      "provenance": "Synthetic algebra implemented in the toy fixture (unverified claim).",
+      "source_path": "fixtures/toy_method_a.py"
+    },
+    {
+      "method_id": "numeric",
+      "method_family": "independent_numeric",
+      "equation_family": "quadrature_differential",
+      "implementation_id": "toy_numeric_B",
+      "source_sha256": "0a9fb7190bd0e73be7b0d4f772d1aa300ebe96ba64fad963d256f9567933ca3b",
+      "input_sha256": "a6fc21f940af91bb104fc8451819463ad5d02eb1d413e4f566407cef79b907f0",
+      "context_sha256": "f544955b24e693b545db191e5125d86ae1f2467d1e13aa10ed1f63789b020264",
+      "status": "completed",
+      "result": {
+        "re": "2.0001",
+        "im": "0"
+      },
+      "absolute_error_budget": "0.00005",
+      "error_budget_class": "self_declared_numerical",
+      "provenance": "Synthetic numerical method independently described in test fixture.",
+      "source_path": "fixtures/toy_method_b.py"
+    }
+  ],
+  "negative_controls": [
+    {
+      "name": "wrong_sign",
+      "perturbation": "Flip a synthetic coupling sign",
+      "baseline_residual": "0.00000001",
+      "corrupted_residual": "0.31",
+      "baseline_maximum": "0.00001",
+      "corruption_minimum": "0.01"
+    },
+    {
+      "name": "missing_term",
+      "perturbation": "Omit a synthetic correction term",
+      "baseline_residual": "0.00000003",
+      "corrupted_residual": "0.05",
+      "baseline_maximum": "0.00001",
+      "corruption_minimum": "0.001"
+    }
+  ],
+  "stability_samples": [
+    {
+      "setting": "setting_low",
+      "result": {
+        "re": "2.0001",
+        "im": "0"
+      },
+      "reference_method_id": "symbolic",
+      "declared_maximum_deviation": "0.0002"
+    },
+    {
+      "setting": "setting_mid",
+      "result": {
+        "re": "1.99995",
+        "im": "0"
+      },
+      "reference_method_id": "symbolic",
+      "declared_maximum_deviation": "0.0002"
+    },
+    {
+      "setting": "setting_high",
+      "result": {
+        "re": "2.00001",
+        "im": "0"
+      },
+      "reference_method_id": "symbolic",
+      "declared_maximum_deviation": "0.0002"
+    }
+  ],
+  "input_path": "fixtures/toy_input.json",
+  "context_path": "fixtures/toy_context.json"
+}

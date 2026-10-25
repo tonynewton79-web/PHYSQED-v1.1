@@ -1,0 +1,13 @@
+{
+  "schema_version": "physqed-0.1",
+  "id": "PHYSQED-ALG-NEGATIVE",
+  "statement": "Deliberately incorrect expansion (v+u)^2 = v^2+u^2.",
+  "source": "Adversarial negative control",
+  "assumptions": ["expected to be rejected"],
+  "checks": [{
+    "kind": "algebra_identity",
+    "variables": ["v", "u"],
+    "lhs": {"op":"pow","arg":{"op":"add","args":[{"var":"v"},{"var":"u"}]},"exp":2},
+    "rhs": {"op":"add","args":[{"op":"pow","arg":{"var":"v"},"exp":2},{"op":"pow","arg":{"var":"u"},"exp":2}]}
+  }]
+}

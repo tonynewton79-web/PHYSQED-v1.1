@@ -1,0 +1,54 @@
+name: PHYSQED 0.1 component verification
+on:
+  push:
+    paths:
+      - "projects/physqed/**"
+      - ".github/workflows/physqed.yml"
+  pull_request:
+    paths:
+      - "projects/physqed/**"
+      - ".github/workflows/physqed.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python-and-adversarial:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned symbolic test dependency
+        run: python -m pip install sympy==1.14.0
+      - name: Run exact-check and negative-control tests
+        run: python -m unittest discover -s projects/physqed/tests -v
+      - name: Create independent certificate artifact
+        run: |
+          python projects/physqed/engine.py projects/physqed/fixtures/kinetic_identity.json --output /tmp/kinetic-certificate.json
+          python projects/physqed/engine.py projects/physqed/fixtures/newton_dimension.json --output /tmp/newton-dim-certificate.json
+      - name: Negative controls must fail
+        shell: bash
+        run: |
+          if python projects/physqed/engine.py projects/physqed/fixtures/wrong_identity.json >/dev/null; then exit 1; fi
+          if python projects/physqed/engine.py projects/physqed/fixtures/wrong_dimension.json >/dev/null; then exit 1; fi
+  lean-kernel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan
+        shell: bash
+        run: |
+          curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Compile pinned Lean proofs
+        working-directory: projects/physqed
+        run: |
+          lake update
+          lake exe cache get
+          lake env lean lean/PhysicsAlgebra.lean
+      - name: Ban admitted proofs and custom axioms
+        working-directory: projects/physqed
+        shell: bash
+        run: |
+          if grep -En '(^|[^[:alnum:]_])(sorry|admit|axiom)([^[:alnum:]_]|$)' lean/PhysicsAlgebra.lean | grep -v '^.*--' ; then exit 1; fi

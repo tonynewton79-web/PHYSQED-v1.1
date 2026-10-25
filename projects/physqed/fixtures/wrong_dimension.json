@@ -1,0 +1,13 @@
+{
+  "schema_version": "physqed-0.1",
+  "id": "PHYSQED-DIM-NEGATIVE",
+  "statement": "Deliberately incorrect dimensions: force equals mass times velocity.",
+  "source": "Adversarial negative control",
+  "assumptions": ["expected to be rejected"],
+  "checks": [{
+    "kind": "dimension_equality",
+    "variables": {"F":{"M":1,"L":1,"T":-2},"m":{"M":1},"v":{"L":1,"T":-1}},
+    "lhs": {"var":"F"},
+    "rhs": {"op":"mul","args":[{"var":"m"},{"var":"v"}]}
+  }]
+}

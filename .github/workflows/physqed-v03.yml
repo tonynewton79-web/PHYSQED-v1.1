@@ -1,0 +1,77 @@
+name: PHYSQED 0.3 Physics Conservation and Locked Statement
+on:
+  push:
+    paths:
+      - "projects/physqed/**"
+      - ".github/workflows/physqed-v03.yml"
+  pull_request:
+    paths:
+      - "projects/physqed/**"
+      - ".github/workflows/physqed-v03.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python-adversarial:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned symbolic-audit dependency
+        run: python -m pip install sympy==1.14.0
+      - name: Exact compiler, signature and negative-control suite
+        run: python -m unittest discover -s projects/physqed/tests -v
+      - name: Independently derived exact SymPy and oscillator trajectory audit
+        run: |
+          python projects/physqed/audit_conservation.py
+          python projects/physqed/audit_sympy.py
+      - name: Reject forged frozen-contract change
+        shell: bash
+        run: |
+          python - <<'PY'
+          import sys, json, copy
+          sys.path.insert(0,'projects/physqed')
+          from semantic_lock import freeze, verify, ContractError
+          from pathlib import Path
+          fixture=json.loads(Path('projects/physqed/fixtures/oscillator_contract.json').read_text())
+          key=bytes(range(32)) # Only synthetic CI test key, no live review authority
+          lock=freeze(fixture,key,'synthetic-test-reviewer')
+          assert verify(fixture,lock,key)['status']=='EXACT_FROZEN_CONTRACT_MATCH'
+          tampered=copy.deepcopy(fixture)
+          tampered['context']['frame']='wrong frame'
+          try:
+              verify(tampered,lock,key)
+          except ContractError:
+              pass
+          else:
+              raise RuntimeError('DANGEROUS: altered contract accepted')
+          PY
+  lean-calculus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan
+        shell: bash
+        run: |
+          curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Fetch exact pinned Lean 4 mathlib v4.24.0
+        working-directory: projects/physqed
+        run: |
+          lake update
+          lake exe cache get
+      - name: Compile calculus-level oscillator theorem (zero admits)
+        working-directory: projects/physqed
+        run: lake env lean lean/Conservation.lean
+      - name: Compile pre-existing v0.2 polynomial source
+        working-directory: projects/physqed
+        run: lake env lean lean/CompiledOscillator.lean
+      - name: Reject proof placeholders or added axioms (strip comment lines)
+        shell: bash
+        working-directory: projects/physqed
+        run: |
+          if grep -En '^\s*(sorry|admit|axiom)\b|:=\s*(sorry|admit)\b' lean/Conservation.lean lean/CompiledOscillator.lean; then
+            echo "Forbidden unchecked proof"; exit 1;
+          fi

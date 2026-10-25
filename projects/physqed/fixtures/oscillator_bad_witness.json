@@ -1,0 +1,148 @@
+{
+  "contract_version": "physqed-contract-0.2",
+  "id": "oscillator_wrong_witness",
+  "statement": "For scalar mass m, stiffness k, displacement x, velocity v and acceleration a, the assumed force-balance law m*a=-k*x implies k*x*v+m*v*a=0. No claim is made here about the validity of the physical assumptions or differentiability of mechanical energy.",
+  "provenance": {
+    "source_uri": "synthetic-regression:oscillator-2026-10-23",
+    "origin_kind": "synthetic"
+  },
+  "context": {
+    "domain": "one-dimensional classical harmonic oscillator",
+    "frame": "inertial laboratory frame",
+    "regime": "constant positive mass and linear restoring stiffness; this software does not check positivity",
+    "regularity": "smooth motion presumed, but derivative identities are not formalised by this contract",
+    "boundary_conditions": "not_applicable to instantaneous pointwise algebra",
+    "gauge": "not_applicable"
+  },
+  "symbols": [
+    {
+      "name": "m",
+      "role": "mass",
+      "unit": "kg",
+      "meaning": "positive inertial mass"
+    },
+    {
+      "name": "k",
+      "role": "stiffness",
+      "unit": "N/m",
+      "meaning": "restoring spring constant"
+    },
+    {
+      "name": "x",
+      "role": "position",
+      "unit": "m",
+      "meaning": "signed displacement from equilibrium"
+    },
+    {
+      "name": "v",
+      "role": "velocity",
+      "unit": "m/s",
+      "meaning": "instantaneous velocity"
+    },
+    {
+      "name": "a",
+      "role": "acceleration",
+      "unit": "m/s^2",
+      "meaning": "instantaneous acceleration"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "force_balance",
+      "meaning": "Newtonian equation of motion is postulated as the hypothesis, not proved here",
+      "source": "classical-model-hypothesis:Hooke-Newton",
+      "lhs": {
+        "op": "mul",
+        "args": [
+          {
+            "var": "m"
+          },
+          {
+            "var": "a"
+          }
+        ]
+      },
+      "rhs": {
+        "op": "mul",
+        "args": [
+          {
+            "const": "-1"
+          },
+          {
+            "var": "k"
+          },
+          {
+            "var": "x"
+          }
+        ]
+      }
+    }
+  ],
+  "conclusions": [
+    {
+      "id": "work_rate_balance",
+      "meaning": "conditional pointwise polynomial balance, not yet a time-derivative theorem",
+      "lhs": {
+        "op": "add",
+        "args": [
+          {
+            "op": "mul",
+            "args": [
+              {
+                "var": "k"
+              },
+              {
+                "var": "x"
+              },
+              {
+                "var": "v"
+              }
+            ]
+          },
+          {
+            "op": "mul",
+            "args": [
+              {
+                "var": "m"
+              },
+              {
+                "var": "v"
+              },
+              {
+                "var": "a"
+              }
+            ]
+          }
+        ]
+      },
+      "rhs": {
+        "const": "0"
+      }
+    }
+  ],
+  "proofs": [
+    {
+      "conclusion_id": "work_rate_balance",
+      "method": "assumption_combination",
+      "multipliers": {
+        "force_balance": {
+          "op": "mul",
+          "args": [
+            {
+              "const": "2"
+            },
+            {
+              "var": "v"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "mapping": {
+    "statement_conclusion_ids": [
+      "work_rate_balance"
+    ],
+    "explanation": "The English statement explicitly names the conditional algebraic conclusion; whether velocity and acceleration represent derivatives must be reviewed separately."
+  }
+}

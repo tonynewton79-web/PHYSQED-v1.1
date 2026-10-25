@@ -1,0 +1,19 @@
+{
+  "schema_version": "physqed-0.1",
+  "id": "PHYSQED-ALG-001",
+  "statement": "Under a change of one-dimensional velocity coordinate v -> v+u, the displayed quadratic difference expands algebraically.",
+  "source": "Synthetic regression control; elementary algebra, no experimental claim",
+  "assumptions": ["v and u commute as real scalar symbols", "this does not establish a physical transformation law"],
+  "checks": [{
+    "kind": "algebra_identity",
+    "variables": ["v", "u"],
+    "lhs": {"op":"add", "args": [
+      {"op":"pow", "arg":{"op":"add", "args":[{"var":"v"},{"var":"u"}]}, "exp":2},
+      {"op":"mul", "args":[{"const":"-1"},{"op":"pow", "arg":{"var":"v"}, "exp":2}]}
+    ]},
+    "rhs": {"op":"add", "args": [
+      {"op":"mul", "args":[{"const":"2"},{"var":"v"},{"var":"u"}]},
+      {"op":"pow", "arg":{"var":"u"}, "exp":2}
+    ]}
+  }]
+}

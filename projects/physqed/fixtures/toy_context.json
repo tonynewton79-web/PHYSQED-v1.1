@@ -1,0 +1,8 @@
+{
+  "domain": "controlled-toy",
+  "frame": "dimensionless",
+  "regime": "finite",
+  "regularity": "analytic",
+  "boundary_conditions": "none",
+  "gauge": "none"
+}

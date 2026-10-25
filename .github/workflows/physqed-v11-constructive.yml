@@ -1,0 +1,69 @@
+name: PHYSQED v1.1 Constructive Affine Essentiality
+on:
+  push:
+    paths:
+      - 'projects/physqed/**'
+      - 'research/physqed-multi-premise-v11/**'
+      - '.github/workflows/physqed-v11-constructive.yml'
+  pull_request:
+    paths:
+      - 'projects/physqed/**'
+      - 'research/physqed-multi-premise-v11/**'
+      - '.github/workflows/physqed-v11-constructive.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-rational-witness-and-independent-oracle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install independently used symbolic backend
+        run: python -m pip install sympy==1.14.0
+      - name: Check v1.0 prerequisites and new constructive witness tests
+        run: python -m unittest discover -s projects/physqed/tests -p 'test_constructive_essentiality_v11.py' -v
+      - name: Recheck 880-case v1.0 conditional baseline
+        run: python projects/physqed/benchmarks/multi_premise_v10.py /tmp/v10-baseline.json
+      - name: Independently replay full mathematical oracle
+        run: python research/physqed-multi-premise-v10/independent_oracle.py /tmp/v10-oracle.json
+      - name: Refuse higher-certification claims
+        run: |
+          python - <<'PY'
+          import json
+          v=json.load(open('/tmp/v10-baseline.json'))
+          o=json.load(open('/tmp/v10-oracle.json'))
+          assert (v['total'],v['correct']) == (880,880)
+          assert (o['total'],o['correct']) == (880,880)
+          assert not v['lean_kernel_confirmed'] and not v['empirical_physics_verified']
+          PY
+      - name: Reject user data in reusable engine
+        run: python projects/physqed/standalone_guard.py
+  pinned-lean-existing-multipremise:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan
+        shell: bash
+        run: |
+          curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Obtain pinned mathlib
+        working-directory: projects/physqed
+        run: |
+          lake update
+          lake exe cache get
+      - name: Compile two-premise and multi-premise Lean examples
+        working-directory: projects/physqed
+        run: |
+          lake env lean lean/TwoPremise.lean
+          lake env lean lean/MultiPremise.lean
+      - name: Reject admitted theorem text
+        working-directory: projects/physqed
+        shell: bash
+        run: |
+          if grep -En '^\s*(sorry|admit|axiom)\b|:=\s*(sorry|admit)\b' lean/TwoPremise.lean lean/MultiPremise.lean; then
+            echo 'Forbidden unchecked proof'; exit 1
+          fi

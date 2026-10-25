@@ -1,0 +1,44 @@
+name: PHYSQED v0.7 Controlled Algebraic Statement Verification
+on:
+  push:
+    paths:
+      - 'projects/physqed/**'
+      - '.github/workflows/physqed-v07-controlled-semantics.yml'
+  pull_request:
+    paths:
+      - 'projects/physqed/**'
+      - '.github/workflows/physqed-v07-controlled-semantics.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  strict-statement-alignment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned symbolic dependency
+        run: python -m pip install sympy==1.14.0
+      - name: Full PHYSQED regression suite
+        run: python -m unittest discover -s projects/physqed/tests -v
+      - name: Run 250-case controlled-language gate benchmark
+        run: python projects/physqed/benchmarks/controlled_semantics_v07.py /tmp/controlled-semantics-v07.json
+      - name: Assert scope and refusal counters
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/controlled-semantics-v07.json'))
+          assert d['claims']==d['correct_classifications']==250
+          assert d['correctly_accepted']==50 and d['false_acceptances']==d['false_refusals']==0
+          assert d['unrestricted_scientific_semantics_solved'] is False
+          assert d['competitor_comparison_performed'] is False
+          PY
+      - name: Recheck release as paper-independent system
+        run: python projects/physqed/standalone_guard.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: physqed-v07-controlled-claims-250
+          path: /tmp/controlled-semantics-v07.json
+          if-no-files-found: error
