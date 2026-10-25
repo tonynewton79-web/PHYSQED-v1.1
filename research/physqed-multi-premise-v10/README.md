@@ -25,7 +25,7 @@ Proof sketch: Exact Gaussian elimination with full row rank gives rational affin
 
 ### Examples
 
-For three equalities v=u, a=b, t=s, the exact energy-dimension identity is
+For three equalities v=u, a=b, t=s, the exact specific-energy-dimension identity is
 
 v*a*t-u*b*s = (a*t)(v-u) + (u*t)(a-b) + (u*b)(t-s).
 
@@ -34,7 +34,7 @@ For four equalities m=n, v=u, a=b, t=s:
 m*v*a*t-n*u*b*s = (v*a*t)(m-n) + (n*a*t)(v-u)
                   + (n*u*t)(a-b) + (n*u*b)(t-s).
 
-The variables may be assigned declared SI dimensions: m,n mass, v,u velocity, a,b acceleration, t,s time. Both conclusion terms then have units of energy, and so do all witness-times-premise terms.
+The variables may be assigned declared SI dimensions: m,n mass, v,u velocity, a,b acceleration, t,s time. In the three-premise identity, both conclusion terms and each witness-times-premise term have specific-energy dimensions L^2 T^-2. In the four-premise identity, the additional mass factors give energy dimensions M L^2 T^-2 throughout.
 
 ### Verification evidence and release gates
 
