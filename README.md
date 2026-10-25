@@ -57,9 +57,15 @@ See [the v1.1 theorem and limitations](research/physqed-multi-premise-v11/README
 
 ## Provenance and evidence
 
-This standalone repository is a scoped copy of the PHYSQED-specific paths at source commit
-`efafa326392b5f639e91114bfc36cc396393a667` ([source PR #48](https://github.com/tonynewton79-web/theoremlean/pull/48)) plus the documented standalone-release adjustments. Unrelated private theoremlean projects are not included.
+This standalone repository is a scoped copy of the PHYSQED-specific paths at private source commit
+`efafa326392b5f639e91114bfc36cc396393a667` (theoremlean PR #48) plus the documented standalone-release adjustments. Unrelated private theoremlean projects are not included; the original source PR is not generally accessible to public readers.
 
 The existing v1.0 deterministic benchmark consists of 880 generated cases; the independent SymPy oracle checks its mathematical tasks separately. Version 1.1 additionally constructs rational witnesses to the essentiality of hypotheses. The fixture labels are synthetic, not blinded expert annotations. Source-code tests or queued CI jobs do **not** confer Lean or empirical-physics certification. Check the current [GitHub Actions runs](https://github.com/tonynewton79-web/PHYSQED-v1.1/actions) for the exact commit before citing a remote pass.
 
 **Status:** public research source; v1.1 release validation is gated on exact-commit automated verification.
+
+## Publication and supplementary-material notes
+
+- The v1.1 research note refers to a **separate, locally produced** 120-system/360-witness evaluation and companion ZIP/PDF/LaTeX materials. These files were **not present** in the source PR's GitHub tree and have not been published here. Reproducibility from this checkout covers the committed v1.1 tests on 80 earlier positive multi-premise specimens, the two-premise illustration, and the v1.0 880-case benchmark and independent oracle. The separate 120/360 evidence must not be represented as reproduced by this repository alone.
+- Older v0.3–v0.5 research notes retain historical references to private development. The current public-release boundary is this repository and its specifically selected PHYSQED paths; those historical statements are not instructions to republish unrelated private work.
+- **License:** no open-source license has been selected for this release. Public source visibility does not itself grant redistribution or other reuse rights. A future license requires the author's decision.
