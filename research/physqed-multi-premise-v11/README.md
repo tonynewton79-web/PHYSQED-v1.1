@@ -8,7 +8,7 @@ For linearly independent rational affine premises p_j = A_j-B_j, k=2,3,4, and po
 The algorithm rational-row-reduces the remaining affine equations, substitutes into T, and sequentially specializes each free coordinate using the univariate polynomial degree-bound identity lemma. It then verifies each original equation and T in exact Fraction arithmetic. These rational assignments are machine-checkable counterexamples to the conclusion when a named hypothesis is omitted. This is standard polynomial algebra, not a newly discovered theorem of physics or algebra.
 
 ## Evidence and test status
-- Local external self-contained code + **independently implemented SymPy Gröbner/rank oracle**: 120 seeded systems, 40 each for 2/3/4 assumptions; **360/360** exact missing-premise rational witnesses checked.
+- An earlier separate local evaluation reported self-contained code and an **independently implemented SymPy Gröbner/rank oracle** on 120 seeded systems, 40 each for 2/3/4 assumptions, with **360/360** exact missing-premise rational witnesses checked. The complete external records and supplementary archive are **not present in this public repository** and cannot be reproduced from this checkout alone.
 - Five independent local regression tests passed, including two-premise normalized energy-flow model and refusals of dependent, nonlinear or nonessential constraints.
 - A separate v1.1 GitHub test invokes the full **PHYSQED v1.0 verifier FIRST**, then constructs and rechecks witnesses on all 80 earlier positive benchmark specimens with SymPy. Results remain unconfirmed until exact-SHA CI completes.
 - Existing v1.0 full 880-case benchmark and pinned Lean example compilation are likewise remote release gates; previously queued.
@@ -23,5 +23,7 @@ No claim that real energy flows were independently measured is made.
 
 ## Reproduction
 Local supplementary research ZIP includes pure-Python Fraction code, independent SymPy oracle, 120 full witness records, mathematical note PDF and source. GitHub integration lives at `projects/physqed/constructive_essentiality_v11.py`, with tests under `projects/physqed/tests/test_constructive_essentiality_v11.py` and a dedicated workflow.
+
+The separately described local ZIP is not included in this public release; the committed v1.1 tests are the reproducible evidence available here.
 
 **Release status: DRAFT_PENDING_REMOTE_CI / EXACT_MATH_SCOPE_ONLY.**
