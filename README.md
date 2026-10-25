@@ -2,13 +2,15 @@
 
 **Experimental exact-mathematics verification software by Tony Newton (Newton Astro Labs).**
 
+**[Read the full PHYSQED v1.1 scientific and engineering report](docs/PHYSQED-v1.1-technical-overview.md)** — a self-contained account of the formal claim model, constructive rational-witness theorem and proof, worked examples, implementation, exact tests and limits. A [Zenodo record preparation guide](docs/ZENODO_RECORD.md) supplies an abstract and metadata for an eventual archived release.
+
 PHYSQED attaches reproducible, machine-checkable evidence to *restricted mathematical claims* found in physics research. It aims to separate algebraic verification, interpretation of scientific language, formal proof compilation, and empirical validation instead of treating them as interchangeable.
 
 The v1.1 extension handles conditional identities of the form
 
-\[
+$$
 C-D=\sum_{j=1}^{k} W_j(A_j-B_j),\qquad 2\leq k\leq4,
-\]
+$$
 
 where the premise differences are independent rational affine polynomials and the remaining expressions are within the supported exact rational-polynomial domain. After the v1.0 verifier accepts a contract and checks claim-specific essentiality, v1.1 constructs an *exact rational counterexample for each omitted premise*: an assignment satisfying every retained premise while falsifying both the omitted premise and the conclusion. The algorithm combines rational row reduction, polynomial restriction and finite rational specialization. Its output is rechecked in exact `fractions.Fraction` arithmetic.
 
@@ -47,7 +49,7 @@ python -m unittest discover -s projects/physqed/tests -p 'test_constructive_esse
 | Path | Purpose |
 | --- | --- |
 | `projects/physqed/` | Exact checking engine, compiler, receipt gate, semantic controls and v1.1 extension |
-| `projects/physqed/lean/` | Pinned, separately compiled Lean examples |
+| `projects/physqed/lean/` | Pinned Lean source examples; public-repository compilation is still pending |
 | `projects/physqed/tests/` | Unit, adversarial, refusal and independent-oracle tests |
 | `projects/physqed/benchmarks/` | Deterministic conditional-claim benchmark generators |
 | `research/physqed-*/` | Mathematical notes, verification protocols and independent audit code |
