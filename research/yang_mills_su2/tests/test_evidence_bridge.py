@@ -16,6 +16,7 @@ from research.yang_mills_su2.wilson_dobrushin import strong_coupling_receipt
 from research.yang_mills_su2.wilson_spectral_gap import lattice_spectral_gap_receipt
 from research.yang_mills_su2.wilson_chordal_mixing import chordal_mixing_receipt
 from research.yang_mills_su2.continuum_scale_bridge import scale_bridge_receipt
+from research.yang_mills_su2.wilson_dobrushin_ceiling import ceiling_receipt
 from research.yang_mills_su2.simulation import run_chains
 
 
@@ -251,6 +252,31 @@ class EvidenceBridgeTests(unittest.TestCase):
                     self.record("EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE", path, bad)
             forged = copy.deepcopy(original)
             forged["derived"]["physical_gap_lower"]["numerator"] = "999"
+            path.write_text(json.dumps(forged), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.validate(ledger)
+
+    def test_wilson_single_link_method_ceiling_has_fail_closed_ledger_kind(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "single-link-ceiling.json"
+            original = ceiling_receipt(2, 9)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            record = self.record("EXACT_WILSON_SINGLE_LINK_METHOD_CEILING", path,
+                                 {"scope": "single-link-method-ceiling"})
+            self.assertEqual(record["status"],
+                             "FINITE_WILSON_SINGLE_LINK_METHOD_CEILING_ARITHMETIC")
+            self.assertIn("Dobrushin", record["scope"])
+            self.assertFalse(record["continuum_mass_gap_proven"])
+            ledger = self.ledger([record])
+            self.validate(ledger)
+            for bad in ({"continuum_mass_gap_proven": True},
+                        {"scope": "continuum-mass-gap"},
+                        {"scope": "single-link-method-ceiling",
+                         "global_sharp_wasserstein_upper_proven": True}):
+                with self.subTest(bad=bad), self.assertRaises(ValueError):
+                    self.record("EXACT_WILSON_SINGLE_LINK_METHOD_CEILING", path, bad)
+            forged = copy.deepcopy(original)
+            forged["global_sharp_wasserstein_upper_proven"] = True
             path.write_text(json.dumps(forged), encoding="utf-8")
             with self.assertRaises(ValueError):
                 self.validate(ledger)

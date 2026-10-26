@@ -1,0 +1,73 @@
+{
+  "analytic_premises": [
+    "six independent central-sign staples on four-tori with transverse period at least three",
+    "each neighboring link changes one staple at chordal unit speed",
+    "a normalized Haar S3 coordinate has variance one quarter",
+    "optimal global Dobrushin coefficient takes a supremum separately for each neighbor"
+  ],
+  "analytic_theorem_kernel_verified": false,
+  "continuum_mass_gap_proven": false,
+  "distinct_neighbor_links": 18,
+  "fingerprint": "a425a6e4b6c8004bfca57068a3acbc3a25cb1ba6a571c4643275b33d3d48c4ec",
+  "global_sharp_wasserstein_upper_proven": false,
+  "incident_plaquettes": 6,
+  "input": {
+    "beta": {
+      "denominator": "9",
+      "numerator": "2"
+    },
+    "torus_extents": [
+      3,
+      3,
+      3,
+      3
+    ]
+  },
+  "lean_kernel_verified": false,
+  "local_wasserstein_slope_lower": {
+    "denominator": "18",
+    "numerator": "1"
+  },
+  "necessary_dobrushin_ceiling": {
+    "denominator": "9",
+    "numerator": "2"
+  },
+  "negative_opposite_links": [
+    {
+      "direction": 0,
+      "site": [
+        0,
+        0,
+        0,
+        2
+      ]
+    },
+    {
+      "direction": 0,
+      "site": [
+        0,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "direction": 0,
+      "site": [
+        0,
+        2,
+        0,
+        0
+      ]
+    }
+  ],
+  "physical_law_proven": false,
+  "row_lower": {
+    "denominator": "1",
+    "numerator": "1"
+  },
+  "schema_version": "ym-single-link-dobrushin-ceiling-0.1",
+  "scope": "UNFIXED_GAUGE_SU2_SINGLE_LINK_DOBRUSHIN_ONLY",
+  "signed_staple_sum": 0,
+  "status": "FINITE_WILSON_SINGLE_LINK_METHOD_CEILING_ARITHMETIC"
+}

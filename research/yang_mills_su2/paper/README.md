@@ -21,3 +21,8 @@ statement; it is not submitted as part of the manuscript.
 The paper establishes no four-dimensional continuum mass gap.
 Its PHYSQED receipts certify exact finite algebra and provenance,
 not the full infinite-dimensional analytic argument in Lean.
+
+The updated cumulative edition adds an explicit central-sign
+single-link Dobrushin ceiling proposition and a conditional two-sided
+physical-block spectral criterion. These are **methodological limits and
+conditional functional analysis**, not a weak-coupling Wilson solution.

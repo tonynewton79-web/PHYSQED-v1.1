@@ -24,6 +24,7 @@ from .wilson_dobrushin import replay_strong_coupling_receipt
 from .wilson_spectral_gap import replay_lattice_spectral_gap_receipt
 from .wilson_chordal_mixing import replay_chordal_mixing_receipt
 from .continuum_scale_bridge import replay_scale_bridge_receipt
+from .wilson_dobrushin_ceiling import replay_ceiling_receipt
 from .character_cli import replay_character_certificate
 from .simulation import run_chains
 
@@ -48,6 +49,9 @@ KINDS = {
     "EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE": (
         "Exact abstract two-mode block-transfer scale arithmetic; "
         "no Wilson spectrum, physical mass gap or continuum construction"),
+    "EXACT_WILSON_SINGLE_LINK_METHOD_CEILING": (
+        "Exact Wilson SU2 single-link Dobrushin row lower bound arithmetic; "
+        "a method ceiling, not a continuum gap or sharp global W1 upper bound"),
     "FINITE_LATTICE_NUMERICAL": "Seeded finite Wilson-lattice sampling; no continuum limit",
 }
 ALLOWED_METADATA = {
@@ -66,6 +70,8 @@ ALLOWED_METADATA = {
         {}, {"scope": "finite-chordal-beta-lt-one-sixth"}),
     "EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE": (
         {}, {"model": "diagonal-transfer-abstract"}),
+    "EXACT_WILSON_SINGLE_LINK_METHOD_CEILING": (
+        {}, {"scope": "single-link-method-ceiling"}),
     "FINITE_LATTICE_NUMERICAL": (
         {}, {"negative_control": "beta0-cold"},
         {"negative_control": "beta0-haar"}),
@@ -301,6 +307,11 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
             raise ValueError("abstract scale bridge arithmetic failed exact replay")
         status = "ABSTRACT_SCALE_BRIDGE_ARITHMETIC_ONLY"
         verification_hash = _digest(_canonical(obj))
+    elif kind == "EXACT_WILSON_SINGLE_LINK_METHOD_CEILING":
+        if not replay_ceiling_receipt(obj):
+            raise ValueError("Wilson single-link ceiling arithmetic failed exact replay")
+        status = "FINITE_WILSON_SINGLE_LINK_METHOD_CEILING_ARITHMETIC"
+        verification_hash = _digest(_canonical(obj))
     else:
         _replay_numerical(obj)
         status = "FINITE_LATTICE_NUMERICAL"
@@ -325,6 +336,8 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
             "research/yang_mills_su2/wilson_spectral_gap.py"),
         "EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE": (
             "research/yang_mills_su2/continuum_scale_bridge.py",),
+        "EXACT_WILSON_SINGLE_LINK_METHOD_CEILING": (
+            "research/yang_mills_su2/wilson_dobrushin_ceiling.py",),
         "FINITE_LATTICE_NUMERICAL": ("research/yang_mills_su2/su2.py",
                                      "research/yang_mills_su2/lattice.py",
                                      "research/yang_mills_su2/simulation.py"),
