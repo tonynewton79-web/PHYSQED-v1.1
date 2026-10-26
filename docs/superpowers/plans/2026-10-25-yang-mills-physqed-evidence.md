@@ -30,18 +30,18 @@
 
 ## Files and interfaces
 
-- Create research/yang_mills_su2/fixtures/quaternion_inverse_identity.json: v0.1 PHYSQED algebra contract.
+- Create research/yang_mills_su2/fixtures/quaternion_scalar_norm_identity.json: v0.1 PHYSQED algebra contract.
 - Create research/yang_mills_su2/evidence_bridge.py: engine invocation and ledger validation.
 - Create research/yang_mills_su2/tests/test_evidence_bridge.py: contract, adversarial and status tests.
 - Create research/yang_mills_su2/EVIDENCE_SCOPE.md: machine evidence taxonomy and claim boundary.
 
 ### Task 1: Exact quaternion algebra fixture
 
-**Files:** fixtures/quaternion_inverse_identity.json; tests/test_evidence_bridge.py.
+**Files:** fixtures/quaternion_scalar_norm_identity.json; tests/test_evidence_bridge.py.
 
 **Interfaces:** The fixture is a PHYSQED physqed-0.1 JSON claim with id YM-SU2-ALG-001 and one algebra_identity check over variables a,b,c,d. Its lhs is the scalar quaternion component a*a-b*(-b)-c*(-c)-d*(-d); rhs is a^2+b^2+c^2+d^2. No assumption that a^2+b^2+c^2+d^2=1 is automatically discharged.
 
-- [ ] Step 1: Write unittest spawning python projects/physqed/engine.py research/yang_mills_su2/fixtures/quaternion_inverse_identity.json from repository root, asserting returncode 0, status MATHEMATICAL_COMPONENTS_VERIFIED, physical_law_proven=false, lean_kernel_verified=false, one passing algebra check.
+- [ ] Step 1: Write unittest spawning python projects/physqed/engine.py research/yang_mills_su2/fixtures/quaternion_scalar_norm_identity.json from repository root, asserting returncode 0, status MATHEMATICAL_COMPONENTS_VERIFIED, physical_law_proven=false, lean_kernel_verified=false, one passing algebra check.
 - [ ] Step 2: Run test_evidence_bridge; expect fixture-missing failure.
 - [ ] Step 3: Create fixture with the exact recursive JSON expression schema from projects/physqed/fixtures/kinetic_identity.json; explicitly label it a local quaternion algebra identity, not gauge theory existence.
 - [ ] Step 4: Run fixture test; expect PASS. Commit fixture and test.

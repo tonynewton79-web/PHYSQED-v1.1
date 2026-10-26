@@ -1,0 +1,35 @@
+{
+  "schema_version": "physqed-0.1",
+  "id": "YM-SU2-ALG-001",
+  "statement": "For a quaternion with real coefficients q=(a,b,c,d), the scalar component of q times its quaternion conjugate equals a squared plus b squared plus c squared plus d squared.",
+  "source": "Elementary quaternion polynomial multiplication; a local SU(2) algebra control, not a Yang-Mills existence or mass-gap claim",
+  "assumptions": [
+    "a, b, c and d are commuting real scalar variables",
+    "The quaternion norm-one constraint is not proved or imposed here",
+    "This exact polynomial identity says nothing about a continuum field-theoretic spectrum"
+  ],
+  "checks": [
+    {
+      "kind": "algebra_identity",
+      "variables": ["a", "b", "c", "d"],
+      "lhs": {
+        "op": "add",
+        "args": [
+          {"op": "mul", "args": [{"var": "a"}, {"var": "a"}]},
+          {"op": "mul", "args": [{"const": "-1"}, {"var": "b"}, {"op": "mul", "args": [{"const": "-1"}, {"var": "b"}]}]},
+          {"op": "mul", "args": [{"const": "-1"}, {"var": "c"}, {"op": "mul", "args": [{"const": "-1"}, {"var": "c"}]}]},
+          {"op": "mul", "args": [{"const": "-1"}, {"var": "d"}, {"op": "mul", "args": [{"const": "-1"}, {"var": "d"}]}]}
+        ]
+      },
+      "rhs": {
+        "op": "add",
+        "args": [
+          {"op": "pow", "arg": {"var": "a"}, "exp": 2},
+          {"op": "pow", "arg": {"var": "b"}, "exp": 2},
+          {"op": "pow", "arg": {"var": "c"}, "exp": 2},
+          {"op": "pow", "arg": {"var": "d"}, "exp": 2}
+        ]
+      }
+    }
+  ]
+}

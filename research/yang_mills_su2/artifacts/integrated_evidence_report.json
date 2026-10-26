@@ -1,0 +1,199 @@
+{
+  "continuum_mass_gap_proven": false,
+  "evidence_ledger": {
+    "continuum_mass_gap_proven": false,
+    "external_solver_integrations": {
+      "einstein_x_omega": {
+        "source_path": null,
+        "source_sha256": null,
+        "status": "SOURCE_UNAVAILABLE_NOT_EXECUTED"
+      },
+      "newton_solver": {
+        "source_path": null,
+        "source_sha256": null,
+        "status": "SOURCE_UNAVAILABLE_NOT_EXECUTED"
+      }
+    },
+    "lean_kernel_verified": false,
+    "ledger_sha256": "2bd4a181c3053744e58342384791cfa2f7811428592a6c4ace91d4bc0ceb0a51",
+    "physical_law_proven": false,
+    "records": [
+      {
+        "continuum_mass_gap_proven": false,
+        "kind": "EXACT_RATIONAL_INTERVAL",
+        "lean_kernel_verified": false,
+        "metadata": {},
+        "physical_law_proven": false,
+        "python_runtime": "3.12.14",
+        "scope": "Finite SU(2) character-series interval; no four-dimensional spectrum",
+        "source_path": "research/yang_mills_su2/artifacts/character_beta2_exact.json",
+        "source_sha256": "97ad441f701eae5ddee89c761b80768dbb6c8682fc2a0410866d535057041255",
+        "status": "FINITE_CHARACTER_EXACT_INTERVAL",
+        "verification_implementation_sha256": "a0aa615481d3a549267293ec46ad1b0a8e834c045b14eaa7bda85107b836439d",
+        "verification_sha256": "331f8c7c949f5c6374f766fb372a82c636347d4641bda00ba16ea96e557803c0"
+      },
+      {
+        "continuum_mass_gap_proven": false,
+        "kind": "FINITE_LATTICE_NUMERICAL",
+        "lean_kernel_verified": false,
+        "metadata": {},
+        "physical_law_proven": false,
+        "python_runtime": "3.12.14",
+        "scope": "Seeded finite Wilson-lattice sampling; no continuum limit",
+        "source_path": "research/yang_mills_su2/artifacts/finite_su2_2x2x2x2_pilot.json",
+        "source_sha256": "4bb8a071fa924096ef3564a93e3f581938912f0f3476bae19f3c166877254238",
+        "status": "FINITE_LATTICE_NUMERICAL",
+        "verification_implementation_sha256": "eeb0e7fa6652a035ca157b58d04dd4e7dd387e98c5da85d5ee292bef70058724",
+        "verification_sha256": "4bb8a071fa924096ef3564a93e3f581938912f0f3476bae19f3c166877254238"
+      },
+      {
+        "continuum_mass_gap_proven": false,
+        "kind": "PHYSQED_EXACT_POLYNOMIAL",
+        "lean_kernel_verified": false,
+        "metadata": {},
+        "physical_law_proven": false,
+        "python_runtime": "3.12.14",
+        "scope": "Exact scalar polynomial identity; no physical assumptions discharged",
+        "source_path": "research/yang_mills_su2/fixtures/quaternion_scalar_norm_identity.json",
+        "source_sha256": "e6606b945cad0c06e96c7b8519124e5ad85c01938ec15170fb2e0ad86807961e",
+        "status": "MATHEMATICAL_COMPONENTS_VERIFIED",
+        "verification_implementation_sha256": "dd83df5d40d90cd834467bd1783f4553e809eed12be0330957776de2b71a6937",
+        "verification_sha256": "b08a74361d156cd642696f890bbcd67438d26197d8efe77483e53b66e212f0e3"
+      },
+      {
+        "continuum_mass_gap_proven": false,
+        "kind": "FINITE_LATTICE_NUMERICAL",
+        "lean_kernel_verified": false,
+        "metadata": {
+          "negative_control": "beta0-cold"
+        },
+        "physical_law_proven": false,
+        "python_runtime": "3.12.14",
+        "scope": "Seeded finite Wilson-lattice sampling; no continuum limit",
+        "source_path": "research/yang_mills_su2/artifacts/cold_beta0_negative_control.json",
+        "source_sha256": "81a532236e39b3135d80441a5bc0730e56e93af7299fee8589e9ce86efc4aa33",
+        "status": "FINITE_LATTICE_NUMERICAL",
+        "verification_implementation_sha256": "eeb0e7fa6652a035ca157b58d04dd4e7dd387e98c5da85d5ee292bef70058724",
+        "verification_sha256": "81a532236e39b3135d80441a5bc0730e56e93af7299fee8589e9ce86efc4aa33"
+      },
+      {
+        "continuum_mass_gap_proven": false,
+        "kind": "FINITE_LATTICE_NUMERICAL",
+        "lean_kernel_verified": false,
+        "metadata": {
+          "negative_control": "beta0-haar"
+        },
+        "physical_law_proven": false,
+        "python_runtime": "3.12.14",
+        "scope": "Seeded finite Wilson-lattice sampling; no continuum limit",
+        "source_path": "research/yang_mills_su2/artifacts/haar_beta0_negative_control.json",
+        "source_sha256": "a8a7898332873d4ee87d8482c059fd5156f65b0da5b0bd274e7b984e8fc192b6",
+        "status": "FINITE_LATTICE_NUMERICAL",
+        "verification_implementation_sha256": "eeb0e7fa6652a035ca157b58d04dd4e7dd387e98c5da85d5ee292bef70058724",
+        "verification_sha256": "a8a7898332873d4ee87d8482c059fd5156f65b0da5b0bd274e7b984e8fc192b6"
+      }
+    ],
+    "schema_version": "ym-su2-evidence-ledger-0.1",
+    "status": "FINITE_RESEARCH_EVIDENCE_ONLY"
+  },
+  "external_solver_integrations": {
+    "einstein_x_omega": {
+      "source_path": null,
+      "source_sha256": null,
+      "status": "SOURCE_UNAVAILABLE_NOT_EXECUTED"
+    },
+    "newton_solver": {
+      "source_path": null,
+      "source_sha256": null,
+      "status": "SOURCE_UNAVAILABLE_NOT_EXECUTED"
+    }
+  },
+  "lean_kernel_verified": false,
+  "math": {
+    "continuum_mass_gap_proven": false,
+    "kind": "EXACT_RATIONAL_INTERVAL",
+    "lean_kernel_verified": false,
+    "metadata": {},
+    "physical_law_proven": false,
+    "python_runtime": "3.12.14",
+    "scope": "Finite SU(2) character-series interval; no four-dimensional spectrum",
+    "source_path": "research/yang_mills_su2/artifacts/character_beta2_exact.json",
+    "source_sha256": "97ad441f701eae5ddee89c761b80768dbb6c8682fc2a0410866d535057041255",
+    "status": "FINITE_CHARACTER_EXACT_INTERVAL",
+    "verification_implementation_sha256": "a0aa615481d3a549267293ec46ad1b0a8e834c045b14eaa7bda85107b836439d",
+    "verification_sha256": "331f8c7c949f5c6374f766fb372a82c636347d4641bda00ba16ea96e557803c0"
+  },
+  "negative_controls": [
+    {
+      "continuum_mass_gap_proven": false,
+      "kind": "FINITE_LATTICE_NUMERICAL",
+      "lean_kernel_verified": false,
+      "metadata": {
+        "negative_control": "beta0-cold"
+      },
+      "physical_law_proven": false,
+      "python_runtime": "3.12.14",
+      "scope": "Seeded finite Wilson-lattice sampling; no continuum limit",
+      "source_path": "research/yang_mills_su2/artifacts/cold_beta0_negative_control.json",
+      "source_sha256": "81a532236e39b3135d80441a5bc0730e56e93af7299fee8589e9ce86efc4aa33",
+      "status": "FINITE_LATTICE_NUMERICAL",
+      "verification_implementation_sha256": "eeb0e7fa6652a035ca157b58d04dd4e7dd387e98c5da85d5ee292bef70058724",
+      "verification_sha256": "81a532236e39b3135d80441a5bc0730e56e93af7299fee8589e9ce86efc4aa33"
+    },
+    {
+      "continuum_mass_gap_proven": false,
+      "kind": "FINITE_LATTICE_NUMERICAL",
+      "lean_kernel_verified": false,
+      "metadata": {
+        "negative_control": "beta0-haar"
+      },
+      "physical_law_proven": false,
+      "python_runtime": "3.12.14",
+      "scope": "Seeded finite Wilson-lattice sampling; no continuum limit",
+      "source_path": "research/yang_mills_su2/artifacts/haar_beta0_negative_control.json",
+      "source_sha256": "a8a7898332873d4ee87d8482c059fd5156f65b0da5b0bd274e7b984e8fc192b6",
+      "status": "FINITE_LATTICE_NUMERICAL",
+      "verification_implementation_sha256": "eeb0e7fa6652a035ca157b58d04dd4e7dd387e98c5da85d5ee292bef70058724",
+      "verification_sha256": "a8a7898332873d4ee87d8482c059fd5156f65b0da5b0bd274e7b984e8fc192b6"
+    }
+  ],
+  "open_obligations": [
+    "Construct the nontrivial continuum Yang-Mills quantum field theory in four dimensions",
+    "Establish reflection positivity and the Osterwalder-Schrader axioms for the limiting measure",
+    "Control ultraviolet lattice-spacing and infinite-volume limits jointly",
+    "Prove a uniform positive lower bound for the full physical excitation spectrum",
+    "Supply a general argument covering every compact simple gauge group G",
+    "Obtain real Newton Solver and EINSTEIN-X Omega versioned source and verified integration runs"
+  ],
+  "physical_law_proven": false,
+  "physical_numerical": {
+    "continuum_mass_gap_proven": false,
+    "kind": "FINITE_LATTICE_NUMERICAL",
+    "lean_kernel_verified": false,
+    "metadata": {},
+    "physical_law_proven": false,
+    "python_runtime": "3.12.14",
+    "scope": "Seeded finite Wilson-lattice sampling; no continuum limit",
+    "source_path": "research/yang_mills_su2/artifacts/finite_su2_2x2x2x2_pilot.json",
+    "source_sha256": "4bb8a071fa924096ef3564a93e3f581938912f0f3476bae19f3c166877254238",
+    "status": "FINITE_LATTICE_NUMERICAL",
+    "verification_implementation_sha256": "eeb0e7fa6652a035ca157b58d04dd4e7dd387e98c5da85d5ee292bef70058724",
+    "verification_sha256": "4bb8a071fa924096ef3564a93e3f581938912f0f3476bae19f3c166877254238"
+  },
+  "physqed": {
+    "continuum_mass_gap_proven": false,
+    "kind": "PHYSQED_EXACT_POLYNOMIAL",
+    "lean_kernel_verified": false,
+    "metadata": {},
+    "physical_law_proven": false,
+    "python_runtime": "3.12.14",
+    "scope": "Exact scalar polynomial identity; no physical assumptions discharged",
+    "source_path": "research/yang_mills_su2/fixtures/quaternion_scalar_norm_identity.json",
+    "source_sha256": "e6606b945cad0c06e96c7b8519124e5ad85c01938ec15170fb2e0ad86807961e",
+    "status": "MATHEMATICAL_COMPONENTS_VERIFIED",
+    "verification_implementation_sha256": "dd83df5d40d90cd834467bd1783f4553e809eed12be0330957776de2b71a6937",
+    "verification_sha256": "b08a74361d156cd642696f890bbcd67438d26197d8efe77483e53b66e212f0e3"
+  },
+  "schema_version": "ym-su2-combined-pilot-report-0.1",
+  "status": "FINITE_CROSS_EVIDENCE_PILOT"
+}
