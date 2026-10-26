@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 from research.yang_mills_su2.character_cli import certify_character
 from research.yang_mills_su2.beta_zero_correlators import beta_zero_correlator_receipt
+from research.yang_mills_su2.transfer_moment_obstructions import transfer_moment_receipt
 from research.yang_mills_su2.simulation import run_chains
 
 
@@ -58,6 +59,57 @@ class EvidenceBridgeTests(unittest.TestCase):
             changed_ledger["records"][0]["verification_sha256"] = "0" * 64
             with self.assertRaises(ValueError):
                 self.validate(changed_ledger)
+
+    def test_exact_abstract_transfer_obstruction_has_distinct_evidence_status(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "abstract-transfer.json"
+            original = transfer_moment_receipt(10, 3)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            record = self.record("EXACT_TRANSFER_MOMENT_OBSTRUCTION", path,
+                                 {"model": "positive-transfer-abstract"})
+            self.assertEqual(record["status"], "ABSTRACT_SPECTRAL_MASKING_EXACT")
+            self.assertIn("abstract", record["scope"].lower())
+            self.assertFalse(record["physical_law_proven"])
+            self.assertFalse(record["continuum_mass_gap_proven"])
+            self.assertFalse(record["lean_kernel_verified"])
+            ledger = self.ledger([record])
+            self.validate(ledger)
+            altered = copy.deepcopy(original)
+            altered["hankel_minors"][1]["numerator"] = "1"
+            path.write_text(json.dumps(altered), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.record("EXACT_TRANSFER_MOMENT_OBSTRUCTION", path, {})
+            with self.assertRaises(ValueError):
+                self.validate(ledger)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            forged = copy.deepcopy(ledger)
+            forged["records"][0]["scope"] = "Proven SU2 continuum mass gap"
+            with self.assertRaises(ValueError):
+                self.validate(forged)
+
+    def test_abstract_transfer_evidence_rejects_physically_misleading_metadata(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "exact-abstract.json"
+            path.write_text(json.dumps(transfer_moment_receipt(10, 2)), encoding="utf-8")
+            for metadata in (
+                {"continuum_mass_gap_proven": True},
+                {"model": "Wilson SU2 Yang Mills"},
+                {"model": "positive-transfer-abstract", "physical_law_proven": True},
+                {"model": "positive-transfer-abstract", "status": "PROVED"},
+            ):
+                with self.subTest(metadata=metadata), self.assertRaises(ValueError):
+                    self.record("EXACT_TRANSFER_MOMENT_OBSTRUCTION", path, metadata)
+
+    def test_duplicate_physical_claim_key_cannot_hide_in_json_receipt(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "ambiguous.json"
+            source = json.dumps(transfer_moment_receipt(10, 2))
+            self.assertIn('"physical_law_proven": false', source)
+            ambiguous = source.replace('"physical_law_proven": false',
+                                       '"physical_law_proven": true, "physical_law_proven": false')
+            path.write_text(ambiguous, encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.record("EXACT_TRANSFER_MOMENT_OBSTRUCTION", path, {})
 
     def test_sign_error_is_not_forgiven_by_claim_prose(self):
         altered = json.loads(FIXTURE.read_text())

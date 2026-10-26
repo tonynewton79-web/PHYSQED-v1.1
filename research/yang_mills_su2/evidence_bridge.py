@@ -18,6 +18,7 @@ import tempfile
 from pathlib import Path
 
 from .beta_zero_correlators import replay_beta_zero_correlator_receipt
+from .transfer_moment_obstructions import replay_transfer_moment_receipt
 from .character_cli import replay_character_certificate
 from .simulation import run_chains
 
@@ -27,6 +28,8 @@ KINDS = {
     "PHYSQED_EXACT_POLYNOMIAL": "Exact scalar polynomial identity; no physical assumptions discharged",
     "EXACT_RATIONAL_INTERVAL": "Finite SU(2) character-series interval; no four-dimensional spectrum",
     "EXACT_HAAR_CORRELATOR": "Exact ideal beta-zero Haar expectation; no physical spectral bound",
+    "EXACT_TRANSFER_MOMENT_OBSTRUCTION": (
+        "Exact abstract positive-transfer counterexample; not a Wilson SU2 spectral bound"),
     "FINITE_LATTICE_NUMERICAL": "Seeded finite Wilson-lattice sampling; no continuum limit",
 }
 SOLVER_IDS = ("newton_solver", "einstein_x_omega")
@@ -82,9 +85,17 @@ def _bounded_bytes(path: Path) -> bytes:
 
 def _load_json(path: Path) -> tuple[object, bytes]:
     data = _bounded_bytes(path)
+    def unique_keys(pairs: list[tuple[str, object]]) -> dict:
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("ambiguous duplicate JSON key")
+            result[key] = value
+        return result
+
     try:
         return json.loads(data.decode("utf-8"), parse_constant=lambda _s: (_ for _ in ()).throw(
-            ValueError("non-finite JSON value"))), data
+            ValueError("non-finite JSON value")), object_pairs_hook=unique_keys), data
     except (UnicodeError, ValueError, RecursionError) as exc:
         raise ValueError("source must be bounded valid JSON") from exc
 
@@ -199,6 +210,10 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
         any(type(k) is not str or len(k) > 40 or type(v) not in (str, int, bool)
             or len(str(v)) > 160 for k, v in metadata.items())):
         raise ValueError("metadata must contain at most eight short scalar fields")
+    if kind == "EXACT_TRANSFER_MOMENT_OBSTRUCTION" and metadata not in (
+        {}, {"model": "positive-transfer-abstract"}
+    ):
+        raise ValueError("abstract transfer evidence refuses physical classifications")
     path = _source_path(source_path)
     obj, data = _load_json(path)
     if kind == "PHYSQED_EXACT_POLYNOMIAL":
@@ -220,6 +235,11 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
             raise ValueError("beta-zero Haar correlation expectation failed exact replay")
         status = "FINITE_HAAR_CORRELATOR_EXPECTATIONS"
         verification_hash = _digest(_canonical(obj))
+    elif kind == "EXACT_TRANSFER_MOMENT_OBSTRUCTION":
+        if not replay_transfer_moment_receipt(obj):
+            raise ValueError("abstract positive-transfer moment certificate failed exact replay")
+        status = "ABSTRACT_SPECTRAL_MASKING_EXACT"
+        verification_hash = _digest(_canonical(obj))
     else:
         _replay_numerical(obj)
         status = "FINITE_LATTICE_NUMERICAL"
@@ -229,6 +249,8 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
         "EXACT_RATIONAL_INTERVAL": ("research/yang_mills_su2/character_bounds.py",
                                     "research/yang_mills_su2/character_cli.py"),
         "EXACT_HAAR_CORRELATOR": ("research/yang_mills_su2/beta_zero_correlators.py",),
+        "EXACT_TRANSFER_MOMENT_OBSTRUCTION": (
+            "research/yang_mills_su2/transfer_moment_obstructions.py",),
         "FINITE_LATTICE_NUMERICAL": ("research/yang_mills_su2/su2.py",
                                      "research/yang_mills_su2/lattice.py",
                                      "research/yang_mills_su2/simulation.py"),
