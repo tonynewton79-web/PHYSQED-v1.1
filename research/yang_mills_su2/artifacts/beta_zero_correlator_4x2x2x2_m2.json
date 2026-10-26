@@ -1,0 +1,83 @@
+{
+  "analytical_premises": [
+    "ideal independently refreshed Haar SU2 links at beta zero",
+    "distinct spatial plaquette loops with spatial side lengths >=2",
+    "Haar-normalized trace moment E[(ReTr U/2)^2]=1/4",
+    "a common empirical mean of exactly M*T independent time-slice values"
+  ],
+  "centering_correction": {
+    "denominator": "768",
+    "numerator": "1"
+  },
+  "certificate_scope": "IDEAL_FINITE_BETA_ZERO_HAAR_EXPECTATIONS",
+  "continuum_mass_gap_proven": false,
+  "equilibrium_claim": false,
+  "exact_covariance": [
+    {
+      "denominator": "96",
+      "numerator": "1"
+    },
+    {
+      "denominator": "1",
+      "numerator": "0"
+    },
+    {
+      "denominator": "1",
+      "numerator": "0"
+    },
+    {
+      "denominator": "1",
+      "numerator": "0"
+    }
+  ],
+  "expected_bias_corrected_covariance": [
+    {
+      "denominator": "96",
+      "numerator": "1"
+    },
+    {
+      "denominator": "1",
+      "numerator": "0"
+    },
+    {
+      "denominator": "1",
+      "numerator": "0"
+    },
+    {
+      "denominator": "1",
+      "numerator": "0"
+    }
+  ],
+  "expected_empirical_centered_covariance": [
+    {
+      "denominator": "768",
+      "numerator": "7"
+    },
+    {
+      "denominator": "768",
+      "numerator": "-1"
+    },
+    {
+      "denominator": "768",
+      "numerator": "-1"
+    },
+    {
+      "denominator": "768",
+      "numerator": "-1"
+    }
+  ],
+  "lean_kernel_verified": false,
+  "parameters": {
+    "coupling_beta": 0,
+    "extents": [
+      4,
+      2,
+      2,
+      2
+    ],
+    "measurements": 2
+  },
+  "physical_law_proven": false,
+  "schema_version": "ym-su2-beta-zero-correlator-0.1"
+}
+

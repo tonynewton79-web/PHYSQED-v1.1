@@ -11,6 +11,9 @@ import math
 import random
 import statistics
 
+from .beta_zero_correlators import (
+    beta_zero_corrected_correlator, beta_zero_correlator_receipt,
+)
 from .heatbath import heatbath_sweep
 from .lattice import Lattice4D
 from .simulation import connected_timeslice, haar_su2, timeslice_plaquette
@@ -87,12 +90,16 @@ def run_heatbath_timeslices(
                     measured.append(points)
                     trace.append({"sweep": sweep, "timeslice": list(points)})
             connected = connected_timeslice(measured)
-            chains.append({
+            chain = {
                 "seed": seed, "trace": trace,
                 "connected_correlator": list(connected),
                 "mean_spatial_plaquette": statistics.fmean(
                     x for point in measured for x in point),
-            })
+            }
+            if beta == 0:
+                chain["beta_zero_bias_corrected_correlator"] = list(
+                    beta_zero_corrected_correlator(measured, extents))
+            chains.append(chain)
         raw_connected = tuple(statistics.fmean(
             chain["connected_correlator"][time] for chain in chains)
             for time in range(time_extent))
@@ -104,12 +111,21 @@ def run_heatbath_timeslices(
             "time": time,
             "cosh_effective_mass": cosh_effective_mass(folded, time),
         } for time in range(1, time_extent//2)]
-        groups[initialization] = {
+        group = {
             "chains": chains,
             "connected_correlator": list(raw_connected),
             "folded_connected_correlator": list(folded),
             "cosh_diagnostics": masses,
         }
+        if beta == 0:
+            group["beta_zero_exact_receipt"] = beta_zero_correlator_receipt(
+                extents, sweeps // thin)
+            group["beta_zero_bias_corrected_correlator"] = [
+                statistics.fmean(chain["beta_zero_bias_corrected_correlator"][time]
+                                 for chain in chains)
+                for time in range(time_extent)
+            ]
+        groups[initialization] = group
 
     return {
         "schema_version": "ym-su2-heatbath-timeslices-0.1",

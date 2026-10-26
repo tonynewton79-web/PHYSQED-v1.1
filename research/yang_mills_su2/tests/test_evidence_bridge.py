@@ -9,6 +9,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from research.yang_mills_su2.character_cli import certify_character
+from research.yang_mills_su2.beta_zero_correlators import beta_zero_correlator_receipt
 from research.yang_mills_su2.simulation import run_chains
 
 
@@ -36,6 +37,27 @@ class EvidenceBridgeTests(unittest.TestCase):
         self.assertTrue(result["checks"][0]["passed"])
         self.assertFalse(result["physical_law_proven"])
         self.assertFalse(result["lean_kernel_verified"])
+
+    def test_exact_beta_zero_receipt_can_enter_fail_closed_evidence_ledger(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "beta0-correlator.json"
+            original = beta_zero_correlator_receipt((4,2,2,2), 2)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            record = self.record("EXACT_HAAR_CORRELATOR", path, {"scope": "beta0"})
+            self.assertEqual(record["status"], "FINITE_HAAR_CORRELATOR_EXPECTATIONS")
+            self.assertFalse(record["continuum_mass_gap_proven"])
+            ledger = self.ledger([record])
+            self.validate(ledger)
+            forged = copy.deepcopy(original)
+            forged["equilibrium_claim"] = True
+            path.write_text(json.dumps(forged), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.validate(ledger)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            changed_ledger = copy.deepcopy(ledger)
+            changed_ledger["records"][0]["verification_sha256"] = "0" * 64
+            with self.assertRaises(ValueError):
+                self.validate(changed_ledger)
 
     def test_sign_error_is_not_forgiven_by_claim_prose(self):
         altered = json.loads(FIXTURE.read_text())

@@ -17,6 +17,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+from .beta_zero_correlators import replay_beta_zero_correlator_receipt
 from .character_cli import replay_character_certificate
 from .simulation import run_chains
 
@@ -25,6 +26,7 @@ SOURCE_BYTE_LIMIT = 2 * 1024 * 1024
 KINDS = {
     "PHYSQED_EXACT_POLYNOMIAL": "Exact scalar polynomial identity; no physical assumptions discharged",
     "EXACT_RATIONAL_INTERVAL": "Finite SU(2) character-series interval; no four-dimensional spectrum",
+    "EXACT_HAAR_CORRELATOR": "Exact ideal beta-zero Haar expectation; no physical spectral bound",
     "FINITE_LATTICE_NUMERICAL": "Seeded finite Wilson-lattice sampling; no continuum limit",
 }
 SOLVER_IDS = ("newton_solver", "einstein_x_omega")
@@ -213,6 +215,11 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
             raise ValueError("character interval certificate failed exact replay")
         status = "FINITE_CHARACTER_EXACT_INTERVAL"
         verification_hash = obj["fingerprint"]
+    elif kind == "EXACT_HAAR_CORRELATOR":
+        if not replay_beta_zero_correlator_receipt(obj):
+            raise ValueError("beta-zero Haar correlation expectation failed exact replay")
+        status = "FINITE_HAAR_CORRELATOR_EXPECTATIONS"
+        verification_hash = _digest(_canonical(obj))
     else:
         _replay_numerical(obj)
         status = "FINITE_LATTICE_NUMERICAL"
@@ -221,6 +228,7 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
         "PHYSQED_EXACT_POLYNOMIAL": ("projects/physqed/engine.py", "projects/physqed/replay.py"),
         "EXACT_RATIONAL_INTERVAL": ("research/yang_mills_su2/character_bounds.py",
                                     "research/yang_mills_su2/character_cli.py"),
+        "EXACT_HAAR_CORRELATOR": ("research/yang_mills_su2/beta_zero_correlators.py",),
         "FINITE_LATTICE_NUMERICAL": ("research/yang_mills_su2/su2.py",
                                      "research/yang_mills_su2/lattice.py",
                                      "research/yang_mills_su2/simulation.py"),
