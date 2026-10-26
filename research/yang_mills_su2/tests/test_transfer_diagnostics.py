@@ -43,6 +43,23 @@ class HeatbathTimesliceTests(unittest.TestCase):
         args=((4,2,2,2),0.5,(2,3),1,2,1)
         self.assertEqual(run_heatbath_timeslices(*args),run_heatbath_timeslices(*args))
 
+    def test_beta_zero_emits_only_explicitly_scoped_bias_control(self):
+        receipt = run_heatbath_timeslices((4,2,2,2),0.0,(17,29),1,2,1)
+        for group in receipt["groups"].values():
+            certificate = group["beta_zero_exact_receipt"]
+            self.assertEqual(certificate["centering_correction"],
+                             {"numerator": "1", "denominator": "768"})
+            for raw, adjusted in zip(group["connected_correlator"],
+                                     group["beta_zero_bias_corrected_correlator"]):
+                self.assertAlmostEqual(adjusted - raw, 1/768, 15)
+            self.assertFalse(group["beta_zero_exact_receipt"]["continuum_mass_gap_proven"])
+
+    def test_positive_beta_must_not_inherit_beta_zero_certificate(self):
+        receipt = run_heatbath_timeslices((4,2,2,2),0.5,(17,29),0,2,1)
+        for group in receipt["groups"].values():
+            self.assertNotIn("beta_zero_exact_receipt", group)
+            self.assertNotIn("beta_zero_bias_corrected_correlator", group)
+
     def test_rejects_temporal_size_and_expensive_inputs(self):
         for args in [
             ((3,2,2,2),0.5,(1,2),1,4,1),
