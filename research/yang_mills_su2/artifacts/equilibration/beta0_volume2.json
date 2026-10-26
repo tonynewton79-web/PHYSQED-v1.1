@@ -1,0 +1,376 @@
+{
+  "continuum_mass_gap_proven": false,
+  "equilibrium_claim": false,
+  "fingerprint": "9c1c7cb45cba8cc79bb7877a0b3ad1746469e2ae5eaa103821129d79b968c753",
+  "implementation_sha256": "10d05485690b107de48e719439b834d7632b80633c61339c746539adbc5c97c5",
+  "input": {
+    "beta": {
+      "denominator": 1,
+      "numerator": 0
+    },
+    "epsilon": {
+      "denominator": 10,
+      "numerator": 3
+    },
+    "extents": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "seeds": [
+      123,
+      456
+    ],
+    "sweeps": 16
+  },
+  "lean_kernel_verified": false,
+  "physical_law_proven": false,
+  "python_runtime": "3.12.14",
+  "report": {
+    "cold_minus_haar_late_mean": 0.45109218598031525,
+    "continuum_mass_gap_proven": false,
+    "equilibrium_claim": false,
+    "groups": {
+      "cold": {
+        "chains": [
+          {
+            "acceptance_rate": 1.0,
+            "early_mean": 0.8080824042297128,
+            "lag_one_correlation": 0.9801687326771724,
+            "late_mean": 0.538706655736066,
+            "late_minus_early": -0.26937574849364676,
+            "seed": 123,
+            "trace": [
+              {
+                "spatial_plaquette": 0.9380462909869905,
+                "sweep": 1
+              },
+              {
+                "spatial_plaquette": 0.8830251331493594,
+                "sweep": 2
+              },
+              {
+                "spatial_plaquette": 0.8389236437675747,
+                "sweep": 3
+              },
+              {
+                "spatial_plaquette": 0.7911532917924211,
+                "sweep": 4
+              },
+              {
+                "spatial_plaquette": 0.7760673039547337,
+                "sweep": 5
+              },
+              {
+                "spatial_plaquette": 0.7613101328111704,
+                "sweep": 6
+              },
+              {
+                "spatial_plaquette": 0.745801876298515,
+                "sweep": 7
+              },
+              {
+                "spatial_plaquette": 0.7303315610769378,
+                "sweep": 8
+              },
+              {
+                "spatial_plaquette": 0.6534420731475425,
+                "sweep": 9
+              },
+              {
+                "spatial_plaquette": 0.6203667455271118,
+                "sweep": 10
+              },
+              {
+                "spatial_plaquette": 0.6396427016680319,
+                "sweep": 11
+              },
+              {
+                "spatial_plaquette": 0.6164011396271787,
+                "sweep": 12
+              },
+              {
+                "spatial_plaquette": 0.5425808575897813,
+                "sweep": 13
+              },
+              {
+                "spatial_plaquette": 0.44343500331952584,
+                "sweep": 14
+              },
+              {
+                "spatial_plaquette": 0.4022553738997885,
+                "sweep": 15
+              },
+              {
+                "spatial_plaquette": 0.39152935110956777,
+                "sweep": 16
+              }
+            ]
+          },
+          {
+            "acceptance_rate": 1.0,
+            "early_mean": 0.7376026555825405,
+            "lag_one_correlation": 0.9874025069084313,
+            "late_mean": 0.439300692974188,
+            "late_minus_early": -0.29830196260835246,
+            "seed": 456,
+            "trace": [
+              {
+                "spatial_plaquette": 0.9507476305309617,
+                "sweep": 1
+              },
+              {
+                "spatial_plaquette": 0.8723799942534571,
+                "sweep": 2
+              },
+              {
+                "spatial_plaquette": 0.8140482878713673,
+                "sweep": 3
+              },
+              {
+                "spatial_plaquette": 0.7531125756841557,
+                "sweep": 4
+              },
+              {
+                "spatial_plaquette": 0.6946126865133049,
+                "sweep": 5
+              },
+              {
+                "spatial_plaquette": 0.6572914991126678,
+                "sweep": 6
+              },
+              {
+                "spatial_plaquette": 0.6027688768589601,
+                "sweep": 7
+              },
+              {
+                "spatial_plaquette": 0.555859693835449,
+                "sweep": 8
+              },
+              {
+                "spatial_plaquette": 0.5093511203534469,
+                "sweep": 9
+              },
+              {
+                "spatial_plaquette": 0.482870965631257,
+                "sweep": 10
+              },
+              {
+                "spatial_plaquette": 0.4457666183424628,
+                "sweep": 11
+              },
+              {
+                "spatial_plaquette": 0.39452247207808705,
+                "sweep": 12
+              },
+              {
+                "spatial_plaquette": 0.4225538606749982,
+                "sweep": 13
+              },
+              {
+                "spatial_plaquette": 0.38295848542362854,
+                "sweep": 14
+              },
+              {
+                "spatial_plaquette": 0.4163512152267704,
+                "sweep": 15
+              },
+              {
+                "spatial_plaquette": 0.46003080606285307,
+                "sweep": 16
+              }
+            ]
+          }
+        ],
+        "early_mean": 0.7728425299061266,
+        "late_mean": 0.48900367435512704
+      },
+      "haar": {
+        "chains": [
+          {
+            "acceptance_rate": 1.0,
+            "early_mean": -0.022061481003743437,
+            "lag_one_correlation": 0.6484593599951044,
+            "late_mean": 0.01484616443282849,
+            "late_minus_early": 0.03690764543657193,
+            "seed": 123,
+            "trace": [
+              {
+                "spatial_plaquette": 0.009870714554812917,
+                "sweep": 1
+              },
+              {
+                "spatial_plaquette": -0.0162739545014505,
+                "sweep": 2
+              },
+              {
+                "spatial_plaquette": -0.00713644329014005,
+                "sweep": 3
+              },
+              {
+                "spatial_plaquette": -0.03284735585403106,
+                "sweep": 4
+              },
+              {
+                "spatial_plaquette": -0.04653812682113934,
+                "sweep": 5
+              },
+              {
+                "spatial_plaquette": -0.02436528918302807,
+                "sweep": 6
+              },
+              {
+                "spatial_plaquette": -0.032003934119429124,
+                "sweep": 7
+              },
+              {
+                "spatial_plaquette": -0.027197458815542266,
+                "sweep": 8
+              },
+              {
+                "spatial_plaquette": -0.020221892493563588,
+                "sweep": 9
+              },
+              {
+                "spatial_plaquette": 0.031329751035885936,
+                "sweep": 10
+              },
+              {
+                "spatial_plaquette": -0.005041418913785269,
+                "sweep": 11
+              },
+              {
+                "spatial_plaquette": 0.006277406970437993,
+                "sweep": 12
+              },
+              {
+                "spatial_plaquette": 0.005571389626939614,
+                "sweep": 13
+              },
+              {
+                "spatial_plaquette": 0.022517973435584447,
+                "sweep": 14
+              },
+              {
+                "spatial_plaquette": 0.04273842224134669,
+                "sweep": 15
+              },
+              {
+                "spatial_plaquette": 0.0355976835597821,
+                "sweep": 16
+              }
+            ]
+          },
+          {
+            "acceptance_rate": 1.0,
+            "early_mean": 0.1003985788661734,
+            "lag_one_correlation": 0.7591319091033046,
+            "late_mean": 0.060976812316795095,
+            "late_minus_early": -0.039421766549378304,
+            "seed": 456,
+            "trace": [
+              {
+                "spatial_plaquette": 0.0782661326980771,
+                "sweep": 1
+              },
+              {
+                "spatial_plaquette": 0.07271339431457313,
+                "sweep": 2
+              },
+              {
+                "spatial_plaquette": 0.05289974443409859,
+                "sweep": 3
+              },
+              {
+                "spatial_plaquette": 0.08490375493542261,
+                "sweep": 4
+              },
+              {
+                "spatial_plaquette": 0.11094647297487617,
+                "sweep": 5
+              },
+              {
+                "spatial_plaquette": 0.10723112016969656,
+                "sweep": 6
+              },
+              {
+                "spatial_plaquette": 0.14842100680033468,
+                "sweep": 7
+              },
+              {
+                "spatial_plaquette": 0.14780700460230833,
+                "sweep": 8
+              },
+              {
+                "spatial_plaquette": 0.11108582054533027,
+                "sweep": 9
+              },
+              {
+                "spatial_plaquette": 0.09796592654220387,
+                "sweep": 10
+              },
+              {
+                "spatial_plaquette": 0.0694386400232691,
+                "sweep": 11
+              },
+              {
+                "spatial_plaquette": 0.029488907991265512,
+                "sweep": 12
+              },
+              {
+                "spatial_plaquette": 0.049682212031715696,
+                "sweep": 13
+              },
+              {
+                "spatial_plaquette": 0.03780336358725449,
+                "sweep": 14
+              },
+              {
+                "spatial_plaquette": 0.06130879035495792,
+                "sweep": 15
+              },
+              {
+                "spatial_plaquette": 0.03104083745836391,
+                "sweep": 16
+              }
+            ]
+          }
+        ],
+        "early_mean": 0.03916854893121498,
+        "late_mean": 0.03791148837481179
+      }
+    },
+    "lean_kernel_verified": false,
+    "limitations": [
+      "finite Euclidean lattice and finite seeded sampling only",
+      "no thermalization time, effective sample size or autocorrelation error certification",
+      "early/late drift and cold/Haar agreement are descriptive, not proof of equilibrium",
+      "spatial plaquette is not a full physical transfer-matrix spectral observable",
+      "no continuum, infinite-volume, or physical mass-gap theorem"
+    ],
+    "parameters": {
+      "action": "SU2 Wilson, beta sum_p (1-ReTr(U_p)/2)",
+      "beta": 0.0,
+      "boundary_conditions": "periodic",
+      "epsilon": 0.3,
+      "extents": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "seeds": [
+        123,
+        456
+      ],
+      "sweeps": 16
+    },
+    "physical_law_proven": false,
+    "schema_version": "ym-su2-equilibration-0.1",
+    "status": "FINITE_COLD_HAAR_TRAJECTORY_DIAGNOSTIC"
+  },
+  "schema_version": "ym-su2-equilibration-certificate-0.1",
+  "scope": "recomputed bounded finite cold/Haar trajectories only",
+  "status": "FINITE_DIAGNOSTIC_REPLAY"
+}

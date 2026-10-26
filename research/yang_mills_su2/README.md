@@ -52,3 +52,9 @@ refuses stale or forged report records.
 Newton Solver and EINSTEIN-X Ω integration remains
 `SOURCE_UNAVAILABLE_NOT_EXECUTED` until their exact executable sources are
 available. **No continuum theory or positive physical mass gap is proved.**
+
+For the follow-up, six-plaquette local Wilson updates have been independently
+compared with the original global action, and a separate matched cold/Haar
+trajectory experiment now documents residual non-equilibration on \(2^4\)
+and \(3^4\) lattices. See [EQUILIBRATION_SCOPE.md](EQUILIBRATION_SCOPE.md).
+The new receipts do not supersede or change the five original evidence files.
