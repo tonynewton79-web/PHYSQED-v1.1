@@ -12,6 +12,8 @@ assertion that PHYSQED proves the listed analytic premises.
 | Abstract three-mode weak-weight example `m_n(t)` has an excitation gap tending to zero despite `sup_t|m_n(t)-2^-t|<=1/n` | `TRANSFER_MOMENT_SCOPE.md`, `artifacts/abstract_transfer_moments_n10.json` | Exact abstract transfer statement only, not a Wilson transfer example. |
 | Old finite strong-coupling temporal correlation row sum `18 beta` and all-spectrum transfer bound at `beta<1/18` | `STRONG_COUPLING_SCOPE.md`, `WILSON_LATTICE_SPECTRAL_GAP.md` | Specialization of classical Dobrushin--Follmer and Perron ratio methods. Separate exact rational PHYSQED receipt; not novel. |
 | New SU2 chordal inequality `W1(nu_b,nu_b')<=|b-b'|/3`, `lambda_n/lambda_0<=6 beta` for `0<beta<1/6` | `WILSON_CHORDAL_MIXING.md`, `wilson_chordal_mixing.py`, `artifacts/wilson_chordal_beta1_over_10.json` | Analytic proof independently reviewed (Barta identities symbolically differentiated, metric comparison and transfer positivity checked). PHYSQED replays only exact rational consequences. Recent unrefereed literature states at least the `1/6` range. |
+| Necessary **single-link method ceiling** `sum_f c_ef >= 9 beta/2` on 4D tori with all periods at least three | `WILSON_SINGLE_LINK_CEILING.md`, `wilson_dobrushin_ceiling.py`, `artifacts/wilson_single_link_ceiling_beta2_over_9.json` | Explicit central-sign Wilson background, geometric 18-neighbor count, analytic Haar derivative `1/4` and independent quaternion plaquette perturbation tests. This excludes unweighted single-link row contraction at `beta>=2/9`; it does not prove the global sharp upper bound or a physical mass gap. Related ceiling is prior art in unrefereed Bhattacharjee--Bhattacharya work. |
+| Conditional two-sided block physical-energy window and residual power telescope | `CONTINUUM_SCALE_BRIDGE.md`, `continuum_scale_bridge.py`, `artifacts/abstract_physical_scale_bridge_n2.json` | Elementary positive-transfer functional analysis and exact rational consequences, with abstract diagonal toy control. The required Wilson weak-coupling block contraction and positive correlator witness are **not** established. |
 | Necessary lower value `K>=1/4` for any global chordal `W1(nu_b,nu_b')<=K|b-b'|` | Direct derivative of the normalized spherical exponential tilt at Haar `b=0`; Haar covariance `Var(h.x)=1/4` | Complete elementary proposition included in the manuscript. This is a **lower** bound on the candidate constant, not the unverified sharp `K=1/4` upper bound. |
 | At `beta=1/10`, exact `q=3/5` and the lattice log lower `-log(3/5)=0.510825623765990683...` | `wilson_chordal_mixing.py`, `artifacts/wilson_chordal_beta1_over_10.json` | Rational eight-term atanh lower certificate; logarithmic decimal independently computed at 50 digits. |
 | 16-sweep cold/Haar differences at `beta=0,1/2`, volume `2^4,3^4` | `EQUILIBRATION_SCOPE.md`, `artifacts/equilibration/*.json` | Seeded finite diagnostics; **not** equilibrium, physical mass, independent trials or a thermodynamic limit. |
@@ -37,6 +39,11 @@ assertion that PHYSQED proves the listed analytic premises.
   The short Sharp Curvature paper covers the conservative 1/6 route;
   the longer Dobrushin Ceiling paper states the 2/9 claim. If wrong,
   historical attribution would be misleading.
+
+- Ruling: distinguish the **necessary** method-ceiling row lower `9 beta/2`
+  from the sufficient chordal row upper `6 beta`; the former does not justify
+  a sharp coefficient of `1/4` at arbitrary fields. If wrong, a lower
+  sensitivity bound could be misreported as a complete mixing theorem.
 
 ## Reproducibility checks
 

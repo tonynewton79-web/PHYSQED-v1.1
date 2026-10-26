@@ -92,3 +92,9 @@ module and source-hashed abstract diagonal-transfer example distinguish a
 finite physical mass, a collapsing gap, and an infinite-energy/ultralocal
 limit. No actual Wilson weak-coupling input, continuum measure or physical
 mass gap has been certified by that construction.
+
+The [single-link Wilson ceiling note](WILSON_SINGLE_LINK_CEILING.md) gives
+an explicit 18-neighbor central-sign witness for a necessary Dobrushin
+row-sum lower bound `9 beta/2`. This confirms that the ordinary global
+single-link criterion cannot contract for `beta>=2/9`. The limit concerns
+one comparison method, not Yang--Mills existence or its physical mass gap.

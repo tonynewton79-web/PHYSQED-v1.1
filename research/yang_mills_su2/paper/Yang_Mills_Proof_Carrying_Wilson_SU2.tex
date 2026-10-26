@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{mathpazo}
 \usepackage{microtype}
-\usepackage[a4paper,margin=23mm]{geometry}
+\usepackage[a4paper,margin=21mm]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools,mathrsfs}
 \usepackage{booktabs,tabularx,array}
 \usepackage{tikz,pgfplots}
@@ -49,10 +49,15 @@ chordal Wasserstein comparison, and the classical Dobrushin method,
 we reconstruct a volume-uniform bound
 \(\lambda_n/\lambda_0\leq 6\beta\) for the excited
 gauge-invariant transfer eigenvalues when \(0<\beta<1/6\).
+An explicit central-sign Wilson background also yields the opposite,
+necessary Dobrushin row-sum estimate \(\sum_f c_{ef}\geq9\beta/2\),
+excluding global single-link row contraction at \(\beta\geq2/9\).
 We separately prove an exact zero-coupling plaquette covariance and
 the bias produced by sample-mean centring, give controlled character
 truncation errors, and exhibit a positive-transfer counterexample
 to inferring a uniform gap from finite correlators.
+We give a conditional two-sided physical-block spectral criterion
+and quantify its sensitivity to transfer-approximation errors.
 The verification layer replays finite rational consequences, with
 analytic hypotheses and stochastic diagnostics recorded as distinct
 claim classes. The strong-coupling estimate relies on established
@@ -103,6 +108,10 @@ a sharp Wasserstein estimate
 \cite{BhattacharjeeBhattacharyaShort,BhattacharjeeBhattacharya};
 we neither establish that sharper estimate nor claim
 priority for the \(1/6\) threshold.
+Section~5 independently constructs an explicit Wilson background
+which shows why \(2/9\) is a necessary ceiling for the ordinary
+unfixed-gauge single-link Dobrushin row-sum method; the ceiling itself
+is already discussed in the cited unrefereed work.
 Our contribution is a traceable finite-model reconstruction that
 places the transfer proof, exact rational enclosures, a rigorous
 null model, and deliberately limited numerical evidence within
@@ -523,6 +532,82 @@ is a strict lower enclosure for \(-\log q\).
 Eight terms at \(q=3/5\) are retained in an exact,
 tamper-checked receipt.
 
+\section{An intrinsic ceiling for single-link comparison}
+\label{sec:ceiling}
+
+The previous proof gives a sufficient upper bound on a matrix of
+conditional influences. We now isolate a necessary lower bound on
+that same matrix. It prevents the global single-link method from
+reaching arbitrary Wilson coupling, without asserting any failure
+of the model's spectral gap.
+
+For distinct positive links \(e,f\), let \(c_{ef}\) be the supremum,
+over configurations differing only at \(f\), of the chordal
+Wasserstein distance between the two conditional laws of \(U_e\),
+divided by the chordal distance between those values of \(U_f\).
+The supremum is taken separately for each \(f\).
+
+\begin{proposition}[Necessary single-link row-sum ceiling]
+\label{prop:ceiling}
+On a periodic four-dimensional Wilson \(\SU\) lattice whose four
+periods are at least three, every positive link \(e\) has 18
+distinct neighbors \(f\) satisfying
+\begin{equation}
+ c_{ef}\geq\frac{\beta}{4},\qquad
+ \sum_{f\ne e}c_{ef}\geq\frac92\beta.          \label{eq:ceiling}
+\end{equation}
+Thus the ordinary unweighted single-link Dobrushin criterion
+\(\sup_e\sum_{f\ne e}c_{ef}<1\) cannot hold for
+\(\beta\geq2/9\).
+\end{proposition}
+\begin{proof}
+Fix \(e=(x,0)\). For each transverse direction \(\nu=1,2,3\),
+the two plaquettes containing \(e\) are rooted at \(x\)
+and \(x-\hat\nu\). Their three other positive links are
+distinct, and the six plaquettes together involve 18 distinct
+neighbors because every period is at least three.
+
+Set the three opposite parallel links at
+\(x-\hat\nu\) equal to the central element \(-I\),
+and all the other neighboring positive links equal to \(I\).
+If \(q=U_e\), the six incident plaquette contributions are
+three copies each of \(W(q)\) and \(W(-q)\), so their sum
+vanishes identically. The single-link conditional distribution
+of \(q\) is therefore normalized Haar measure on \(S^3\).
+
+Choose any of the 18 neighboring links \(f\) and perturb its
+central value \(\sigma I\) to \(\sigma\exp(tX)\), with
+\(X\) a unit imaginary quaternion and \(\sigma\in\{\pm1\}\).
+Only one of the six staples changes. Since the remaining factors
+are central, the conditional exponential parameter
+\(b_e(t)\in\mathbb R^4\) has \(b_e(0)=0\) and
+\(|b'_e(0)|=\beta\). Take
+\(h=b'_e(0)/\beta\) and the chordal one-Lipschitz
+coordinate function \(F(q)=h\cdot q\). At Haar measure
+\(\Var(F)=1/4\), whence differentiation of the tilted
+expectation gives
+\[
+ \left.\frac{\dd}{\dd t}\E_{\nu_{b_e(t)}}F\right|_{t=0}
+   =\frac{\beta}{4}.
+\]
+The chordal distance between the two neighboring link values
+is \(|t|+o(|t|)\). Kantorovich duality proves
+\(c_{ef}\geq\beta/4\). Sum over the 18 distinct
+neighbors to obtain \eqref{eq:ceiling}.
+\end{proof}
+
+The upper estimate \(\sum_f c_{ef}\leq6\beta\) of
+Section~4 and the lower estimate \eqref{eq:ceiling}
+are compatible. The latter does \emph{not} prove that
+\(c_{ef}=\beta/4\), nor the global sharp quarter
+Wasserstein upper estimate claimed in
+\cite{BhattacharjeeBhattacharya}. It applies to the
+unfixed-gauge single-link row-sum comparison; block couplings
+and renormalized methods are not ruled out. The central-sign
+geometry and its 18 independent link perturbations are tested
+against the actual Wilson plaquette implementation, with a
+separate exact arithmetic receipt.
+
 \section{An exact Haar null model for temporal correlators}
 \label{sec:haar}
 
@@ -684,6 +769,40 @@ not an SU(2) Wilson counterexample; complete
 long-time relative asymptotics would reveal its
 slow mode.
 
+There is also a useful two-sided criterion at a fixed
+physical time separation. Let \(S=\mathcal T/\lambda_0\)
+have simple normalized vacuum \(\Omega\), and put
+\(Q=S-|\Omega\rangle\langle\Omega|\) and
+\(r=\|Q\|<1\). If \(S\) is nonnegative and
+self-adjoint, \(\|Q^k\|\leq U<1\), and a centered
+observable \(F\) obeys
+\(\langle F\Omega,S^kF\Omega\rangle\geq c>0\)
+with \(\|F\Omega\|^2\leq A\), then
+\begin{equation}
+ \frac{-\log U}{ak}\leq\frac{-\log r}{a}
+              \leq\frac{-\log(c/A)}{ak}.       \label{eq:bridge}
+\end{equation}
+Indeed \(F\Omega\perp\Omega\), so positivity and
+the operator norm give \(c\leq Ar^k\leq AU\).
+The first inequality in \eqref{eq:bridge} prevents
+vanishing physical energy, while the second requires
+a nonvanishing correlator witness to prevent all
+excited energies running to infinity. Neither hypothesis
+has been established along a weak-coupling Wilson
+continuum sequence. Even uniform physical-energy bounds
+would not by themselves construct a quantum field theory.
+
+For a normalized excited-sector approximation \(Q_D\)
+with \(\|Q\|,\|Q_D\|\leq1\), the power-telescope identity
+gives
+\begin{equation}
+ \|Q^k\|\leq\|Q_D^k\|+k\|Q-Q_D\|.             \label{eq:bridgeerror}
+\end{equation}
+At \(ak\) bounded away from zero, this particular
+certificate needs a one-step residual of order \(a\)
+or better to retain a fixed contraction margin. It
+also needs control of vacuum-projector alignment.
+
 Second, a mass in physical units requires a
 continuum construction and scale setting.
 If \(a\) denotes the lattice spacing, an
@@ -736,7 +855,12 @@ shows why finite correlations are not by
 themselves spectral certificates.
 The strongest proved estimate in this account,
 \(\lambda_n/\lambda_0\leq6\beta\), is restricted
-to \(0<\beta<1/6\). It is neither a new proof
+to \(0<\beta<1/6\). The independent central-sign
+calculation identifies \(\beta=2/9\) as a necessary
+ceiling for the unfixed-gauge single-link Dobrushin
+row-sum approach. The conditional physical-block
+criterion \eqref{eq:bridge} exposes two still-open
+renormalized spectral inputs. This is neither a new proof
 of Yang--Mills existence nor a positive mass
 gap in the continuum theory.
 
@@ -747,14 +871,16 @@ in the \texttt{research/yang\_mills\_su2/}
 tree of \url{https://github.com/tonynewton79-web/PHYSQED-v1.1}.
 The tests independently differentiate the
 two Barta identities \eqref{eq:barta1}--\eqref{eq:barta0}
-and exercise tamper rejection. A natural next
-mathematical question is whether the recently
-claimed sharp \(1/4\) chordal sensitivity can be
-proved independently; even that would not remove
-the essential weak-coupling and continuum-limit
-requirements.
+and exercise tamper rejection. Exact link-incidence
+receipts and a separate physical-block arithmetic
+module retain the new method-ceiling and conditional
+scaling distinctions. The next mathematical objective
+is a block-scale contraction and a nonvanishing
+correlator witness along the relevant weak-coupling
+trajectory, followed by continuum reconstruction.
 
 \begin{thebibliography}{9}
+\small
 \bibitem{OsterwalderSeiler}
 K.~Osterwalder and E.~Seiler,
 \emph{Gauge field theories on a lattice},
