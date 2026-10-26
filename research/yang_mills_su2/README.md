@@ -60,6 +60,15 @@ coupled excitation energies tend to zero. The result has a strict rational
 receipt and a separate PHYSQED evidence-ledger kind. **It is not a Wilson
 SU(2) example or a Yang--Mills spectral bound.**
 
+The [finite-coupling Wilson transfer analysis](WILSON_TRANSFER_SCOPE.md)
+now identifies the physical positive-beta Wilson temporal-link kernel,
+derives a uniform SU(2) character-truncation tail enclosure with an exact
+PHYSQED-ledger receipt, and checks the periodic spatial-cap/timelike-slab
+action factorization under local gauge transformations. An independent
+rational bound controls genuine finite-volume connected temporal plaquette
+correlations but grows with total lattice size. These are finite-lattice
+certificates, not a uniform four-dimensional mass gap.
+
 For the follow-up, six-plaquette local Wilson updates have been independently
 compared with the original global action, and a separate matched cold/Haar
 trajectory experiment now documents residual non-equilibration on \(2^4\)

@@ -19,6 +19,7 @@ from pathlib import Path
 
 from .beta_zero_correlators import replay_beta_zero_correlator_receipt
 from .transfer_moment_obstructions import replay_transfer_moment_receipt
+from .wilson_transfer_characters import replay_wilson_transfer_receipt
 from .character_cli import replay_character_certificate
 from .simulation import run_chains
 
@@ -30,7 +31,21 @@ KINDS = {
     "EXACT_HAAR_CORRELATOR": "Exact ideal beta-zero Haar expectation; no physical spectral bound",
     "EXACT_TRANSFER_MOMENT_OBSTRUCTION": (
         "Exact abstract positive-transfer counterexample; not a Wilson SU2 spectral bound"),
+    "EXACT_WILSON_TRANSFER_CHARACTER": (
+        "Exact Wilson temporal-link character kernel; not the interacting 4D transfer spectrum"),
     "FINITE_LATTICE_NUMERICAL": "Seeded finite Wilson-lattice sampling; no continuum limit",
+}
+ALLOWED_METADATA = {
+    "PHYSQED_EXACT_POLYNOMIAL": ({},),
+    "EXACT_RATIONAL_INTERVAL": ({},),
+    "EXACT_HAAR_CORRELATOR": ({}, {"scope": "beta0"}),
+    "EXACT_TRANSFER_MOMENT_OBSTRUCTION": (
+        {}, {"model": "positive-transfer-abstract"}),
+    "EXACT_WILSON_TRANSFER_CHARACTER": (
+        {}, {"model": "wilson-temporal-link"}),
+    "FINITE_LATTICE_NUMERICAL": (
+        {}, {"negative_control": "beta0-cold"},
+        {"negative_control": "beta0-haar"}),
 }
 SOLVER_IDS = ("newton_solver", "einstein_x_omega")
 # Pin the exact declarative quaternion polynomial. This both prevents a
@@ -210,10 +225,8 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
         any(type(k) is not str or len(k) > 40 or type(v) not in (str, int, bool)
             or len(str(v)) > 160 for k, v in metadata.items())):
         raise ValueError("metadata must contain at most eight short scalar fields")
-    if kind == "EXACT_TRANSFER_MOMENT_OBSTRUCTION" and metadata not in (
-        {}, {"model": "positive-transfer-abstract"}
-    ):
-        raise ValueError("abstract transfer evidence refuses physical classifications")
+    if metadata not in ALLOWED_METADATA[kind]:
+        raise ValueError("unrecognized evidence provenance or physical classification")
     path = _source_path(source_path)
     obj, data = _load_json(path)
     if kind == "PHYSQED_EXACT_POLYNOMIAL":
@@ -240,6 +253,11 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
             raise ValueError("abstract positive-transfer moment certificate failed exact replay")
         status = "ABSTRACT_SPECTRAL_MASKING_EXACT"
         verification_hash = _digest(_canonical(obj))
+    elif kind == "EXACT_WILSON_TRANSFER_CHARACTER":
+        if not replay_wilson_transfer_receipt(obj):
+            raise ValueError("Wilson temporal-link character certificate failed exact replay")
+        status = "FINITE_WILSON_TRANSFER_CHARACTER_EXACT"
+        verification_hash = _digest(_canonical(obj))
     else:
         _replay_numerical(obj)
         status = "FINITE_LATTICE_NUMERICAL"
@@ -251,6 +269,9 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
         "EXACT_HAAR_CORRELATOR": ("research/yang_mills_su2/beta_zero_correlators.py",),
         "EXACT_TRANSFER_MOMENT_OBSTRUCTION": (
             "research/yang_mills_su2/transfer_moment_obstructions.py",),
+        "EXACT_WILSON_TRANSFER_CHARACTER": (
+            "research/yang_mills_su2/wilson_transfer_characters.py",
+            "research/yang_mills_su2/character_bounds.py"),
         "FINITE_LATTICE_NUMERICAL": ("research/yang_mills_su2/su2.py",
                                      "research/yang_mills_su2/lattice.py",
                                      "research/yang_mills_su2/simulation.py"),
