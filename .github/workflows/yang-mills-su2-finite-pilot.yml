@@ -1,0 +1,36 @@
+name: Yang–Mills Finite SU2 Pilot and PHYSQED Evidence
+
+on:
+  push:
+    paths:
+      - 'research/yang_mills_su2/**'
+      - 'projects/physqed/engine.py'
+      - 'projects/physqed/replay.py'
+      - '.github/workflows/yang-mills-su2-finite-pilot.yml'
+  pull_request:
+    paths:
+      - 'research/yang_mills_su2/**'
+      - 'projects/physqed/engine.py'
+      - 'projects/physqed/replay.py'
+      - '.github/workflows/yang-mills-su2-finite-pilot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-finite-pilot-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Install independent symbolic test oracle
+        run: python -m pip install sympy==1.14.0
+      - name: Re-run 4D SU2 physical model, exact character intervals, and PHYSQED bridge
+        run: python -m unittest discover -s research/yang_mills_su2/tests -v
+      - name: Re-run existing PHYSQED regression suite
+        run: python -m unittest discover -s projects/physqed/tests -q
+      - name: Verify finite-model report and source hashes
+        run: python -m research.yang_mills_su2.evidence_bridge --verify research/yang_mills_su2/artifacts/integrated_evidence_report.json

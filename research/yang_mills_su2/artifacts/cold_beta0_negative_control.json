@@ -1,0 +1,133 @@
+{
+  "acceptance_rate": 1.0,
+  "connected_correlator": [
+    {
+      "independent_chain_standard_error": 0.00016841910952069156,
+      "mean": 0.0002756251723322232
+    },
+    {
+      "independent_chain_standard_error": 5.137983697480608e-05,
+      "mean": 0.0001346400453587871
+    }
+  ],
+  "continuum_mass_gap_proven": false,
+  "equilibrium_claim": false,
+  "limitations": [
+    "finite lattice and finite sampling only",
+    "the thermalization and autocorrelation times are unmeasured",
+    "cold initialization makes short low-angle runs strong transient diagnostics, not equilibrium estimates",
+    "no autocorrelation-time or continuum-limit certification",
+    "a single spatial-plaquette channel is not the entire physical spectrum",
+    "independent-chain standard errors are exploratory, not full systematic errors"
+  ],
+  "parameters": {
+    "action": "SU2 Wilson, beta sum_p (1-ReTr(U_p)/2)",
+    "beta": 0.0,
+    "boundary_conditions": "periodic",
+    "epsilon": 0.15,
+    "extents": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "initialization": "cold",
+    "seeds": [
+      123,
+      456
+    ],
+    "sweeps": 4,
+    "thin": 1,
+    "warmup": 2
+  },
+  "per_chain": [
+    {
+      "acceptance_rate": 1.0,
+      "connected_correlator": [
+        0.00010720606281153157,
+        8.326020838398101e-05
+      ],
+      "mean_spatial_plaquette": 0.9415251919076562,
+      "measurements": [
+        {
+          "sweep": 1,
+          "timeslice": [
+            0.9566885357863365,
+            0.9570493330900879
+          ]
+        },
+        {
+          "sweep": 2,
+          "timeslice": [
+            0.9440800740656204,
+            0.9410887016697189
+          ]
+        },
+        {
+          "sweep": 3,
+          "timeslice": [
+            0.9422851201623866,
+            0.9288012475321704
+          ]
+        },
+        {
+          "sweep": 4,
+          "timeslice": [
+            0.9306939168640128,
+            0.9315146060909157
+          ]
+        }
+      ],
+      "samples": 4,
+      "seed": 123
+    },
+    {
+      "acceptance_rate": 1.0,
+      "connected_correlator": [
+        0.00044404428185291475,
+        0.00018601988233359317
+      ],
+      "mean_spatial_plaquette": 0.9245362327836882,
+      "measurements": [
+        {
+          "sweep": 1,
+          "timeslice": [
+            0.9577137911101358,
+            0.9418939537410749
+          ]
+        },
+        {
+          "sweep": 2,
+          "timeslice": [
+            0.9378234854171531,
+            0.9245309399119858
+          ]
+        },
+        {
+          "sweep": 3,
+          "timeslice": [
+            0.9298720105348637,
+            0.8989958605947543
+          ]
+        },
+        {
+          "sweep": 4,
+          "timeslice": [
+            0.9158056469852207,
+            0.8896541739743179
+          ]
+        }
+      ],
+      "samples": 4,
+      "seed": 456
+    }
+  ],
+  "physical_law_proven": false,
+  "schema_version": "ym-su2-finite-pilot-0.1",
+  "spatial_plaquette": {
+    "independent_chain_standard_error": 0.008494479561983959,
+    "mean": 0.9330307123456723
+  },
+  "status": "FINITE_LATTICE_NUMERICAL",
+  "thermalization_status": "UNTHERMALIZED_COLD_START_TRANSIENT"
+}
