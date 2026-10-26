@@ -14,6 +14,7 @@ from research.yang_mills_su2.transfer_moment_obstructions import transfer_moment
 from research.yang_mills_su2.wilson_transfer_characters import wilson_transfer_receipt
 from research.yang_mills_su2.wilson_dobrushin import strong_coupling_receipt
 from research.yang_mills_su2.wilson_spectral_gap import lattice_spectral_gap_receipt
+from research.yang_mills_su2.wilson_chordal_mixing import chordal_mixing_receipt
 from research.yang_mills_su2.simulation import run_chains
 
 
@@ -195,6 +196,38 @@ class EvidenceBridgeTests(unittest.TestCase):
         record = self.record("EXACT_WILSON_LATTICE_SPECTRAL_RATIO", path, {})
         self.assertEqual(record["status"],
                          "FINITE_WILSON_LATTICE_SPECTRAL_RATIO_ARITHMETIC")
+
+    def test_chordal_wilson_lattice_bound_has_distinct_fail_closed_kind(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "chordal-spectral-ratio.json"
+            original = chordal_mixing_receipt(1, 10, 8)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            record = self.record("EXACT_WILSON_CHORDAL_LATTICE_RATIO", path,
+                                 {"scope": "finite-chordal-beta-lt-one-sixth"})
+            self.assertEqual(record["status"],
+                             "FINITE_SU2_CHORDAL_MIXING_RATIO_ARITHMETIC")
+            self.assertIn("chordal", record["scope"])
+            self.assertFalse(record["continuum_mass_gap_proven"])
+            ledger = self.ledger([record])
+            self.validate(ledger)
+            for bad_metadata in ({"scope": "continuum"},
+                                 {"physical_law_proven": True},
+                                 {"scope": "finite-chordal-beta-lt-one-sixth",
+                                  "lean_kernel_verified": True}):
+                with self.subTest(metadata=bad_metadata), self.assertRaises(ValueError):
+                    self.record("EXACT_WILSON_CHORDAL_LATTICE_RATIO", path,
+                                bad_metadata)
+            forged = copy.deepcopy(original)
+            forged["sharp_quarter_wasserstein_bound_verified"] = True
+            path.write_text(json.dumps(forged), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.validate(ledger)
+
+    def test_committed_chordal_wilson_beta_tenth_artifact_replays(self):
+        path = ROOT / "research/yang_mills_su2/artifacts/wilson_chordal_beta1_over_10.json"
+        record = self.record("EXACT_WILSON_CHORDAL_LATTICE_RATIO", path, {})
+        self.assertEqual(record["status"],
+                         "FINITE_SU2_CHORDAL_MIXING_RATIO_ARITHMETIC")
 
     def test_legacy_evidence_categories_also_refuse_false_physical_metadata(self):
         character = ROOT / "research/yang_mills_su2/artifacts/character_beta2_exact.json"
