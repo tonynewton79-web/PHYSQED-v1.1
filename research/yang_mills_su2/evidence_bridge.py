@@ -21,6 +21,7 @@ from .beta_zero_correlators import replay_beta_zero_correlator_receipt
 from .transfer_moment_obstructions import replay_transfer_moment_receipt
 from .wilson_transfer_characters import replay_wilson_transfer_receipt
 from .wilson_dobrushin import replay_strong_coupling_receipt
+from .wilson_spectral_gap import replay_lattice_spectral_gap_receipt
 from .character_cli import replay_character_certificate
 from .simulation import run_chains
 
@@ -36,6 +37,9 @@ KINDS = {
         "Exact Wilson temporal-link character kernel; not the interacting 4D transfer spectrum"),
     "EXACT_WILSON_DOBRUSHIN_BOUND": (
         "Finite Wilson strong-coupling covariance bound; not a continuum or full-spectrum gap"),
+    "EXACT_WILSON_LATTICE_SPECTRAL_RATIO": (
+        "Exact gauge-invariant strong-coupling lattice spectral ratio arithmetic; "
+        "analytic inputs not kernel-formalized, no continuum mass gap"),
     "FINITE_LATTICE_NUMERICAL": "Seeded finite Wilson-lattice sampling; no continuum limit",
 }
 ALLOWED_METADATA = {
@@ -48,6 +52,8 @@ ALLOWED_METADATA = {
         {}, {"model": "wilson-temporal-link"}),
     "EXACT_WILSON_DOBRUSHIN_BOUND": (
         {}, {"scope": "finite-strong-coupling"}),
+    "EXACT_WILSON_LATTICE_SPECTRAL_RATIO": (
+        {}, {"scope": "finite-strong-coupling-spectral-ratio"}),
     "FINITE_LATTICE_NUMERICAL": (
         {}, {"negative_control": "beta0-cold"},
         {"negative_control": "beta0-haar"}),
@@ -268,6 +274,11 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
             raise ValueError("Wilson Dobrushin rational bound failed exact replay")
         status = "FINITE_STRONG_COUPLING_COVARIANCE_BOUND"
         verification_hash = _digest(_canonical(obj))
+    elif kind == "EXACT_WILSON_LATTICE_SPECTRAL_RATIO":
+        if not replay_lattice_spectral_gap_receipt(obj):
+            raise ValueError("Wilson lattice spectral ratio arithmetic failed exact replay")
+        status = "FINITE_WILSON_LATTICE_SPECTRAL_RATIO_ARITHMETIC"
+        verification_hash = _digest(_canonical(obj))
     else:
         _replay_numerical(obj)
         status = "FINITE_LATTICE_NUMERICAL"
@@ -284,6 +295,9 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
             "research/yang_mills_su2/character_bounds.py"),
         "EXACT_WILSON_DOBRUSHIN_BOUND": (
             "research/yang_mills_su2/wilson_dobrushin.py",),
+        "EXACT_WILSON_LATTICE_SPECTRAL_RATIO": (
+            "research/yang_mills_su2/wilson_spectral_gap.py",
+            "research/yang_mills_su2/wilson_dobrushin.py"),
         "FINITE_LATTICE_NUMERICAL": ("research/yang_mills_su2/su2.py",
                                      "research/yang_mills_su2/lattice.py",
                                      "research/yang_mills_su2/simulation.py"),

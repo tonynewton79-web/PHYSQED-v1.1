@@ -13,6 +13,7 @@ from research.yang_mills_su2.beta_zero_correlators import beta_zero_correlator_r
 from research.yang_mills_su2.transfer_moment_obstructions import transfer_moment_receipt
 from research.yang_mills_su2.wilson_transfer_characters import wilson_transfer_receipt
 from research.yang_mills_su2.wilson_dobrushin import strong_coupling_receipt
+from research.yang_mills_su2.wilson_spectral_gap import lattice_spectral_gap_receipt
 from research.yang_mills_su2.simulation import run_chains
 
 
@@ -163,6 +164,37 @@ class EvidenceBridgeTests(unittest.TestCase):
             path.write_text(json.dumps(forged), encoding="utf-8")
             with self.assertRaises(ValueError):
                 self.validate(ledger)
+
+    def test_lattice_transfer_ratio_has_distinct_noncontinuum_evidence_kind(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "lattice-spectral-gap.json"
+            original = lattice_spectral_gap_receipt(1, 100, 8)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            record = self.record("EXACT_WILSON_LATTICE_SPECTRAL_RATIO", path,
+                                 {"scope": "finite-strong-coupling-spectral-ratio"})
+            self.assertEqual(record["status"],
+                             "FINITE_WILSON_LATTICE_SPECTRAL_RATIO_ARITHMETIC")
+            self.assertIn("gauge-invariant", record["scope"])
+            self.assertFalse(record["continuum_mass_gap_proven"])
+            ledger = self.ledger([record])
+            self.validate(ledger)
+            for metadata in ({"continuum_mass_gap_proven": True},
+                             {"scope": "continuum-mass-gap"},
+                             {"scope": "finite-strong-coupling-spectral-ratio",
+                              "lean_kernel_verified": True}):
+                with self.subTest(metadata=metadata), self.assertRaises(ValueError):
+                    self.record("EXACT_WILSON_LATTICE_SPECTRAL_RATIO", path, metadata)
+            forged = copy.deepcopy(original)
+            forged["lattice_gap_lower"]["numerator"] = "0"
+            path.write_text(json.dumps(forged), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.validate(ledger)
+
+    def test_committed_lattice_transfer_ratio_artifact_replays(self):
+        path = ROOT / "research/yang_mills_su2/artifacts/wilson_lattice_spectral_gap_beta1_over_100.json"
+        record = self.record("EXACT_WILSON_LATTICE_SPECTRAL_RATIO", path, {})
+        self.assertEqual(record["status"],
+                         "FINITE_WILSON_LATTICE_SPECTRAL_RATIO_ARITHMETIC")
 
     def test_legacy_evidence_categories_also_refuse_false_physical_metadata(self):
         character = ROOT / "research/yang_mills_su2/artifacts/character_beta2_exact.json"

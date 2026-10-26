@@ -165,6 +165,14 @@ conclusion from this comparison alone.
 
 ## 5. What remains
 
+The same Dobrushin covariance mechanism, when applied to *all* bounded
+gauge-invariant spatial observables and combined with strict transfer-kernel
+positivity, implies a volume-uniform spectral gap in **lattice time units**
+for the complete gauge-invariant transfer spectrum at `0<beta<1/18`.
+The proof and its non-continuum scope are in
+`WILSON_LATTICE_SPECTRAL_GAP.md`. This is a spectral **ratio** theorem; the
+exponential factor in the separate absolute Fourier-cutoff error remains.
+
 The main mathematical obstacle is now sharply identified: controlling
 the spatial Wilson multiplier and gauge-projected sector *without* a
 volume-growing norm estimate, then extending estimates beyond the

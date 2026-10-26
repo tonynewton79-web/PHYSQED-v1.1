@@ -1,0 +1,31 @@
+{
+  "analytic_premises": [
+    "four-dimensional periodic SU2 Wilson links with beta < 1/18",
+    "classical Dobrushin-Follmer all-bounded-slice covariance estimate",
+    "strictly positive trace-class gauge-projected Wilson transfer",
+    "Perron ground state, time-period limit and excited-state test observable"
+  ],
+  "analytic_theorem_kernel_verified": false,
+  "continuum_mass_gap_proven": false,
+  "fingerprint": "b208da5bbcf4a476457676e5f7cf93ab414d0888a13fd3e8d35e02af3eb09e21",
+  "input": {
+    "beta": {
+      "denominator": "100",
+      "numerator": "1"
+    },
+    "log_terms": 8
+  },
+  "lattice_gap_lower": {
+    "denominator": "16459883835622992308257344085455",
+    "numerator": "28218334094460617478035988756544"
+  },
+  "lean_kernel_verified": false,
+  "physical_law_proven": false,
+  "schema_version": "ym-wilson-lattice-spectral-ratio-0.1",
+  "scope": "FINITE_SPATIAL_VOLUME_GAUGE_INVARIANT_STRONG_COUPLING_ONLY",
+  "spectral_ratio_upper": {
+    "denominator": "50",
+    "numerator": "9"
+  },
+  "status": "FINITE_WILSON_LATTICE_SPECTRAL_RATIO_ARITHMETIC"
+}
