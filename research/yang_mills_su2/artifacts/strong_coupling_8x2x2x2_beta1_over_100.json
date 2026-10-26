@@ -1,0 +1,30 @@
+{
+  "beta": {
+    "denominator": "100",
+    "numerator": "1"
+  },
+  "continuum_mass_gap_proven": false,
+  "covariance_upper": {
+    "denominator": "640625",
+    "numerator": "13122"
+  },
+  "dobrushin_row_sum_upper": {
+    "denominator": "50",
+    "numerator": "9"
+  },
+  "extents": [
+    8,
+    2,
+    2,
+    2
+  ],
+  "fingerprint": "35b6921c2db0a7859acbaeb75781c64d9b08ed33407e25414000c05001af6077",
+  "full_spectrum_gap_proven": false,
+  "lean_kernel_verified": false,
+  "max_link_plaquette_neighbor_incidences": 18,
+  "physical_law_proven": false,
+  "schema_version": "ym-wilson-dobrushin-0.1",
+  "status": "FINITE_STRONG_COUPLING_COVARIANCE_BOUND",
+  "temporal_distance": 4,
+  "time_lag": 4
+}
