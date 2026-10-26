@@ -53,6 +53,13 @@ Newton Solver and EINSTEIN-X Ω integration remains
 `SOURCE_UNAVAILABLE_NOT_EXECUTED` until their exact executable sources are
 available. **No continuum theory or positive physical mass gap is proved.**
 
+An independent [abstract transfer-moment obstruction](TRANSFER_MOMENT_SCOPE.md)
+now gives exact positive-transfer correlation sequences that converge
+uniformly in absolute error to a gapped reference while their smallest
+coupled excitation energies tend to zero. The result has a strict rational
+receipt and a separate PHYSQED evidence-ledger kind. **It is not a Wilson
+SU(2) example or a Yang--Mills spectral bound.**
+
 For the follow-up, six-plaquette local Wilson updates have been independently
 compared with the original global action, and a separate matched cold/Haar
 trajectory experiment now documents residual non-equilibration on \(2^4\)

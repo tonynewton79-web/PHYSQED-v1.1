@@ -1,0 +1,133 @@
+{
+  "analytical_premises": [
+    "T_n=diag(1,1/2,1-1/n) is a positive self-adjoint transfer matrix",
+    "vacuum A couplings are sqrt(1-1/n) and sqrt(1/n)",
+    "the lowest observable-coupled gap is -log(1-1/n) and tends to zero",
+    "the uniform error bound follows from 0<=b^t-a^t<=1"
+  ],
+  "certificate_scope": "ABSTRACT_POSITIVE_TRANSFER_OPERATOR_ONLY",
+  "continuum_mass_gap_proven": false,
+  "hankel_minors": [
+    {
+      "denominator": "625",
+      "numerator": "9"
+    },
+    {
+      "denominator": "12500",
+      "numerator": "81"
+    },
+    {
+      "denominator": "250000",
+      "numerator": "729"
+    },
+    {
+      "denominator": "5000000",
+      "numerator": "6561"
+    },
+    {
+      "denominator": "100000000",
+      "numerator": "59049"
+    }
+  ],
+  "lean_kernel_verified": false,
+  "moments": [
+    {
+      "denominator": "1",
+      "numerator": "1"
+    },
+    {
+      "denominator": "50",
+      "numerator": "27"
+    },
+    {
+      "denominator": "500",
+      "numerator": "153"
+    },
+    {
+      "denominator": "5000",
+      "numerator": "927"
+    },
+    {
+      "denominator": "50000",
+      "numerator": "6093"
+    },
+    {
+      "denominator": "500000",
+      "numerator": "43587"
+    },
+    {
+      "denominator": "5000000",
+      "numerator": "336033"
+    }
+  ],
+  "parameters": {
+    "horizon": 4,
+    "n": 10
+  },
+  "physical_law_proven": false,
+  "positive_period_four_fixture": [
+    {
+      "denominator": "1",
+      "numerator": "1"
+    },
+    {
+      "denominator": "17",
+      "numerator": "10"
+    },
+    {
+      "denominator": "17",
+      "numerator": "8"
+    },
+    {
+      "denominator": "17",
+      "numerator": "10"
+    }
+  ],
+  "reference_eigenvalue": {
+    "denominator": "2",
+    "numerator": "1"
+  },
+  "reference_moments": [
+    {
+      "denominator": "1",
+      "numerator": "1"
+    },
+    {
+      "denominator": "2",
+      "numerator": "1"
+    },
+    {
+      "denominator": "4",
+      "numerator": "1"
+    },
+    {
+      "denominator": "8",
+      "numerator": "1"
+    },
+    {
+      "denominator": "16",
+      "numerator": "1"
+    },
+    {
+      "denominator": "32",
+      "numerator": "1"
+    },
+    {
+      "denominator": "64",
+      "numerator": "1"
+    }
+  ],
+  "schema_version": "ym-abstract-transfer-moments-0.1",
+  "slow_eigenvalue": {
+    "denominator": "10",
+    "numerator": "9"
+  },
+  "slow_spectral_weight": {
+    "denominator": "10",
+    "numerator": "1"
+  },
+  "uniform_absolute_error_bound": {
+    "denominator": "10",
+    "numerator": "1"
+  }
+}
