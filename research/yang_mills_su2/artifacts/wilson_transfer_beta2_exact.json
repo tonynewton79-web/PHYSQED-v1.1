@@ -1,0 +1,96 @@
+{
+  "analytic_premises": [
+    "SU2 Peter-Weyl characters chi_(d-1)=U_(d-1)(ReTr(g)/2)",
+    "exp(beta ReTr(g)/2)=sum_(d>=1) (2d/beta) I_d(beta) chi_(d-1)(g)",
+    "I_d(beta)>0 for beta>0 and every integer d>=1",
+    "full Wilson transfer requires spatial potential and site gauge projection"
+  ],
+  "continuum_mass_gap_proven": false,
+  "fingerprint": "10a241ef8a52abdf7b93c7579305b1e723bca01bc6d0c758cd2cd0b94fcd2659",
+  "fundamental_to_trivial_ratio": {
+    "lower": {
+      "denominator": "429375144342121956745",
+      "numerator": "185974151367424461984"
+    },
+    "upper": {
+      "denominator": "4295332935665573606896",
+      "numerator": "1860426501340422978881"
+    }
+  },
+  "input": {
+    "D": 8,
+    "bessel_terms": 12,
+    "beta": {
+      "denominator": "1",
+      "numerator": "2"
+    },
+    "exp_terms": 12
+  },
+  "kernel_samples": [
+    {
+      "lower": {
+        "denominator": "1025571342376587101781727641600000",
+        "numerator": "137861052650591405736738774291719"
+      },
+      "trace_half": {
+        "denominator": "1",
+        "numerator": "-1"
+      },
+      "upper": {
+        "denominator": "37118806071706447576339474022400000",
+        "numerator": "5041034379622987569474113830244719"
+      }
+    },
+    {
+      "lower": {
+        "denominator": "55009730858171175242956800000",
+        "numerator": "54970161321347486477355575047"
+      },
+      "trace_half": {
+        "denominator": "1",
+        "numerator": "0"
+      },
+      "upper": {
+        "denominator": "95653220338575998248550400000",
+        "numerator": "95716841011216072420322111227"
+      }
+    },
+    {
+      "lower": {
+        "denominator": "8836032287629782821634048000000",
+        "numerator": "24012738821578166276994712194773"
+      },
+      "trace_half": {
+        "denominator": "2",
+        "numerator": "1"
+      },
+      "upper": {
+        "denominator": "1827472624362573078660460314624000000",
+        "numerator": "4968856693216347206525510571479451887"
+      }
+    },
+    {
+      "lower": {
+        "denominator": "344753503223947827609600000",
+        "numerator": "2547067662403458560985762569"
+      },
+      "trace_half": {
+        "denominator": "1",
+        "numerator": "1"
+      },
+      "upper": {
+        "denominator": "110420875826888053424304361963939430400000",
+        "numerator": "815951519447509739279478749455912796785469"
+      }
+    }
+  ],
+  "lean_kernel_verified": false,
+  "physical_law_proven": false,
+  "schema_version": "ym-wilson-temporal-character-0.1",
+  "scope": "ACTUAL_WILSON_TEMPORAL_LINK_KERNEL_NOT_FULL_TRANSFER_SPECTRUM",
+  "status": "FINITE_WILSON_TRANSFER_CHARACTER_EXACT",
+  "uniform_character_tail_upper": {
+    "denominator": "3224567808000",
+    "numerator": "2232105163"
+  }
+}

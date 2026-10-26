@@ -11,6 +11,7 @@ from unittest.mock import patch
 from research.yang_mills_su2.character_cli import certify_character
 from research.yang_mills_su2.beta_zero_correlators import beta_zero_correlator_receipt
 from research.yang_mills_su2.transfer_moment_obstructions import transfer_moment_receipt
+from research.yang_mills_su2.wilson_transfer_characters import wilson_transfer_receipt
 from research.yang_mills_su2.simulation import run_chains
 
 
@@ -110,6 +111,44 @@ class EvidenceBridgeTests(unittest.TestCase):
             path.write_text(ambiguous, encoding="utf-8")
             with self.assertRaises(ValueError):
                 self.record("EXACT_TRANSFER_MOMENT_OBSTRUCTION", path, {})
+
+    def test_exact_positive_beta_wilson_temporal_kernel_has_separate_evidence(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "wilson-temporal.json"
+            original = wilson_transfer_receipt(2, 1, 8, 12, 12)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            record = self.record("EXACT_WILSON_TRANSFER_CHARACTER", path,
+                                 {"model": "wilson-temporal-link"})
+            self.assertEqual(record["status"], "FINITE_WILSON_TRANSFER_CHARACTER_EXACT")
+            self.assertIn("Wilson temporal-link", record["scope"])
+            self.assertFalse(record["continuum_mass_gap_proven"])
+            ledger = self.ledger([record])
+            self.validate(ledger)
+            forged = copy.deepcopy(original)
+            forged["fundamental_to_trivial_ratio"]["upper"]["numerator"] = "1"
+            path.write_text(json.dumps(forged), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.validate(ledger)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            for metadata in ({"continuum_mass_gap_proven": True},
+                             {"model": "continuum Wilson spectrum"}):
+                with self.subTest(metadata=metadata), self.assertRaises(ValueError):
+                    self.record("EXACT_WILSON_TRANSFER_CHARACTER", path, metadata)
+
+    def test_committed_wilson_character_artifact_exactly_replays(self):
+        path = ROOT / "research/yang_mills_su2/artifacts/wilson_transfer_beta2_exact.json"
+        record = self.record("EXACT_WILSON_TRANSFER_CHARACTER", path, {})
+        self.assertEqual(record["status"], "FINITE_WILSON_TRANSFER_CHARACTER_EXACT")
+
+    def test_legacy_evidence_categories_also_refuse_false_physical_metadata(self):
+        character = ROOT / "research/yang_mills_su2/artifacts/character_beta2_exact.json"
+        for kind, source in (("PHYSQED_EXACT_POLYNOMIAL", FIXTURE),
+                             ("EXACT_RATIONAL_INTERVAL", character)):
+            for metadata in ({"continuum_mass_gap_proven": True},
+                             {"model": "4D Wilson SU2 spectrum proven"},
+                             {"physical_law_proven": True}):
+                with self.subTest(kind=kind, metadata=metadata), self.assertRaises(ValueError):
+                    self.record(kind, source, metadata)
 
     def test_sign_error_is_not_forgiven_by_claim_prose(self):
         altered = json.loads(FIXTURE.read_text())
