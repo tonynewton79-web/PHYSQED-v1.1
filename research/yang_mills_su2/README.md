@@ -69,6 +69,16 @@ rational bound controls genuine finite-volume connected temporal plaquette
 correlations but grows with total lattice size. These are finite-lattice
 certificates, not a uniform four-dimensional mass gap.
 
+The [explicit strong-coupling continuation](STRONG_COUPLING_SCOPE.md)
+now specializes classical Dobrushin--Föllmer covariance control to the
+interacting periodic Wilson SU(2) Gibbs measure. For `0<=beta<1/18`,
+it supplies a **spatial-volume-independent** temporal-plaquette correlation
+envelope and a separately replayable PHYSQED rational receipt. Two further
+modules give finite plaquette-subset/character-product errors and a
+finite-rank gauge-projected Wilson transfer operator-norm bound. The latter
+is not a computed spectrum: its remaining `exp(3 beta V)` factor prevents
+a volume-uniform full-spectrum or continuum gap conclusion.
+
 For the follow-up, six-plaquette local Wilson updates have been independently
 compared with the original global action, and a separate matched cold/Haar
 trajectory experiment now documents residual non-equilibration on \(2^4\)

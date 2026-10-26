@@ -12,6 +12,7 @@ from research.yang_mills_su2.character_cli import certify_character
 from research.yang_mills_su2.beta_zero_correlators import beta_zero_correlator_receipt
 from research.yang_mills_su2.transfer_moment_obstructions import transfer_moment_receipt
 from research.yang_mills_su2.wilson_transfer_characters import wilson_transfer_receipt
+from research.yang_mills_su2.wilson_dobrushin import strong_coupling_receipt
 from research.yang_mills_su2.simulation import run_chains
 
 
@@ -139,6 +140,29 @@ class EvidenceBridgeTests(unittest.TestCase):
         path = ROOT / "research/yang_mills_su2/artifacts/wilson_transfer_beta2_exact.json"
         record = self.record("EXACT_WILSON_TRANSFER_CHARACTER", path, {})
         self.assertEqual(record["status"], "FINITE_WILSON_TRANSFER_CHARACTER_EXACT")
+
+    def test_exact_strong_coupling_receipt_has_distinct_fail_closed_scope(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "strong-coupling.json"
+            original = strong_coupling_receipt((8, 2, 2, 2), 1, 100, 4)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            record = self.record("EXACT_WILSON_DOBRUSHIN_BOUND", path,
+                                 {"scope": "finite-strong-coupling"})
+            self.assertEqual(record["status"], "FINITE_STRONG_COUPLING_COVARIANCE_BOUND")
+            self.assertIn("strong-coupling", record["scope"])
+            self.assertFalse(record["continuum_mass_gap_proven"])
+            ledger = self.ledger([record])
+            self.validate(ledger)
+            for bad_metadata in ({"continuum_mass_gap_proven": True},
+                                 {"scope": "full-spectrum-gap"},
+                                 {"scope": "finite-strong-coupling", "lean_proven": True}):
+                with self.subTest(metadata=bad_metadata), self.assertRaises(ValueError):
+                    self.record("EXACT_WILSON_DOBRUSHIN_BOUND", path, bad_metadata)
+            forged = copy.deepcopy(original)
+            forged["covariance_upper"]["denominator"] = "1"
+            path.write_text(json.dumps(forged), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.validate(ledger)
 
     def test_legacy_evidence_categories_also_refuse_false_physical_metadata(self):
         character = ROOT / "research/yang_mills_su2/artifacts/character_beta2_exact.json"
