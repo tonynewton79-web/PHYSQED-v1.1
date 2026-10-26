@@ -15,6 +15,7 @@ from research.yang_mills_su2.wilson_transfer_characters import wilson_transfer_r
 from research.yang_mills_su2.wilson_dobrushin import strong_coupling_receipt
 from research.yang_mills_su2.wilson_spectral_gap import lattice_spectral_gap_receipt
 from research.yang_mills_su2.wilson_chordal_mixing import chordal_mixing_receipt
+from research.yang_mills_su2.continuum_scale_bridge import scale_bridge_receipt
 from research.yang_mills_su2.simulation import run_chains
 
 
@@ -228,6 +229,31 @@ class EvidenceBridgeTests(unittest.TestCase):
         record = self.record("EXACT_WILSON_CHORDAL_LATTICE_RATIO", path, {})
         self.assertEqual(record["status"],
                          "FINITE_SU2_CHORDAL_MIXING_RATIO_ARITHMETIC")
+
+    def test_abstract_scale_window_has_separate_nonphysical_ledger_scope(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "scale-bridge.json"
+            original = scale_bridge_receipt("finite_mass", 8, 6)
+            path.write_text(json.dumps(original), encoding="utf-8")
+            record = self.record("EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE", path,
+                                 {"model": "diagonal-transfer-abstract"})
+            self.assertEqual(record["status"],
+                             "ABSTRACT_SCALE_BRIDGE_ARITHMETIC_ONLY")
+            self.assertIn("abstract", record["scope"].lower())
+            self.assertFalse(record["continuum_mass_gap_proven"])
+            ledger = self.ledger([record])
+            self.validate(ledger)
+            for bad in ({"continuum_mass_gap_proven": True},
+                        {"model": "Wilson continuum SU2"},
+                        {"model": "diagonal-transfer-abstract",
+                         "lean_kernel_verified": True}):
+                with self.subTest(bad=bad), self.assertRaises(ValueError):
+                    self.record("EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE", path, bad)
+            forged = copy.deepcopy(original)
+            forged["derived"]["physical_gap_lower"]["numerator"] = "999"
+            path.write_text(json.dumps(forged), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                self.validate(ledger)
 
     def test_legacy_evidence_categories_also_refuse_false_physical_metadata(self):
         character = ROOT / "research/yang_mills_su2/artifacts/character_beta2_exact.json"

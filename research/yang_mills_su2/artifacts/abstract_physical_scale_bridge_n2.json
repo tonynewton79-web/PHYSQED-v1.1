@@ -1,0 +1,50 @@
+{
+  "analytic_premises": [
+    "normalized transfer is exactly diag(1,r_n), not an interacting Wilson operator",
+    "centered diagonal toy observable has unit excitation norm and block correlation r_n**n",
+    "Wilson weak-coupling crossing, continuum QFT and physical scale setting are not provided"
+  ],
+  "analytic_theorem_kernel_verified": false,
+  "block_ratio": {
+    "denominator": "4",
+    "numerator": "1"
+  },
+  "continuum_mass_gap_proven": false,
+  "derived": {
+    "block_lower": {
+      "denominator": "4",
+      "numerator": "1"
+    },
+    "block_upper": {
+      "denominator": "4",
+      "numerator": "1"
+    },
+    "physical_gap_lower": {
+      "denominator": "125",
+      "numerator": "168"
+    },
+    "physical_gap_upper": {
+      "denominator": "5000",
+      "numerator": "6963"
+    },
+    "physical_scale": {
+      "denominator": "1",
+      "numerator": "1"
+    }
+  },
+  "fingerprint": "c860f2b68fb3ecabe5d9f567e4a9a326588e28e07bfc888d41735fafbcd0a70f",
+  "input": {
+    "atanh_terms": 2,
+    "family": "finite_mass",
+    "n": 2
+  },
+  "lean_kernel_verified": false,
+  "physical_law_proven": false,
+  "schema_version": "ym-abstract-scale-bridge-0.1",
+  "scope": "DIAGONAL_POSITIVE_TWO_MODE_TRANSFER_ONLY",
+  "single_step_ratio": {
+    "denominator": "2",
+    "numerator": "1"
+  },
+  "status": "EXACT_ABSTRACT_DIAGONAL_TRANSFER_ARITHMETIC"
+}

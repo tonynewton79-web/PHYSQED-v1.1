@@ -84,3 +84,11 @@ compared with the original global action, and a separate matched cold/Haar
 trajectory experiment now documents residual non-equilibration on \(2^4\)
 and \(3^4\) lattices. See [EQUILIBRATION_SCOPE.md](EQUILIBRATION_SCOPE.md).
 The new receipts do not supersede or change the five original evidence files.
+
+The [physical-scale bridge note](CONTINUUM_SCALE_BRIDGE.md) identifies a
+strictly **conditional** two-sided block criterion and a residual-stability
+requirement for the weak-coupling continuum programme. Its exact rational
+module and source-hashed abstract diagonal-transfer example distinguish a
+finite physical mass, a collapsing gap, and an infinite-energy/ultralocal
+limit. No actual Wilson weak-coupling input, continuum measure or physical
+mass gap has been certified by that construction.

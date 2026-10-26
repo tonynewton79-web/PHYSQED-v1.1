@@ -23,6 +23,7 @@ from .wilson_transfer_characters import replay_wilson_transfer_receipt
 from .wilson_dobrushin import replay_strong_coupling_receipt
 from .wilson_spectral_gap import replay_lattice_spectral_gap_receipt
 from .wilson_chordal_mixing import replay_chordal_mixing_receipt
+from .continuum_scale_bridge import replay_scale_bridge_receipt
 from .character_cli import replay_character_certificate
 from .simulation import run_chains
 
@@ -44,6 +45,9 @@ KINDS = {
     "EXACT_WILSON_CHORDAL_LATTICE_RATIO": (
         "Exact SU2 chordal finite-lattice spectral ratio arithmetic; "
         "analytic Poincare/mixing premises not kernel-formalized, no continuum gap"),
+    "EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE": (
+        "Exact abstract two-mode block-transfer scale arithmetic; "
+        "no Wilson spectrum, physical mass gap or continuum construction"),
     "FINITE_LATTICE_NUMERICAL": "Seeded finite Wilson-lattice sampling; no continuum limit",
 }
 ALLOWED_METADATA = {
@@ -60,6 +64,8 @@ ALLOWED_METADATA = {
         {}, {"scope": "finite-strong-coupling-spectral-ratio"}),
     "EXACT_WILSON_CHORDAL_LATTICE_RATIO": (
         {}, {"scope": "finite-chordal-beta-lt-one-sixth"}),
+    "EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE": (
+        {}, {"model": "diagonal-transfer-abstract"}),
     "FINITE_LATTICE_NUMERICAL": (
         {}, {"negative_control": "beta0-cold"},
         {"negative_control": "beta0-haar"}),
@@ -290,6 +296,11 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
             raise ValueError("Wilson chordal lattice ratio arithmetic failed exact replay")
         status = "FINITE_SU2_CHORDAL_MIXING_RATIO_ARITHMETIC"
         verification_hash = _digest(_canonical(obj))
+    elif kind == "EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE":
+        if not replay_scale_bridge_receipt(obj):
+            raise ValueError("abstract scale bridge arithmetic failed exact replay")
+        status = "ABSTRACT_SCALE_BRIDGE_ARITHMETIC_ONLY"
+        verification_hash = _digest(_canonical(obj))
     else:
         _replay_numerical(obj)
         status = "FINITE_LATTICE_NUMERICAL"
@@ -312,6 +323,8 @@ def record_evidence(kind: str, source_path: Path | None, metadata: dict) -> dict
         "EXACT_WILSON_CHORDAL_LATTICE_RATIO": (
             "research/yang_mills_su2/wilson_chordal_mixing.py",
             "research/yang_mills_su2/wilson_spectral_gap.py"),
+        "EXACT_ABSTRACT_PHYSICAL_SCALE_BRIDGE": (
+            "research/yang_mills_su2/continuum_scale_bridge.py",),
         "FINITE_LATTICE_NUMERICAL": ("research/yang_mills_su2/su2.py",
                                      "research/yang_mills_su2/lattice.py",
                                      "research/yang_mills_su2/simulation.py"),
