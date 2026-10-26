@@ -38,6 +38,11 @@ The bound is independent of the three spatial periods. It controls the
 physical *gauge-invariant lattice* transfer spectrum, **not** the
 continuum mass gap.
 
+An improved **chordal-metric** argument using the spherical SU(2)
+single-link conditional law obtains `lambda_n/lambda_0 <= 6 beta`
+for `0<beta<1/6`. See `WILSON_CHORDAL_MIXING.md`; the present
+total-variation theorem remains a separate valid, more elementary route.
+
 ## Proof
 
 **Positive compact transfer.** The Wilson temporal-link convolution

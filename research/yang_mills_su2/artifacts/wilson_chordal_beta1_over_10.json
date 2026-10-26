@@ -1,0 +1,49 @@
+{
+  "analytic_premises": [
+    "unit S3 von Mises-Fisher spectral gap >=3 for every concentration",
+    "chordal (not geodesic) W1 sensitivity <=parameter distance/3",
+    "standard Wasserstein-Dobrushin covariance comparison for smooth slice functions",
+    "strictly positive smooth gauge-invariant Wilson transfer and Perron ratio test"
+  ],
+  "analytic_theorem_kernel_verified": false,
+  "barta_degree_one_quadratic": {
+    "denominator": "25",
+    "numerator": "4"
+  },
+  "barta_zonal_derivative_quadratic": {
+    "denominator": "25",
+    "numerator": "6"
+  },
+  "chordal_wasserstein_parameter_upper": {
+    "denominator": "3",
+    "numerator": "1"
+  },
+  "continuum_mass_gap_proven": false,
+  "dobrushin_row_sum_upper": {
+    "denominator": "5",
+    "numerator": "3"
+  },
+  "fingerprint": "cccbc483a50a2c1044b8cb6c6eec8aac7b54f43ad184bddff5e75769a8c75a83",
+  "input": {
+    "atanh_terms": 8,
+    "beta": {
+      "denominator": "10",
+      "numerator": "1"
+    }
+  },
+  "lattice_gap_lower": {
+    "denominator": "24183350231040",
+    "numerator": "12353474966347"
+  },
+  "lean_kernel_verified": false,
+  "link_neighbor_plaquette_incidences": 18,
+  "physical_law_proven": false,
+  "schema_version": "ym-wilson-chordal-mixing-0.1",
+  "scope": "GAUGE_INVARIANT_FINITE_LATTICE_BETA_LT_1_OVER_6_ONLY",
+  "sharp_quarter_wasserstein_bound_verified": false,
+  "spectral_ratio_upper": {
+    "denominator": "5",
+    "numerator": "3"
+  },
+  "status": "FINITE_SU2_CHORDAL_MIXING_RATIO_ARITHMETIC"
+}
