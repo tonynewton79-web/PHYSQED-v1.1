@@ -126,9 +126,8 @@ angle identities before their final refusal decision.
 ```bash
 python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_jet_oracle.py' -v
 python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_einstein_maxwell.py' -v
-PYTHONPATH=projects/physqed python -m v12.coupled_benchmark \\
-  --output /tmp/physqed-v12-receipts/STD-GR-EM-RN-001.json \\
-  --negative-output /tmp/physqed-v12-receipts/STD-GR-EM-RN-NEG.json
+mkdir -p /tmp/physqed-v12-receipts
+PYTHONPATH=projects/physqed python -m v12.coupled_benchmark --output /tmp/physqed-v12-receipts/STD-GR-EM-RN-001.json --negative-output /tmp/physqed-v12-receipts/STD-GR-EM-RN-NEG.json
 ```
 
 These tests concern exact local classical GR and electrodynamics. They
