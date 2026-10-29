@@ -48,6 +48,9 @@ jobs:
       - name: Reproducible standard-physics receipts
         run: |
           PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.coupled_benchmark \
+            --output /tmp/physqed-v12-receipts/STD-GR-EM-RN-001.json \
+            --negative-output /tmp/physqed-v12-receipts/STD-GR-EM-RN-NEG.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
