@@ -1,4 +1,31 @@
-# PHYSQED v1.1 — Proof-Carrying Physics
+# PHYSQED v1.2 — Proof-Carrying Physics
+
+**General-purpose *architecture* for scoped verification of classical and quantum physics.**
+The v1.2 expansion provides executable symbolic backends for tensor geometry,
+Einstein equations, Lie and Yang–Mills gauge fields, finite quantum operators,
+Euler–Lagrange and finite Gaussian perturbative field theory, and canonical
+constraint checks. Existing v0.1–v1.1 proof-carrying components remain intact.
+
+**Read the new [v1.2 physics backend guide](docs/PHYSQED-v1.2-physics-backends.md)**,
+which starts with standard textbook physics, lists implemented capabilities,
+explicit restrictions, reproducible tests, adversarial refusals, and receipt
+status rules. CI targets **CPython 3.15.2** and checks existing v0.1 regressions.
+
+```bash
+python -m pip install -r requirements-test.txt
+python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
+```
+
+The title does **not** imply unrestricted mathematical or physical
+certification: chart-local tensor expressions, exact finite-dimensional
+algebra and controlled symbolic calculations are supported; a general
+quantum gravity proof engine, arbitrary continuum QFT, global PDE
+dynamics, physical-model validation and independent proof-assistant
+certification are not yet established.
+
+---
+
+## Previous v1.1 release documentation (retained)
 
 **Experimental exact-mathematics verification software by Tony Newton (Newton Astro Labs).**
 
