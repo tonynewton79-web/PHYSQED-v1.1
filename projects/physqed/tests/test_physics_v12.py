@@ -13,7 +13,7 @@ from sympy.physics.matrices import msigma
 
 
 def all_zero(items):
-    if isinstance(items,S.MatrixBase):
+    if isinstance(items,(S.MatrixBase,S.NDimArray)):
         return all(zero(x) for x in items)
     if isinstance(items,(list,tuple)):
         return all(all_zero(x) for x in items)
