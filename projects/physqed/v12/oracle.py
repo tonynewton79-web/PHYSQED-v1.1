@@ -9,8 +9,8 @@ from fractions import Fraction
 
 
 def _r(x):
-    if isinstance(x,bool):
-        raise ValueError("boolean is not a rational datum")
+    if isinstance(x,bool) or not isinstance(x,(int,str,Fraction)):
+        raise ValueError("exact integer, string or Fraction required; floats refused")
     return Fraction(x)
 
 
