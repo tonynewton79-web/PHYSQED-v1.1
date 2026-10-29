@@ -105,11 +105,10 @@ class ExactJetOracleTests(unittest.TestCase):
             for b in range(n):
                 for c in range(n):
                     for d in range(n):
-                        for e in range(n):
-                            # Diagonal metric/inverse in Schwarzschild chart.
-                            K+=g[a][a]*inv[a][a]*inv[b][b]*inv[c][c]*inv[d][d]*(
-                                g[a][a]*R[a][b][c][d]*R[a][b][c][d]
-                            ) if e==0 else Fraction(0)
+                        # Diagonal metric: K = sum_a,b,c,d
+                        # g_aa g^bb g^cc g^dd (R^a_bcd)^2.
+                        K += (g[a][a]*inv[b][b]*inv[c][c]*inv[d][d] *
+                              R[a][b][c][d]**2)
         self.assertEqual(K,Fraction(3,256))
 
     def test_jet_rejects_bad_metric(self):
