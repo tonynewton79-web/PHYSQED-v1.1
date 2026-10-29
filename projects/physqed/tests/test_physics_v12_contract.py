@@ -116,3 +116,15 @@ class CoupledContractTests(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
+
+
+class ReceiptReplayTests(unittest.TestCase):
+    def test_tampered_receipt_refused(self):
+        import copy
+        from v12.contracts import replay_contract_receipt
+        case=rn()
+        correct=evaluate_contract(case)
+        self.assertTrue(replay_contract_receipt(case,correct)['positive_certificate_verified'])
+        altered=copy.deepcopy(correct)
+        altered['nodes'][0]['passed']=False
+        self.assertFalse(replay_contract_receipt(case,altered)['receipt_recomputed_and_matched'])
