@@ -46,10 +46,15 @@ def build_receipt():
         [(einstein_maxwell_residual(geometry,2*F),S.zeros(4))],
         source="intentionally incorrect electromagnetic amplitude",
         assumptions=("same RN metric","field scaled by factor 2"))
-    if bad["status"]!="REJECTED" or not any(
-        v["counterexample"] is not None for v in bad["checks"] if not v["passed"]
-    ):
+    if bad["status"]!="REJECTED":
         raise AssertionError("scaled-field negative control not refused")
+    # Explicit admissible coordinate-point witness; generic polynomial
+    # receipt substitution need not respect chart/domain assumptions.
+    physical_point={r:S.Integer(4),theta:S.pi/2}
+    bad_at=(einstein_maxwell_residual(geometry,2*F)
+            .subs(physical_point).applyfunc(S.simplify))
+    if not any(v!=0 for v in bad_at):
+        raise AssertionError("no nonzero scaled-field residual at r=4")
     return receipt,bad
 
 
