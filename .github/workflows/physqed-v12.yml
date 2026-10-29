@@ -45,6 +45,9 @@ jobs:
       - name: Coupled Einstein-Maxwell positive and negative controls
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_einstein_maxwell.py' -v
+      - name: Spherical conservation trigonometric exactness and refusal
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_trig.py' -v
       - name: Reproducible standard-physics receipts
         run: |
           PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
