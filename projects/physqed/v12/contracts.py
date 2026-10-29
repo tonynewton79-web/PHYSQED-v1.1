@@ -305,3 +305,26 @@ def save_contract(receipt,path):
     target.parent.mkdir(parents=True,exist_ok=True)
     target.write_text(json.dumps(receipt,sort_keys=True,indent=2)+'\n',encoding='utf-8')
     return target
+
+
+def replay_contract_receipt(spec: EinsteinMaxwellSpec, receipt):
+    """Fail-closed full *recomputation*, not mere checksum comparison.
+
+    The caller supplies the typed model again. Every node, curvature oracle
+    comparison and current verifier-source hash is recomputed, then compared
+    byte-for-byte under deterministic JSON. Modifying a stored receipt is
+    refused unless the modified bytes match the current recomputation.
+    This is not an independently trusted proof assistant/kernel.
+    """
+    fresh=evaluate_contract(spec)
+    matched=(isinstance(receipt,dict) and
+             json.dumps(receipt,sort_keys=True,separators=(',',':')) ==
+             json.dumps(fresh,sort_keys=True,separators=(',',':')))
+    return {'schema':'physqed-v1.2-contract-replay-1',
+            'claim_id':spec.claim_id,
+            'receipt_recomputed_and_matched':bool(matched),
+            'fresh_status':fresh['status'],
+            'positive_certificate_verified':bool(matched and
+                fresh['status']=='PASS_LOCAL_TYPED_COUPLED_SYMBOLIC_CONTRACT'),
+            'independent_symbolic_proof':False,
+            'note':'Replays symbolic components and rational curvature oracle; not a global proof'}
