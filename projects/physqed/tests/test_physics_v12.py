@@ -9,6 +9,7 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import sympy as S
 from v12 import *
+from sympy.physics.matrices import msigma
 
 
 def all_zero(items):
@@ -126,16 +127,16 @@ class GaugeBenchmarks(unittest.TestCase):
 
 class QuantumBenchmarks(unittest.TestCase):
     def test_pauli_commutator(self):
-        x,y,z=S.physics.matrices.msigma(1),S.physics.matrices.msigma(2),S.physics.matrices.msigma(3)
+        x,y,z=msigma(1),msigma(2),msigma(3)
         self.assertTrue(all_zero(commutator(x,y)-2*S.I*z))
         self.assertTrue(all_zero(anticommutator(x,y)))
 
     def test_clifford_euclidean_2d(self):
-        x,y=S.physics.matrices.msigma(1),S.physics.matrices.msigma(2)
+        x,y=msigma(1),msigma(2)
         self.assertTrue(all_zero(clifford_residual([x,y],S.eye(2))))
 
     def test_robertson_saturated(self):
-        x,y=S.physics.matrices.msigma(1),S.physics.matrices.msigma(2)
+        x,y=msigma(1),msigma(2)
         rho=S.diag(1,0)
         self.assertTrue(zero(robertson_residual(x,y,rho)))
 
