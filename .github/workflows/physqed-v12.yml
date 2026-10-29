@@ -1,0 +1,45 @@
+name: PHYSQED v1.2 physics-backend certificates
+
+on:
+  push:
+    paths:
+      - "projects/physqed/v12/**"
+      - "projects/physqed/tests/test_physics_v12.py"
+      - ".github/workflows/physqed-v12.yml"
+  pull_request:
+    paths:
+      - "projects/physqed/v12/**"
+      - "projects/physqed/tests/test_physics_v12.py"
+      - ".github/workflows/physqed-v12.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  physics-exact:
+    name: Python 3.15.2 textbook checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Confirm interpreter (security-patched release)
+        run: |
+          python -c "import sys; assert sys.version_info[:3] == (3,15,2), sys.version"
+      - name: Install exact-symbolic dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-test.txt
+      - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
+      - name: Existing legacy engine regression
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_engine.py' -v
+      - name: Compile all new Python modules
+        run: |
+          python -m compileall -q projects/physqed/v12
+
