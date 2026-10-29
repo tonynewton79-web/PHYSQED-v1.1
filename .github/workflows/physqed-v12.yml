@@ -48,9 +48,28 @@ jobs:
       - name: Spherical conservation trigonometric exactness and refusal
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_trig.py' -v
+      - name: Typed coupled Einstein-Maxwell/ADM contracts (isolated SymPy processes)
+        shell: bash
+        run: |
+          set -euo pipefail
+          for test in \
+            test_valid_einstein_maxwell_full_linked_contract \
+            test_wrong_coupling_fails_dynamics_but_not_geometry_bridge \
+            test_wrong_cosmological_constant \
+            test_declared_inconsistent_stress \
+            test_nonclosed_declared_field_is_detected \
+            test_wrong_claimed_constraints_refused \
+            test_wrong_lapse_raises_not_green \
+            test_wrong_signature_witness_refused \
+            test_offshell_codazzi_bridge_nontrivial \
+            test_matter_noether_bridge_offshell_maxwell; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p 'test_physics_v12_contract.py' -k "$test" -v
+          done
       - name: Reproducible standard-physics receipts
         run: |
           PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.contract_benchmark --out-dir /tmp/physqed-v12-receipts
           PYTHONPATH=projects/physqed python -m v12.coupled_benchmark \
             --output /tmp/physqed-v12-receipts/STD-GR-EM-RN-001.json \
             --negative-output /tmp/physqed-v12-receipts/STD-GR-EM-RN-NEG.json
