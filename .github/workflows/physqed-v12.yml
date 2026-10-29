@@ -62,7 +62,8 @@ jobs:
             test_wrong_lapse_raises_not_green \
             test_wrong_signature_witness_refused \
             test_offshell_codazzi_bridge_nontrivial \
-            test_matter_noether_bridge_offshell_maxwell; do
+            test_matter_noether_bridge_offshell_maxwell \
+            test_tampered_receipt_refused; do
             python -m unittest discover -s projects/physqed/tests \
               -p 'test_physics_v12_contract.py' -k "$test" -v
           done
