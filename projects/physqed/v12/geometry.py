@@ -16,7 +16,19 @@ class ScopeError(ValueError):
 
 
 def zero(x):
-    return S.simplify(S.cancel(S.together(x))) == 0
+    """Conservative exact symbolic zero test including trig identities.
+
+    The second pass expands angle-multiple identities (e.g. sin(2x))
+    before trigonometric simplification. Without it, correctly conserved
+    Maxwell stress may be falsely refused in spherical coordinates.
+    """
+    try:
+        if S.simplify(S.cancel(S.together(x))) == 0:
+            return True
+        return S.simplify(S.cancel(S.together(
+            S.trigsimp(S.expand_trig(x))))) == 0
+    except (TypeError, ValueError, ZeroDivisionError, NotImplementedError):
+        return False
 
 
 class Geometry:
