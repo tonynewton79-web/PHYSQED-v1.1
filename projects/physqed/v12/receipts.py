@@ -6,6 +6,7 @@ Programs are trusted; never evaluate user-supplied Python/expression strings.
 from __future__ import annotations
 import hashlib
 import json
+from itertools import product
 from pathlib import Path
 import sympy as S
 from .geometry import ScopeError
@@ -20,7 +21,7 @@ def _components(expr):
             out.extend(_components(e))
         return out
     if isinstance(expr,S.NDimArray):
-        return list(expr)
+        return [expr[idx] for idx in product(*(range(d) for d in expr.shape))]
     return [S.sympify(expr)]
 
 
