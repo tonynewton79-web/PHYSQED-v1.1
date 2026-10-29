@@ -36,6 +36,15 @@ jobs:
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
+      - name: Reproducible standard-physics receipts
+        run: |
+          PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: physqed-v12-standard-receipts
+          path: /tmp/physqed-v12-receipts
+          if-no-files-found: warn
       - name: Existing legacy engine regression
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_engine.py' -v
