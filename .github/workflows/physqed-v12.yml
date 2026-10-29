@@ -4,12 +4,12 @@ on:
   push:
     paths:
       - "projects/physqed/v12/**"
-      - "projects/physqed/tests/test_physics_v12.py"
+      - "projects/physqed/tests/test_physics_v12*.py"
       - ".github/workflows/physqed-v12.yml"
   pull_request:
     paths:
       - "projects/physqed/v12/**"
-      - "projects/physqed/tests/test_physics_v12.py"
+      - "projects/physqed/tests/test_physics_v12*.py"
       - ".github/workflows/physqed-v12.yml"
   workflow_dispatch:
 
@@ -36,6 +36,9 @@ jobs:
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
+      - name: Independent standard-library arithmetic oracle
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_oracle.py' -v
       - name: Reproducible standard-physics receipts
         run: |
           PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
