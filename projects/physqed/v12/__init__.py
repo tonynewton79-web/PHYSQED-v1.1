@@ -15,3 +15,5 @@ from .receipts import certify, save_certificate
 __version__="1.2.0"
 
 from .contracts import EinsteinMaxwellSpec, ContractNode, evaluate_contract, save_contract
+
+from .contracts import replay_contract_receipt
