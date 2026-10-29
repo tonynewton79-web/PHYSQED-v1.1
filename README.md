@@ -6,6 +6,8 @@ Einstein equations, Lie and Yang–Mills gauge fields, finite quantum operators,
 Euler–Lagrange and finite Gaussian perturbative field theory, and canonical
 constraint checks. Existing v0.1–v1.1 proof-carrying components remain intact.
 
+**New:** [Typed Einstein–Maxwell and ADM 16-node proof-carrying contract](docs/PHYSQED-v1.2-typed-coupled-contract.md), with separately computed 4D/3D rational-jet curvature certificates, adversarial rejection cases, and reproducible JSON receipts.
+
 **Read the new [v1.2 physics backend guide](docs/PHYSQED-v1.2-physics-backends.md)**,
 which starts with standard textbook physics, lists implemented capabilities,
 explicit restrictions, reproducible tests, adversarial refusals, and receipt
