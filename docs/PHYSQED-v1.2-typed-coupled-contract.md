@@ -66,7 +66,7 @@ while failing sourceless Maxwell and stress conservation.
     PYTHONPATH=projects/physqed python -m v12.contract_benchmark --out-dir /tmp/physqed-v12-contracts
     python -m unittest discover -s projects/physqed/tests -p test_physics_v12_contract.py -k test_valid_einstein_maxwell_full_linked_contract -v
 
-GitHub Actions runs each of the ten methods in its own Python process so
+GitHub Actions runs all eleven methods (including a receipt-replay tamper test) in separate Python processes so
 large SymPy symbolic caches do not accumulate across cases. Outputs are JSON
 receipts with original assumptions, exact residual indices and source/
 oracle file SHA-256 digests. SHA-256 attests reproducibility rather than
@@ -80,3 +80,7 @@ Yang–Mills stress and currents; independent variational derivations;
 full constraint propagation; well-posed PDE estimates; external proof
 assistant, Hilbert-space operator domains, renormalisation and functional
 quantum gravity remain separate research and engineering tasks.
+
+## Full receipt replay
+
+Calling replay_contract_receipt(spec, receipt) recomputes every component, both rational curvature-oracle comparisons, and the verifier source digests from the original typed specification. It compares the full canonical serialized receipt, not merely its self-reported checksum. A changed JSON result is rejected. A replayed *rejection* is not mislabelled as a positive solution certificate. This checks reproducibility of the specific local symbolic implementation and still does not constitute a proof assistant's formal verification of continuum physics.
