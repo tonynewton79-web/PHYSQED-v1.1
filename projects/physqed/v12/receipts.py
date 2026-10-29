@@ -63,8 +63,17 @@ def certify(claim_id, domain, equations, assumptions=(), source=""):
             raise ScopeError("component count mismatch or over limit")
         for i,(x,y) in enumerate(zip(a,b)):
             delta=x-y
+            # First use the fast rational route. A separate trig-expanded
+            # route prevents false refusals of exact conservation identities
+            # involving sin(2 theta), cos(2 theta) and tan(theta).
             primary=S.simplify(delta)
+            if primary != 0:
+                primary=S.simplify(S.cancel(S.together(
+                    S.trigsimp(S.expand_trig(delta)))))
             secondary=S.cancel(S.together(S.expand(delta)))
+            if secondary != 0:
+                secondary=S.simplify(S.cancel(S.together(
+                    S.trigsimp(S.expand_trig(S.expand(delta))))))
             passed=primary==0 and secondary==0
             rows.append({"relation":k,"component":i,
                          "passed":bool(passed),
