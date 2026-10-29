@@ -17,6 +17,8 @@ local Python versions may run the same source but do not establish
 ```bash
 python -m pip install -r requirements-test.txt
 python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
+python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_oracle.py' -v
+PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
 python -m unittest discover -s projects/physqed/tests -p 'test_engine.py' -v
 ```
 
