@@ -91,6 +91,52 @@ assert receipt["status"].startswith("EXACT_SYMBOLIC")
 assert receipt["physical_law_proven"] is False
 ```
 
+## Independent curvature and coupled-field certification
+
+The **independent 2-jet oracle** (`v12/jet_oracle.py`) accepts a local
+metric, first and second metric derivatives as exact rational arrays. It
+reconstructs the metric inverse, Levi-Civita connection, its derivative,
+Riemann, Ricci, scalar and Einstein tensors using only
+`fractions.Fraction` and elementary Gaussian elimination, without importing
+SymPy or the primary geometry backend. In the unit tests, symbolic metric
+derivatives are evaluated at fixed rational points with SymPy; the
+independent oracle does **not** differentiate the metric, so independence
+is specific to the subsequent curvature computation.
+
+Reference checks compare each available component against the symbolic
+backend for Minkowski, curved warped 2-space, nonlinear coordinates on
+flat space, flat FLRW, and the Schwarzschild exterior. At M=1, r=4 the
+Schwarzschild Kretschmann invariant is exactly 3/256 and Ricci vanishes.
+
+The **Einstein–Maxwell bridge** (`v12/coupled.py`) checks a single
+coordinate-chart model simultaneously against Maxwell Bianchi identities,
+`nabla_a F^{ab}=0`, the stress tensor and its covariant divergence, and
+`G_ab=2T_ab`. Its stated action normalization is `R - F_ab F^ab`.
+The reference model is Reissner–Nordström with M=1, Q=1/2, outside the
+outer horizon, using a regular angular coordinate patch. A field rescaling
+`F -> 2F` leaves the source-free Maxwell equation satisfied but fails
+the Einstein equation, providing a meaningful negative control.
+
+A spherical-coordinate stress-conservation test exposed a limitation of
+naive SymPy zero checking: `sin(2t)tan(t)+cos(2t)-1` is identically zero
+where defined but `simplify` alone may leave it unevaluated. Both the
+geometry zero gate and the two symbolic receipt paths now expand multiple
+angle identities before their final refusal decision.
+
+```bash
+python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_jet_oracle.py' -v
+python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_einstein_maxwell.py' -v
+PYTHONPATH=projects/physqed python -m v12.coupled_benchmark \\
+  --output /tmp/physqed-v12-receipts/STD-GR-EM-RN-001.json \\
+  --negative-output /tmp/physqed-v12-receipts/STD-GR-EM-RN-NEG.json
+```
+
+These tests concern exact local classical GR and electrodynamics. They
+do not imply global cosmic evolution, quantum Maxwell theory, path
+integrals or a nonperturbative quantum gravity construction. Local
+rational replays used Python 3.13.5; Python **3.15.2** compatibility
+remains a GitHub Actions release gate.
+
 ## Future gates for broader verification
 
 1. A safe, typed, validated expression/field/metric input language, with
