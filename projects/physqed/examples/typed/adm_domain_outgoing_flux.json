@@ -1,0 +1,155 @@
+{
+  "schema": "physqed.typed-adm-domain.v1",
+  "coordinates": [
+    "t",
+    "x",
+    "y",
+    "z"
+  ],
+  "box": {
+    "t": [
+      0,
+      1
+    ],
+    "x": [
+      0,
+      1
+    ],
+    "y": [
+      0,
+      1
+    ],
+    "z": [
+      0,
+      1
+    ]
+  },
+  "spatial_metric": [
+    [
+      {
+        "add": [
+          1,
+          "t"
+        ]
+      },
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ]
+  ],
+  "lapse": {
+    "add": [
+      1,
+      "t"
+    ]
+  },
+  "shift": [
+    {
+      "rational": [
+        1,
+        5
+      ]
+    },
+    0,
+    0
+  ],
+  "lapse_floor": {
+    "rational": [
+      1,
+      2
+    ]
+  },
+  "metric_floor": 1,
+  "energy_coercivity": 1,
+  "energy_growth": 0,
+  "boundary_mode": "trace_subspaces_assumed",
+  "boundary_frames": {
+    "x_lower": [
+      [
+        1,
+        {
+          "rational": [
+            1,
+            2
+          ]
+        },
+        0,
+        0
+      ]
+    ],
+    "x_upper": [
+      [
+        1,
+        {
+          "rational": [
+            -1,
+            2
+          ]
+        },
+        0,
+        0
+      ]
+    ],
+    "y_lower": [
+      [
+        1,
+        0,
+        {
+          "rational": [
+            1,
+            2
+          ]
+        },
+        0
+      ]
+    ],
+    "y_upper": [
+      [
+        1,
+        0,
+        {
+          "rational": [
+            -1,
+            2
+          ]
+        },
+        0
+      ]
+    ],
+    "z_lower": [
+      [
+        1,
+        0,
+        0,
+        {
+          "rational": [
+            1,
+            2
+          ]
+        }
+      ]
+    ],
+    "z_upper": [
+      [
+        1,
+        0,
+        0,
+        {
+          "rational": [
+            -1,
+            2
+          ]
+        }
+      ]
+    ]
+  }
+}
