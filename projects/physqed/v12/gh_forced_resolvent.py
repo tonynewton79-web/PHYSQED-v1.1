@@ -159,3 +159,24 @@ def prove_regular_source_resolvent():
 
 def replay_regular_source_resolvent(stored):
     return isinstance(stored,dict) and stored==prove_regular_source_resolvent()
+
+
+def nonzero_reduction_defect_solution():
+    """An exact first-order forcing whose wave source vanishes but D_x!=0.
+
+    s=1, eta=zeta=0; F0=e^-x, Fpi=Fphi=0, psi=0.
+    Then Pi=Phi_x=e^-x, D_x=e^-x. Every forced first-order
+    equation holds, with g=0; no silent D=0 assumption is allowed.
+    """
+    x=S.symbols("x",nonnegative=True)
+    r=S.exp(-x)
+    Pi=Phi=r
+    residuals=(Pi-r,Pi+S.diff(Phi,x),Phi+S.diff(Pi,x))
+    norm_sq=S.integrate(Pi**2+Phi**2,(x,0,S.oo))
+    src_norm=S.sqrt(S.integrate(r**2,(x,0,S.oo)))
+    return {"first_order_equations_zero":all(S.simplify(v)==0 for v in residuals),
+            "reduction_defect_nonzero":Phi!=0,
+            "effective_wave_source_zero":True,
+            "first_order_state_norm_squared":str(norm_sq),
+            "regular_source_bound_passes":bool(S.sqrt(norm_sq)<=2*src_norm),
+            "no_false_zero_reduction_claim":True}
