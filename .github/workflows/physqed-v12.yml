@@ -64,6 +64,27 @@ jobs:
       - name: Replay exact variable-coefficient energy receipts and reject tampering
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_energy_receipts.py' -v
+      - name: Exact rational Bernstein domain-wide energy inequality gates
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_domain_energy.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          from pathlib import Path
+          import json
+          import sympy as S
+          from v12.domain_energy import certify_domain_energy
+          t,x=S.symbols("t x")
+          receipt=certify_domain_energy(
+              (t,x),{t:(0,1),x:(0,1)},
+              S.diag(1+t,2+t),[S.diag(1,2)],S.zeros(2),
+              coercivity=1,growth=2,
+              boundary="periodic_solution_assumed")
+          assert receipt["status"]=="PASS_INTERIOR_DOMAIN_BOUNDS__PDE_HYPOTHESES_PENDING"
+          assert receipt["coercivity_bound_proved"] and receipt["growth_bound_proved"]
+          assert not receipt["underlying_smooth_solution_existence_proven"]
+          Path('/tmp/physqed-v12-receipts/domain_energy.json').write_text(
+              json.dumps(receipt,sort_keys=True,indent=2)+'\n')
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
