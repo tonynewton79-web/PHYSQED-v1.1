@@ -87,12 +87,7 @@
     0,
     0
   ],
-  "lapse_floor": {
-    "rational": [
-      1,
-      2
-    ]
-  },
+  "lapse_floor": "1/2",
   "metric_floor": 1,
   "energy_coercivity": 1,
   "energy_growth": 0,
