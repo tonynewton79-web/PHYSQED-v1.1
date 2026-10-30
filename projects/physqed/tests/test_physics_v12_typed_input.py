@@ -147,6 +147,23 @@ class TypedPhysicsTests(unittest.TestCase):
         tampered["checks"][0]["passed"]=False
         self.assertFalse(replay_physics_input(data,tampered))
 
+    def test_duplicate_json_keys_refused(self):
+        original=json.dumps(minkowski())
+        hostile=original[:-1] + ', "kind": "hamiltonian"}'
+        with self.assertRaises(ScopeError):
+            load_physics_input(hostile)
+
+    def test_unsupported_derivative_ast_structure_refused(self):
+        data=kg()
+        data["lagrangian"]={"derivative":[["phi"],"t"]}
+        with self.assertRaises(ScopeError):
+            execute_physics_input(data)
+
+    def test_no_premature_certificate_on_plan(self):
+        plan=plan_physics_obligations(load_physics_input(minkowski()))
+        self.assertTrue(all("comparison" in obligation for obligation in plan))
+        self.assertFalse(any("passed" in obligation for obligation in plan))
+
     def test_unknown_symbols_and_code_strings_refused(self):
         data=oscillator()
         data["hamiltonian"]="__import__('os').system('echo unsafe')"
