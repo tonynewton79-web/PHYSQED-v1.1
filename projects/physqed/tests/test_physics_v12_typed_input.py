@@ -54,7 +54,7 @@ def kg():
     d["expected_eom"]=[{"add":[
         {"neg":{"derivative":["phi","t",2]}},
         {"derivative":["phi","x",2]},
-        {"neg":mphi2 if False else {"mul":[{"pow":["m",2]},"phi"]}}]}]
+        {"neg":{"mul":[{"pow":["m",2]},"phi"]}}]}]
     return d
 
 
