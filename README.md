@@ -1,3 +1,39 @@
+## PHYSQED v1.2 — Glancing boundary obstruction, higher corners and curved GH
+
+The next generalized-harmonic verification stage has identified a
+**sharp obstruction** to a proposed uniform *unweighted*
+metric-amplitude boundary inverse. For the existing linearized 10×10
+boundary symbol, the decaying normal-mode sequence
+`s=i+1/n^2`, `eta=1` has `|kappa|<sqrt(3)/n` while
+a unit normal-normal metric amplitude has boundary residual
+`-kappa`. Thus ordinary amplitude-normalized uniform
+boundary invertibility fails near glancing. This does **not**
+disprove a properly weighted first-order Kreiss estimate.
+
+A separate higher-corner engine checks the exact temporal
+compatibility hierarchy through requested order ≤8. The example
+`f_yz=x^3,g_yz=0` passes temporal orders 0 and 1 but
+fails order 2 with residual `-6`.
+
+A **genuinely curved Ricci-flat Brinkmann gravitational wave**
+`ds²=-2du dv+dx²+dy²+(x²-y²)du²` supplies a positive
+covariant benchmark: curvature nonzero, Ricci zero, harmonic
+coordinates, independent linearized Bianchi and reduced
+constraint-wave identities for a polynomial metric perturbation.
+
+```bash
+PYTHONPATH=projects/physqed python -m v12.gh_extended_cli \
+  --case all --output gh_extended_receipt.json
+```
+
+[Mathematical derivation, counterexamples, source and scope](
+docs/PHYSQED-v1.2-GH-glancing-higher-corners-curved.md).
+
+**Release boundary:** native Python 3.15.2 CI and inherited
+regressions remain unverified. This is not a uniform
+first-order boundary stability theorem, curved-boundary energy
+theorem, or nonlinear Einstein well-posedness proof.
+
 ## PHYSQED v1.2 — Linearized harmonic Einstein boundary-to-constraint map
 
 A **specific linearized generalized-harmonic vacuum Einstein**
