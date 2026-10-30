@@ -71,6 +71,42 @@ jobs:
             python -m unittest discover -s projects/physqed/tests \
               -p 'test_physics_v12_contract.py' -k "$test" -v
           done
+      - name: Typed four-domain JSON compiler and refusal tests
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_typed_input.py' -v
+      - name: Textbook typed input CLI positive and adversarial JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts/typed
+          for stem in metric_minkowski lagrangian_free_scalar hamiltonian_oscillator gauge_maxwell; do
+            PYTHONPATH=projects/physqed python -m v12.typed_cli \
+              --input "projects/physqed/examples/typed/${stem}.json" \
+              --output "/tmp/physqed-v12-receipts/typed/${stem}.json"
+          done
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/metric_minkowski.json \
+            --plan --output /tmp/physqed-v12-receipts/typed/minkowski_plan.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/negative_nonflat_field.json \
+            --output /tmp/physqed-v12-receipts/typed/negative_nonflat_field.json
+          exit_code=$?
+          set -e
+          if [ "$exit_code" -ne 2 ]; then echo "False flatness should fail with exit 2"; exit 1; fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/physqed-v12-receipts/typed')
+          for stem in ('metric_minkowski','lagrangian_free_scalar','hamiltonian_oscillator','gauge_maxwell'):
+              r=json.loads((p/(stem+'.json')).read_text())
+              assert r['status'].startswith('PASS_SCOPED_'), stem
+              assert not r['physical_truth_proven']
+          bad=json.loads((p/'negative_nonflat_field.json').read_text())
+          assert bad['status']=='REJECTED_UNSATISFIED_PHYSICS_OBLIGATION'
+          plan=json.loads((p/'minkowski_plan.json').read_text())
+          assert plan['execution_status']=='NOT_EXECUTED'
+          PY
       - name: Reproducible standard-physics receipts
         run: |
           PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
