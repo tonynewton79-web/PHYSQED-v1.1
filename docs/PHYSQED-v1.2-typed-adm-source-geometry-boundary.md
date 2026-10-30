@@ -223,11 +223,11 @@ Three fixture models are provided:
 \`adm_domain_hidden_pole.json\`, and
 \`adm_domain_incoming_flux.json\`.
 
-The 16 regression tests cover all-six-face flux signs, hidden
+The 18 regression tests cover all-six-face flux signs, hidden
 source poles, incoming-flux refusal, bad lapse, indefinite metric,
 insufficient metric floor, unsupported rational AST types,
 periodic-coefficient-only assumptions, absent boundary evidence,
-malformed face declarations, source-guard capture and independent
+malformed face declarations, source-guard capture, masked poles in boundary frames, off-domain guard controls, and independent
 recomputation of the complete receipt.
 
 Native Python 3.15.2 GitHub CI and inherited legacy regressions
