@@ -162,6 +162,7 @@ jobs:
             test_incoming_trace_flux_rejects_joint_contract \
             test_rank_deficient_three_column_face \
             test_hidden_original_metric_pole_not_accepted \
+            test_cancelled_electromagnetic_source_pole_refused \
             test_negative_growth_declaration_refused \
             test_periodic_assumption_does_not_prove_frame_compatibility \
             test_tampered_receipt_replay_and_changed_input \
