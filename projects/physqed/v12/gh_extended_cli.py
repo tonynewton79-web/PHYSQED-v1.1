@@ -7,7 +7,8 @@ NOT mean the uniform boundary estimate was proved.
 import argparse
 import json
 from pathlib import Path
-from .gh_glancing_corners import certify_glancing_and_corners
+from .gh_glancing_corners import (certify_glancing_and_corners,
+                                  verify_scalar_sommerfeld_reference)
 from .gh_curved_ppwave import verify_curved_ppwave
 
 
@@ -21,9 +22,12 @@ def main(argv=None):
         result={}
         if args.case in ("glancing_corners","all"):
             result["glancing_corners"]=certify_glancing_and_corners()
+            result["scalar_sommerfeld_calibration"]=verify_scalar_sommerfeld_reference()
         if args.case in ("curved_ppwave","all"):
             result["curved_ppwave"]=verify_curved_ppwave()
-        good=(("glancing_corners" not in result or result["glancing_corners"][
+        good=(("scalar_sommerfeld_calibration" not in result or
+              result["scalar_sommerfeld_calibration"]["all_local_exact_replays_pass"]) and
+              ("glancing_corners" not in result or result["glancing_corners"][
               "status"]=="PASS_GH_GLANCING_OBSTRUCTION_AND_FINITE_CORNERS")
               and ("curved_ppwave" not in result or result["curved_ppwave"][
               "status"]=="PASS_EXACT_CURVED_BULK_GH_INTERTWINER"))
