@@ -76,3 +76,6 @@ from .gh_first_order_uniform import (
     first_order_characteristics, adapted_normal_symbol,
     stable_mode_reduction, analytic_uniform_bound,
     glancing_diagnostic, certify_first_order_gh, replay_first_order_gh)
+
+from .gh_curved_timelike_frozen import (
+    verify_ppwave_timelike_frozen, replay_ppwave_timelike_frozen)
