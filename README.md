@@ -1,3 +1,23 @@
+## PHYSQED v1.2 — Exact spacetime-box energy certificates
+
+The **domain-wide energy gate** checks (S\succeq s_*I) and
+(R\preceq CS) across a declared rational spacetime rectangle,
+using **exact multivariate Bernstein coefficients and Gershgorin
+matrix inequalities**. Unlike pointwise tensor checks, its positive
+result certifies each polynomial inequality throughout the box.
+
+It supports exact rational-polynomial symmetric-hyperbolic
+coefficients, emits a replayable component certificate, and
+distinguishes successful interior bounds from inconclusive
+sufficient bounds. Smooth PDE existence and boundary flux are
+separate explicit assumptions, never silently certified.
+
+[Bounded-domain theorem and examples](
+docs/PHYSQED-v1.2-domain-energy-certificates.md).
+
+This is still an experimental feature-branch component pending
+native Python 3.15.2 CI and inherited regression results.
+
 ## PHYSQED v1.2 — Constraint energy and conditional PDE uniqueness checks
 
 Two new checks complement the shifted-ADM Einstein–Maxwell contract:
