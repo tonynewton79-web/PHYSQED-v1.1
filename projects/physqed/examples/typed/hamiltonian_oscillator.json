@@ -1,0 +1,66 @@
+{
+  "schema": "physqed.typed-input.v1",
+  "claim_id": "HARMONIC_OSCILLATOR",
+  "kind": "hamiltonian",
+  "source": "standard textbook model",
+  "assumptions": [
+    "regular local coordinate chart; formal exact expressions"
+  ],
+  "coordinates": [
+    "t"
+  ],
+  "claims": [
+    "hamilton_equations",
+    "poisson_jacobi"
+  ],
+  "positions": [
+    "q"
+  ],
+  "momenta": [
+    "p"
+  ],
+  "hamiltonian": {
+    "mul": [
+      {
+        "rational": [
+          1,
+          2
+        ]
+      },
+      {
+        "add": [
+          {
+            "pow": [
+              "q",
+              2
+            ]
+          },
+          {
+            "pow": [
+              "p",
+              2
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "expected_dq": [
+    "p"
+  ],
+  "expected_dp": [
+    {
+      "neg": "q"
+    }
+  ],
+  "jacobi_test": [
+    "q",
+    "p",
+    {
+      "mul": [
+        "q",
+        "p"
+      ]
+    }
+  ]
+}
