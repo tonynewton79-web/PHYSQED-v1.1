@@ -94,7 +94,11 @@ def verify_curved_gh_control():
     dt=S.Matrix([1,1,0,0])/S.sqrt(2)
     dt_norm=S.simplify((dt.T*gi*dt)[0])
     # H in [-1/4,+1/4] on |x|,|y|<=1/2.
-    t_bound=S.simplify(dt_norm+S.Rational(7,8))
+    # On |x|,|y|<=1/2, both x^2 and (1/4-y^2) are nonnegative.
+    # Their sum provides an exact box-wide timelike-covector bound.
+    timelike_margin=S.simplify(-S.Rational(7,8)-dt_norm)
+    margin_decomposition_verified=_zero(
+        timelike_margin-(x*x+(S.Rational(1,4)-y*y))/2)
     passed=(g.det()==-1 and Ric==S.zeros(4) and
             contracted==S.zeros(4,1) and
             r_uxux==-1 and r_uyuy==1 and
@@ -102,7 +106,8 @@ def verify_curved_gh_control():
             vecwave==S.zeros(4,1) and
             reduced==S.zeros(4) and
             full==S.diag(2,0,0,0) and
-            _zero(dt_norm+1+(x*x-y*y)/2))
+            _zero(dt_norm+1+(x*x-y*y)/2) and
+            margin_decomposition_verified)
     result={
        "schema":"physqed.curved-gh-plane-wave.v1",
        "status":("PASS_EXACT_CURVED_GH_BACKGROUND_AND_REDUCED_CONTROL" if passed
@@ -118,6 +123,8 @@ def verify_curved_gh_control():
        "time_covector_squared":str(dt_norm),
        "time_timelike_on_box_abs_x_y_le_half":bool(_zero(dt_norm+1+(x*x-y*y)/2)),
        "time_covector_squared_upper_bound":"-7/8",
+       "timelike_box_margin_nonnegative_decomposition_verified":bool(margin_decomposition_verified),
+       "timelike_margin_formula":"(x^2+(1/4-y^2))/2 >= 0 for |x|,|y|<=1/2",
        "boundary_x_constant_timelike":bool(gi[2,2]==1),
        "linearized_trace_reversed_metric":"bar_h_ab=u^2 g_ab",
        "harmonic_constraint_covector":[str(a) for a in C],
