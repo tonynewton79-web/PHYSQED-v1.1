@@ -1,3 +1,30 @@
+## PHYSQED v1.2 — Constraint energy and conditional PDE uniqueness checks
+
+Two new checks complement the shifted-ADM Einstein–Maxwell contract:
+
+- **Independent Fraction frozen-energy oracle:** for a constant
+  positive-definite spatial metric, constant positive lapse and
+  shift on a periodic three-torus, verify exact characteristic
+  polynomial, symmetrizer and constraint-energy flux conservation.
+- **Variable-coefficient energy identity:** generate the full
+  symmetric-hyperbolic principal and lower-order ADM matrices
+  including shift gradients, extrinsic curvature, spatial
+  connections and lapse acceleration; check the exact differentiated
+  matrix-energy identity and issue fully replayed receipts.
+
+The resulting conditional theorem requires global positivity,
+bounded coefficients, conserved matter, spatial evolution,
+appropriate boundary flux and a smooth solution. The program
+does **not** assert these global hypotheses from pointwise tests.
+
+[Explicit frozen periodic energy theorem](
+docs/PHYSQED-v1.2-frozen-adm-energy.md) ·
+[Variable-coefficient identity and energy estimate obligations](
+docs/PHYSQED-v1.2-variable-adm-energy.md)
+
+The implementation remains experimental pending native Python
+3.15.2 GitHub CI and legacy regression results.
+
 ## PHYSQED v1.2 — Nonzero ADM shift and conditional constraint propagation
 
 The general typed JSON compiler can now generate a **shifted 3+1
