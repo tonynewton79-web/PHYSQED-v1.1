@@ -125,7 +125,9 @@ class RestrictedExpression:
             return funcs[value["name"]](child(value["arg"]))
         if key == "derivative":
             if (not isinstance(value, list) or len(value) not in (2,3)
-                    or value[0] not in self.fields or
+                    or not isinstance(value[0], str) or
+                    not isinstance(value[1], str) or
+                    value[0] not in self.fields or
                     value[1] not in self.coordinates):
                 raise ScopeError("derivative must name a declared field and coordinate")
             order = value[2] if len(value) == 3 else 1
@@ -153,7 +155,17 @@ def load_physics_input(payload: Any) -> PhysicsInput:
         if len(payload) > MAX_BYTES:
             raise ScopeError("typed input exceeds byte limit")
         try:
-            payload = json.loads(payload, parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
+            def unique_keys(pairs):
+                out = {}
+                for key, value in pairs:
+                    if key in out:
+                        raise ValueError("duplicate JSON object key: " + key)
+                    out[key] = value
+                return out
+            payload = json.loads(
+                payload,
+                object_pairs_hook=unique_keys,
+                parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
         except (ValueError, TypeError) as exc:
             raise ScopeError("invalid JSON physics input") from exc
     if not isinstance(payload, dict):
