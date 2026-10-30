@@ -448,6 +448,25 @@ jobs:
                   'failed_corners':bad,'nonconserved_source':nonconserved},
                   sort_keys=True,indent=2)+'\n')
           PY
+      - name: Replay exact inhomogeneous GH regular-source and sourced corner CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.gh_forced_cli \
+            --output /tmp/physqed-v12-receipts/gh_forced_cli.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('/tmp/physqed-v12-receipts/gh_forced_cli.json').read_text())
+          assert a['status']=='PASS_REGULAR_FORCED_GH_CHECKS_ONLY'
+          assert a['theorem']['constants_exactly_verified']
+          assert a['exponential_forced_solution']['Green_boundary_source_J_exact']
+          assert a['sourced_corners_positive']['source_divergence_free']
+          assert not a['sourced_corners_bad_order2']['requested_corner_orders_passed']
+          assert not a['sourced_corners_nonconserved']['source_divergence_free']
+          assert not a['arbitrary_L2_strong_wellposedness_proven']
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
