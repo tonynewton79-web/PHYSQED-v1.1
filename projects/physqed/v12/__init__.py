@@ -21,3 +21,6 @@ from .contracts import replay_contract_receipt
 from .typed_input import (PhysicsInput, RestrictedExpression,
                           load_physics_input, plan_physics_obligations,
                           execute_physics_input, replay_physics_input)
+
+from .physical_types import TensorType, GeometrizedDimensions, check_tensor_signatures
+from .typed_em_bridge import run_typed_einstein_maxwell
