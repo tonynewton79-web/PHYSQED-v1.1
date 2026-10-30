@@ -34,6 +34,39 @@ regressions remain unverified. This is not a uniform
 first-order boundary stability theorem, curved-boundary energy
 theorem, or nonlinear Einstein well-posedness proof.
 
+### Refined glancing and curved-vacuum controls
+
+The glancing analysis now also records a **stronger coupled**
+normal-mode amplitude `H_tx=kappa, H_xx=-s`, for which the
+full ten-row boundary residual is exactly `-kappa^2`
+in one harmonic row. For
+`s=epsilon+i, eta=1, zeta=0`, its normalized
+residual is at most `sqrt(5/2)*epsilon`: the
+unweighted uniform metric-amplitude inverse is therefore
+rigorously unavailable. The explicitly documented
+off-glancing sector `|kappa|>=delta*p` retains a
+quantitative positive inverse bound that degenerates as
+`delta -> 0`.
+
+A second corner control
+`bar_h_yz=(t-x)^4` passes through order 2 and
+fails at order 3 (residual 48). A second curved pp-wave
+control `bar_h_ab=u^2*g_ab` solves the curved reduced
+Lichnerowicz wave but has harmonic
+`C_b=2u*(du)_b` and nonzero full Einstein
+`deltaG_uu=2`; this prevents false full-Einstein promotion
+even on a **genuinely curved Ricci-flat background**.
+
+```bash
+PYTHONPATH=projects/physqed python -m v12.gh_frontier_cli \
+  --corner-order 4 --output gh_frontier_receipt.json
+```
+
+The native CI uses `test_physics_v12_gh_uniform_sector.py`
+alongside the existing glancing/curved regression suite.
+No weighted uniform Kreiss estimate, general curved GH
+boundary condition or nonlinear Einstein IBVP is claimed.
+
 ## PHYSQED v1.2 — Linearized harmonic Einstein boundary-to-constraint map
 
 A **specific linearized generalized-harmonic vacuum Einstein**
