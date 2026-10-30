@@ -393,6 +393,21 @@ jobs:
               json.dumps({'proof':result,'glancing':samples},
                          sort_keys=True,indent=2)+'\n')
           PY
+      - name: Curved Ricci-flat pp-wave timelike ADM frozen characteristic gates
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_gh_curved_timelike_frozen.py' -v
+          PYTHONPATH=projects/physqed python - <<'PY'
+          from v12.gh_curved_timelike_frozen import verify_ppwave_timelike_frozen
+          from v12.gh_curved_ppwave import verify_curved_ppwave
+          r=verify_ppwave_timelike_frozen()
+          bulk=verify_curved_ppwave()
+          assert r['status']=='PASS_CURVED_TIMELIKE_ADM_FROZEN_PRINCIPAL'
+          assert r['normal_wave_pair_strict_signs_proved']
+          assert r['advective_normal_speed_changes_sign_at_H_zero']
+          assert not r['globally_uniform_boundary_inertia_proven']
+          assert bulk['status']=='PASS_EXACT_CURVED_BULK_GH_INTERTWINER'
+          assert bulk['nonflat_background'] and bulk['Ricci_tensor_zero']
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
