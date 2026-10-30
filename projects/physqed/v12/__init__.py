@@ -42,3 +42,6 @@ from .rational_energy import (certify_rational_domain_energy,
 from .typed_adm_domain import (parse_rational_sources,
                                certify_typed_adm_domain,
                                replay_typed_adm_domain)
+
+from .linked_adm_boundary import (certify_linked_adm_boundary,
+                                  replay_linked_adm_boundary)
