@@ -120,7 +120,7 @@ class RestrictedExpression:
         if key == "func":
             _keys(value, ("name", "arg"), ("name", "arg"))
             funcs = {"sin": S.sin, "cos": S.cos, "exp": S.exp, "sqrt": S.sqrt}
-            if value["name"] not in funcs:
+            if not isinstance(value["name"],str) or value["name"] not in funcs:
                 raise ScopeError("unsupported function constructor")
             return funcs[value["name"]](child(value["arg"]))
         if key == "derivative":
@@ -169,7 +169,7 @@ def load_physics_input(payload: Any) -> PhysicsInput:
     if payload["schema"] != SCHEMA:
         raise ScopeError("unsupported typed input schema version")
     kind = payload["kind"]
-    if kind not in KINDS:
+    if not isinstance(kind,str) or kind not in KINDS:
         raise ScopeError("unsupported physics kind")
     if not isinstance(payload["claim_id"], str) or not _ID.fullmatch(payload["claim_id"]):
         raise ScopeError("invalid claim ID")
@@ -183,7 +183,9 @@ def load_physics_input(payload: Any) -> PhysicsInput:
     params = tuple() if "parameters" not in payload else _names(payload["parameters"])
     claims = payload["claims"]
     if (not isinstance(claims, list) or not claims or
-        len(set(claims)) != len(claims) or any(x not in KINDS[kind] for x in claims)):
+        any(not isinstance(x,str) for x in claims) or
+        len(set(claims)) != len(claims) or
+        any(x not in KINDS[kind] for x in claims)):
         raise ScopeError("unsupported or repeated theorem request")
     # Ensure a JSON literal strictly determines a model; refuse unknown
     # kind-specific fields instead of silently dropping them.
@@ -197,6 +199,8 @@ def load_physics_input(payload: Any) -> PhysicsInput:
         "gauge": {"algebra", "connection", "metric"},
     }
     _keys(payload, common | specific[kind])
+    if len(set(coords + params)) != len(coords) + len(params):
+        raise ScopeError("coordinates/parameter identifier collision")
     _names(list(coords) + list(params), limit=12)
     return PhysicsInput(payload["claim_id"], kind, payload["source"],
                         tuple(assumptions), tuple(claims), coords, params, payload)
@@ -225,6 +229,8 @@ def _obligations(spec, parser):
         if "metric" not in raw:
             raise ScopeError("metric kind requires metric")
         geom = Geometry(x, _matrix(raw["metric"], len(x), parser))
+        if any(c in ("vacuum_einstein", "einstein_source") for c in spec.claims) and geom.n != 4:
+            raise ScopeError("physical Einstein-field-equation claims require four-dimensional charts")
         for claim in spec.claims:
             if claim == "metric_compatibility":
                 relation = [(geom.covariant_derivative(
@@ -308,7 +314,7 @@ def _obligations(spec, parser):
         algebra_name=raw.get("algebra")
         constructors={"u1":LieAlgebra.u1,"so3":LieAlgebra.so3,
                       "lorentz":LieAlgebra.lorentz}
-        if algebra_name not in constructors:
+        if not isinstance(algebra_name,str) or algebra_name not in constructors:
             raise ScopeError("unsupported Lie algebra; no arbitrary structure constants")
         lie=constructors[algebra_name]()
         connection=raw["connection"]
