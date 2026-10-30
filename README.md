@@ -19,7 +19,7 @@ Complete source-domain provenance is a caller assertion, not yet an
 independently established guarantee.
 
 A nonzero-shift **ADM example with h=diag(1+t,1,1), N=1+t** and
-`beta=(1/5,0,0)` certifies `S >= I` and `R <= 12S` on
+`beta=(1/5,0,0)` certifies `S >= I` and `R <= 0` on
 `[0,1]^4` by exact arithmetic. It does **not** certify the
 underlying Einstein equations, nonlinear existence, periodic solution
 data or boundary flux.
