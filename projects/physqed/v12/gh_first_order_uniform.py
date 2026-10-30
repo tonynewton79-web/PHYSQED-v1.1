@@ -81,6 +81,9 @@ def adapted_normal_symbol():
     Q=B[6:,:]
     determinant=S.factor(B.det(method="domain-ge"))
     gram=F.T*F
+    normal_d=-d
+    inverse_gauge=S.eye(4)/normal_d-L*qrow/(2*normal_d**2)
+    inverse_verified=(Q*F*inverse_gauge).applyfunc(S.simplify)==S.eye(4)
     return {
         "s":s,"k":k,"eta":eta,"zeta":zeta,"B":B,"P":P,"Q":Q,
         "F":F,"E":E,"q":qrow,"L":L,
@@ -90,6 +93,7 @@ def adapted_normal_symbol():
         "complement_P_E_identity":P*E==S.eye(6),
         "gauge_block_verified":Q*F==(-d*S.eye(4)+L*qrow),
         "gauge_subspace_gram":gram,
+        "gauge_block_explicit_inverse_verified":inverse_verified,
         "gauge_gram_eigenvalues":gram.eigenvals(),
         "E_gram_identity":E.T*E==S.eye(6),
         "complement_decomposition_invertible":
@@ -107,11 +111,19 @@ def stable_mode_reduction():
     lower=S.zeros(5);lower[0,1]=1
     residual=(s*S.eye(5)+lower-k*ax+S.I*eta*ay+S.I*zeta*az)*state
     dispersion=k*k-s*s-eta*eta-zeta*zeta
+    # Reduction constraints on the decaying state: Phi_i=partial_i psi,
+    # and all three curl(Phi) components vanish.
+    derivative=S.Matrix([-k,S.I*eta,S.I*zeta])
+    spatial_phi=state[2:5,:]
+    reduction_verified=(spatial_phi==derivative and
+       all(S.simplify(derivative[i]*spatial_phi[j]-
+           derivative[j]*spatial_phi[i])==0
+           for i in range(3) for j in range(i+1,3)))
     exact=all(S.rem(S.Poly(S.expand(v),k),
                     S.Poly(dispersion,k)).is_zero for v in residual)
     return {"state":state,"symbol_residual":residual,
         "stable_mode_wave_dispersion_verified":exact,
-        "reduction_constraints_verified":True,
+        "reduction_constraints_verified":reduction_verified,
         "first_order_state_dimension":50,
         "decaying_stable_subspace_dimension":10,
         "frequency_weighted_state_norm":
@@ -145,6 +157,7 @@ def analytic_uniform_bound():
         "adapted_boundary_determinant":"(s+k)**10",
         "determinant_verified":a["determinant_verified"],
         "gauge_block_identity_verified":a["gauge_block_verified"],
+        "gauge_block_inverse_verified":a["gauge_block_explicit_inverse_verified"],
         "direct_sum_decomposition_verified":all((
             a["complement_P_F_zero"],a["complement_P_E_identity"],
             a["E_gram_identity"],a["complement_decomposition_invertible"])),
@@ -208,6 +221,8 @@ def certify_first_order_gh():
         mode["stable_mode_wave_dispersion_verified"],
         theorem["determinant_verified"],
         theorem["gauge_block_identity_verified"],
+        theorem["gauge_block_inverse_verified"],
+        mode["reduction_constraints_verified"],
         theorem["direct_sum_decomposition_verified"],
         theorem["coefficient_A_lt_9"],theorem["coefficient_B_lt_28"]))
     report={
