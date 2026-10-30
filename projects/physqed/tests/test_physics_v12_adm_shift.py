@@ -85,6 +85,18 @@ class ShiftedADMTests(unittest.TestCase):
         self.assertTrue(node(r,"gauss_hamiltonian_bridge")["passed"])
         self.assertTrue(node(r,"momentum_propagation_bridge")["passed"])
 
+    def test_offshell_maxwell_stress_refuses_homogeneous_closure(self):
+        case=flat_shift()
+        t=case.coordinates[0]
+        r=evaluate_shifted_einstein_maxwell(replace(case,
+            potential=(0,t*t,0,0)))
+        self.assertFalse(node(r,"maxwell_equations")["passed"])
+        self.assertFalse(node(r,"matter_conservation")["passed"])
+        self.assertTrue(node(r,"einstein_stress_bianchi_bridge")["passed"])
+        self.assertTrue(node(r,"hamiltonian_hyperbolic_propagation_bridge")["passed"])
+        self.assertTrue(node(r,"momentum_hyperbolic_propagation_bridge")["passed"])
+        self.assertFalse(r["trace_reversed_hyperbolic_constraint_closure_passed"])
+
     def test_invalid_negative_lapse_witness_refused(self):
         with self.assertRaises(ScopeError):
             evaluate_shifted_einstein_maxwell(replace(flat_shift(),lapse=-1))
