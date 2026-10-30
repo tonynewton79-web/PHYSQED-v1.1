@@ -206,6 +206,28 @@ jobs:
           matter=json.loads((p/'nonconserved.json').read_text())
           assert not matter['all_18_field_nodes_passed']
           PY
+      - name: Shifted Maxwell Gauss and moving-boundary energy positive controls
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_maxwell_ibvp_control.py' -v
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_linked_maxwell_ibvp.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.maxwell_ibvp_control import verify_maxwell_shifted_boundary
+          from v12.linked_maxwell_ibvp import verify_linked_maxwell_positive_control
+          receipt=verify_maxwell_shifted_boundary('1/5')
+          assert receipt['status']=='PASS_EXACT_SHIFTED_MAXWELL_BOUNDARY_ALGEBRA'
+          assert len(receipt['boundary_faces'])==6
+          assert all(f['passed'] for f in receipt['boundary_faces'])
+          m=json.loads(Path('projects/physqed/examples/typed/linked_adm_shifted_minkowski.json').read_text())
+          linked=verify_linked_maxwell_positive_control(m['field_model'])
+          assert linked['status']=='PASS_FIELD_AND_MAXWELL_POSITIVE_CONTROL__GR_BOUNDARY_LINK_OPEN'
+          assert linked['all_18_Einstein_Maxwell_nodes_passed']
+          assert not linked['constraint_energy_boundary_from_GR_evolution_proven']
+          Path('/tmp/physqed-v12-receipts/maxwell_moving_wall.json').write_text(
+              json.dumps(linked,indent=2,sort_keys=True)+'\n')
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
