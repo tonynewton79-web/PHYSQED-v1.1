@@ -107,6 +107,65 @@ jobs:
           plan=json.loads((p/'minkowski_plan.json').read_text())
           assert plan['execution_status']=='NOT_EXECUTED'
           PY
+      - name: Typed Einstein-Maxwell ADM 16-node bridge, unit and variance gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          for test in \
+            test_flat_all_sixteen_linked \
+            test_nonflat_electrovacuum_reissner_nordstrom \
+            test_wrong_electric_source_fails_physics_after_type_pass \
+            test_plan_exposes_sixteen_but_does_not_prove \
+            test_wrong_covariant_index_variance_refused \
+            test_wrong_tensor_rank_refused \
+            test_missing_unit_system_refused \
+            test_dimensionally_inconsistent_potential_refused \
+            test_dimensionally_inconsistent_spherical_metric_refused \
+            test_wrong_parameter_dimension_refused \
+            test_nontrivial_trigonometric_argument_dimension_refused \
+            test_nonzero_shift_refused_by_existing_ADM_backend \
+            test_claimed_hamiltonian_false_but_dimension_correct \
+            test_wrong_cosmological_constant_dimension_refused \
+            test_tampered_linked_receipt_refused_by_full_replay; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p 'test_physics_v12_typed_em_bridge.py' -k "$test" -v
+          done
+      - name: Typed Einstein-Maxwell CLI positive and refusal receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts/typed
+          for stem in einstein_maxwell_flat einstein_maxwell_reissner_nordstrom; do
+            PYTHONPATH=projects/physqed python -m v12.typed_cli \
+              --input "projects/physqed/examples/typed/${stem}.json" \
+              --output "/tmp/physqed-v12-receipts/typed/${stem}.json"
+          done
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_flat.json \
+            --plan --output /tmp/physqed-v12-receipts/typed/einstein_maxwell_plan.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_inconsistent_flat.json \
+            --output /tmp/physqed-v12-receipts/typed/einstein_maxwell_inconsistent_flat.json
+          refusal=$?
+          set -e
+          if [ "$refusal" -ne 2 ]; then echo "Expected wrong Einstein-Maxwell source refusal"; exit 1; fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/physqed-v12-receipts/typed')
+          for stem in ('einstein_maxwell_flat', 'einstein_maxwell_reissner_nordstrom'):
+              result=json.loads((root/(stem+'.json')).read_text())
+              assert result['status']=='PASS_TYPED_EINSTEIN_MAXWELL_ADM__SCOPED'
+              assert len(result['coupled_contract']['nodes'])==16
+              assert len(result['tensor_index_signature_checks'])==5
+              assert not result['global_theorem_proven']
+          bad=json.loads((root/'einstein_maxwell_inconsistent_flat.json').read_text())
+          assert bad['status']=='REJECTED_LINKED_PHYSICS_OBLIGATIONS'
+          planned=json.loads((root/'einstein_maxwell_plan.json').read_text())
+          assert planned['execution_status']=='NOT_EXECUTED'
+          assert len(planned['obligations'])==16
+          PY
       - name: Reproducible standard-physics receipts
         run: |
           PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
