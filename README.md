@@ -1,3 +1,32 @@
+## PHYSQED v1.2 — Automatic Einstein–Maxwell/ADM type-checked contracts
+
+The general JSON physics-input compiler is now connected directly to
+the **16-node Einstein–Maxwell/ADM consistency contract**. A single
+typed input produces linked Einstein and Maxwell equations, covariant
+conservation, Hamiltonian/momentum constraints, off-shell Gauss/Codazzi
+bridges and independent rational 4D/3D curvature checks.
+
+**New:** strict covariant tensor signatures (index rank/variance) and
+**coordinate-aware physical length dimensions in geometrized units**.
+These safeguards correctly distinguish spherical radial and angular
+metric-component dimensions. They do not yet provide general SI units
+or unrestricted index-expression algebra.
+
+```bash
+PYTHONPATH=projects/physqed python -m v12.typed_cli \
+  --input projects/physqed/examples/typed/einstein_maxwell_reissner_nordstrom.json \
+  --output typed_einstein_maxwell_receipt.json
+```
+
+[Complete Einstein–Maxwell/ADM bridge specification](
+docs/PHYSQED-v1.2-typed-einstein-maxwell-bridge.md) ·
+[15 adversarial and textbook type/physics tests](
+projects/physqed/tests/test_physics_v12_typed_em_bridge.py)
+
+**Release gate:** still a draft feature branch until Python 3.15.2 CI
+and inherited regression suites pass. Local component checks are not
+global physics proofs.
+
 ## PHYSQED v1.2 typed physics input (experimental)
 
 A safe, restricted JSON input layer now accepts **metrics, scalar-field
