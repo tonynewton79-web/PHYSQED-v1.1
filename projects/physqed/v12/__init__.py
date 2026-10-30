@@ -60,6 +60,7 @@ from .gh_boundary_map import (
 
 from .gh_glancing_corners import (
     glancing_obstruction, glancing_summary, higher_corner_hierarchy,
+    verify_scalar_sommerfeld_reference,
     certify_glancing_and_corners, replay_glancing_corners)
 from .gh_curved_ppwave import verify_curved_ppwave, replay_curved_ppwave
 
