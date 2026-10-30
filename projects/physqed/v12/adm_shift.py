@@ -158,6 +158,11 @@ def evaluate_shifted_einstein_maxwell(spec):
     T=maxwell_stress(full,F)
     lam=S.sympify(spec.cosmological_constant)
     kappa=S.sympify(spec.gravitational_coupling)
+    if any(not zero(S.diff(lam,coord)) or not zero(S.diff(kappa,coord))
+           for coord in x):
+        raise ScopeError("Einstein coupling and cosmological constant must be spacetime constants")
+    if zero(kappa):
+        raise ScopeError("nonzero gravitational matter coupling required")
     E=(full.einstein+lam*g-kappa*T).applyfunc(S.simplify)
     Jm=maxwell_equations(full,F)
     divT=covariant_divergence_stress(full,T)
