@@ -85,6 +85,34 @@ jobs:
           Path('/tmp/physqed-v12-receipts/domain_energy.json').write_text(
               json.dumps(receipt,sort_keys=True,indent=2)+'\n')
           PY
+      - name: Exact rational-function ADM domain and denominator sign gates
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_rational_energy.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          import sympy as S
+          from v12.variable_energy import adm_constraint_matrices
+          from v12.rational_energy import certify_rational_domain_energy, replay_rational_domain_energy
+          t,x,y,z=S.symbols('t x y z')
+          Sm,A,B=adm_constraint_matrices((t,x,y,z),S.diag(1+t,1,1),1+t,
+                                          [S.Rational(1,5),0,0])
+          box={t:(0,1),x:(0,1),y:(0,1),z:(0,1)}
+          options={'coercivity':1,'growth':12,
+                   'denominator_guards':[1+t],
+                   'original_expression_denominators_complete':True,
+                   'boundary':'periodic_solution_assumed'}
+          r=certify_rational_domain_energy((t,x,y,z),box,Sm,A,B,**options)
+          assert r['status']=='PASS_RATIONAL_INTERIOR_BOUNDS__PDE_HYPOTHESES_PENDING'
+          assert r['all_received_coefficient_denominators_certified']
+          assert r['all_required_original_denominator_guards_certified']
+          assert replay_rational_domain_energy((t,x,y,z),box,Sm,A,B,r,**options)
+          assert not r['boundary_flux_control_proven']
+          assert not r['global_Einstein_Cauchy_theorem_proven']
+          Path('/tmp/physqed-v12-receipts/rational_adm_energy.json').write_text(
+              json.dumps(r,sort_keys=True,indent=2)+'\n')
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
