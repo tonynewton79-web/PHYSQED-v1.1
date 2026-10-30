@@ -362,3 +362,75 @@ coefficient/symmetrizer analysis to a specified curved
 spacetime with a uniformly timelike boundary. Nothing
 here proves general nonlinear Einstein–Maxwell initial-
 boundary well-posedness.
+
+
+## 8. Curved pp-wave in a timelike ADM chart (operator calibration)
+
+The previous Ricci-flat curved control used Brinkmann coordinates
+\((u,v,x,y)\), where \(u\) is a **null** coordinate and therefore
+cannot be substituted blindly for a timelike ADM time. Take instead
+
+\[
+u=(t-z)/\sqrt2,\qquad v=(t+z)/\sqrt2,
+\qquad H(x,y)=x^2-y^2.
+\]
+
+The same genuinely curved vacuum metric becomes
+
+\[
+ds^2=-dt^2+dx^2+dy^2+dz^2
++\tfrac12H(dt-dz)^2.
+\]
+
+Its exact 3+1 fields are
+
+\[
+h_{ij}=\operatorname{diag}(1,1,1+H/2),\quad
+N^2=(1+H/2)^{-1},\quad
+\beta^i=(0,0,-H/(2+H)).
+\]
+
+On the declared transverse box
+\(-\frac12\le x,y\le\frac12\),
+elementary exact square bounds give
+\(-\frac14\le H\le\frac14\). Therefore
+
+\[
+h_{ij}\succeq\tfrac78 I_3,\quad
+\tfrac89\le N^2\le\tfrac87,\quad
+|\beta^z|\le\tfrac17.
+\]
+
+The frozen *wave-normal* characteristic speeds in the
+\(z\) direction are exactly
+
+\[
+\lambda_+=-\beta^z+N\sqrt{h^{zz}}=1,\qquad
+\lambda_-=-\beta^z-N\sqrt{h^{zz}}
+=\frac{H-2}{H+2}<0.
+\]
+
+Thus the two normal gravitational wave directions retain
+opposite signs uniformly on this box. But the shift-advection
+speed of the other first-order variables is
+
+\[
+\lambda_0=-\beta^z=\frac{H}{H+2},
+\]
+
+which changes sign along \(H=0\). Consequently, a
+**single globally constant incoming-characteristic rank
+cannot be inferred from the flat boundary decomposition**
+without a separate analysis of these variable-speed and
+characteristic-boundary modes.
+
+\`v12/gh_curved_timelike_frozen.py\` checks the exact metric
+reconstruction, inverse metric, lapse/shift relations and
+normal-speed identities. The CI step also replays the
+independent genuinely curved Ricci-flat Riemann/Bianchi
+positive control. The wave speed signs and bounded
+geometry are **frozen principal-coefficient calibration only**.
+The flat \(1/60\) boundary estimate is *not* asserted
+on this curved background. No curved-domain normal mode
+resolvent estimate, uniform maximal-dissipative boundary
+subspace or nonlinear Einstein theorem is claimed.
