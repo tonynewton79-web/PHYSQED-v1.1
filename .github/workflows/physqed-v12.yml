@@ -312,6 +312,35 @@ jobs:
           assert not r['scope']['first_order_Kreiss_estimate_proven']
           assert not r['scope']['curved_boundary_wellposedness_proven']
           PY
+      - name: Glancing unweighted obstruction and higher GH corner hierarchy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_glancing_curved.py' -v
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_uniform_sector.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.gh_glancing_corners import certify_glancing_and_corners
+          from v12.gh_curved_ppwave import verify_curved_ppwave
+          from v12.gh_glancing import certify_glancing_gate
+          from v12.gh_curved_plane_wave import verify_curved_gh_control
+          result={"glancing_corner":certify_glancing_and_corners(),
+                  "glancing_refined":certify_glancing_gate(),
+                  "curved_bulk":verify_curved_ppwave(),
+                  "curved_mode":verify_curved_gh_control()}
+          assert result["glancing_corner"]["status"]=="PASS_GH_GLANCING_OBSTRUCTION_AND_FINITE_CORNERS"
+          assert result["glancing_refined"]["algebra"]["uniform_unweighted_normalized_lopatinski_bound_refuted"]
+          assert result["curved_bulk"]["status"]=="PASS_EXACT_CURVED_BULK_GH_INTERTWINER"
+          assert result["curved_mode"]["status"]=="PASS_EXACT_CURVED_GH_BACKGROUND_AND_REDUCED_CONTROL"
+          assert not result["curved_bulk"]["curved_background_uniform_energy_proven"]
+          assert not result["curved_mode"]["nonlinear_Einstein_IBVP_proven"]
+          Path('/tmp/physqed-v12-receipts/gh_glancing_curved.json').write_text(
+              json.dumps(result,sort_keys=True,indent=2)+'\n')
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
