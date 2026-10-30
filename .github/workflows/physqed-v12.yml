@@ -241,6 +241,31 @@ jobs:
           assert not r['initial_constraint_time_derivative_zero']
           assert not r['full_linearized_Einstein_equations_verified']
           PY
+      - name: Linearized GH Einstein constraint-boundary intertwiner and corner controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_boundary_map.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.gh_boundary_cli \
+            --case all --output /tmp/physqed-v12-receipts/gh_linearized_boundary.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('/tmp/physqed-v12-receipts/gh_linearized_boundary.json').read_text())
+          summary=result['symbol_and_control_summary']
+          assert summary['status']=='PASS_SCOPED_LINEARIZED_GH_DIFFERENTIAL_BOUNDARY_MAP'
+          assert summary['Laplace_Fourier_normal_mode_determinant']=='k**4*(k + s)**6'
+          assert summary['operator_intertwiner_verified']
+          assert result['positive']['full_linearized_vacuum_Einstein_passed']
+          assert result['positive']['initial_corner']['first_order_compatibility_passed']
+          assert not result['initial_velocity']['initial_corner']['dt_C_initial_zero']
+          assert not result['metric_corner']['initial_corner']['metric_corner_order0_zero']
+          assert result['naive_sommerfeld']['exact_obstruction_passed']
+          assert not summary['uniform_Kreiss_Lopatinski_proven']
+          assert not summary['nonlinear_Einstein_IBVP_proven']
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
