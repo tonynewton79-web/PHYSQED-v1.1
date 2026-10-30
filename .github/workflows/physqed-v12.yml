@@ -467,6 +467,31 @@ jobs:
           assert not a['sourced_corners_nonconserved']['source_divergence_free']
           assert not a['arbitrary_L2_strong_wellposedness_proven']
           PY
+      - name: Final GH arbitrary-source weighted norm and Euclidean boundary-flux refusal
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_final_release_gate.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.gh_final_release_gate import (
+              certify_final_gh_release_gate, replay_final_gh_release_gate)
+          r=certify_final_gh_release_gate()
+          assert r['status']=='HOLD_STRONG_WELLPOSEDNESS__TWO_EXACT_SCOPE_OBSTRUCTIONS'
+          assert all(a['all_forced_first_order_equations_zero'] for a in r['arbitrary_source_examples'])
+          assert all(a['all_initial_first_order_and_reduction_fields_zero'] for a in r['arbitrary_source_examples'])
+          assert r['boundary_standard_energy']['outward_standard_energy_flux']=='-1/4'
+          assert r['boundary_standard_energy']['outward_flux_negative']
+          assert not r['unrestricted_L2_to_weighted_H1_psi_estimate_proven']
+          assert not r['natural_unweighted_first_order_L2_wellposedness_disproved']
+          assert not r['nonlinear_Einstein_IBVP_proven']
+          assert replay_final_gh_release_gate(r)
+          Path('/tmp/physqed-v12-receipts/gh_final_release_audit.json').write_text(
+              json.dumps(r,sort_keys=True,indent=2)+'\n')
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
