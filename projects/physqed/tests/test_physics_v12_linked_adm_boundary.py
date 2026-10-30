@@ -86,6 +86,17 @@ class LinkedADMBoundaryTests(unittest.TestCase):
         self.assertFalse(result["uniform_interior_energy_bounds_passed"])
         self.assertFalse(result["domain_contract"]["all_source_guards_certified"])
 
+    def test_cancelled_electromagnetic_source_pole_refused(self):
+        case=read()
+        base={"add":["t",{"rational":[-1,2]}]}
+        case["field_model"]["potential"][0]={
+             "mul":[base,{"pow":[base,-1]}]}
+        result=certify_linked_adm_boundary(case)
+        self.assertFalse(result["matter_source_domain"]["passed"])
+        self.assertEqual(result["matter_source_domain"]["guard_count"],1)
+        self.assertEqual(result["status"],
+                         "REJECTED_OR_INCONCLUSIVE_LINKED_OBLIGATIONS")
+
     def test_negative_growth_declaration_refused(self):
         case=read()
         case["domain_model"]["energy_growth"]=-1
