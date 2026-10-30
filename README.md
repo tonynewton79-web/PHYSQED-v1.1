@@ -1,3 +1,27 @@
+## PHYSQED v1.2 typed physics input (experimental)
+
+A safe, restricted JSON input layer now accepts **metrics, scalar-field
+Lagrangians, canonical Hamiltonians and gauge connections** and constructs
+a typed list of supported mathematical verification obligations. See
+[typed-input user guide](docs/PHYSQED-v1.2-typed-input.md) and
+[five textbook JSON fixtures](projects/physqed/examples/typed/).
+
+```bash
+PYTHONPATH=projects/physqed python -m v12.typed_cli \
+  --input projects/physqed/examples/typed/metric_minkowski.json --plan
+PYTHONPATH=projects/physqed python -m v12.typed_cli \
+  --input projects/physqed/examples/typed/metric_minkowski.json \
+  --output minkowski_receipt.json
+```
+
+No text is evaluated as Python source. Unsupported expressions, claims,
+missing target equations and unverified identities are refused. This
+**does not imply unrestricted global physics proofs** or proof of
+user-supplied premises. The linked [Einstein–Maxwell/ADM contract](
+docs/PHYSQED-v1.2-typed-coupled-contract.md) remains a complementary,
+more specialised multi-law verification backend. The v1.2 feature branch
+is not a stable release until Python 3.15.2 and legacy CI pass.
+
 # PHYSQED v1.2 — Proof-Carrying Physics
 
 **General-purpose *architecture* for scoped verification of classical and quantum physics.**
