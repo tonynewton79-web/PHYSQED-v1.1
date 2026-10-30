@@ -178,6 +178,7 @@ jobs:
             test_time_dependent_nonzero_shift_flat_solution \
             test_spatially_dependent_shift_offshell_bianchi \
             test_shifted_minkowski_with_spatial_shift_gradient \
+            test_offshell_maxwell_stress_refuses_homogeneous_closure \
             test_invalid_negative_lapse_witness_refused \
             test_invalid_indefinite_spatial_witness_refused \
             test_wrong_shift_dimension_refused \
