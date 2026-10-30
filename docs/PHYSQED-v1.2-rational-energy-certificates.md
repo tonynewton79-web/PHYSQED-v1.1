@@ -151,7 +151,7 @@ S,A,B=adm_constraint_matrices(
 receipt=certify_rational_domain_energy(
     (t,x,y,z),
     {t:(0,1),x:(0,1),y:(0,1),z:(0,1)},
-    S,A,B,coercivity=1,growth=12,
+    S,A,B,coercivity=1,growth=0,
     denominator_guards=[1+t],
     original_expression_denominators_complete=True,
     boundary="periodic_solution_assumed")
