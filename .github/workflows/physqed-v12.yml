@@ -61,6 +61,9 @@ jobs:
       - name: Variable-coefficient ADM energy-balance and scope gate
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_variable_energy.py' -v
+      - name: Replay exact variable-coefficient energy receipts and reject tampering
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_energy_receipts.py' -v
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
