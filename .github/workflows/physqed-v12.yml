@@ -166,6 +166,75 @@ jobs:
           assert planned['execution_status']=='NOT_EXECUTED'
           assert len(planned['obligations'])==16
           PY
+      - name: Shifted ADM normal/momentum and off-shell Bianchi propagation
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            test_time_dependent_nonzero_shift_flat_solution \
+            test_spatially_dependent_shift_offshell_bianchi \
+            test_shifted_minkowski_with_spatial_shift_gradient \
+            test_invalid_negative_lapse_witness_refused \
+            test_invalid_indefinite_spatial_witness_refused \
+            test_wrong_shift_dimension_refused \
+            test_recompute_receipt_rejects_tampering; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p test_physics_v12_adm_shift.py -k "$name" -v
+          done
+      - name: Typed shifted ADM unit and index gate regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            test_time_dependent_shifted_minkowski_full_contract \
+            test_offshell_shift_retains_bianchi_but_refuses_field_equations \
+            test_shift_dimension_wrong_refused_before_equations \
+            test_covariant_shift_signature_refused \
+            test_shift_missing_declared_refused \
+            test_wrong_spatial_metric_units_refused \
+            test_wrong_shift_rank_refused \
+            test_planning_is_not_execution \
+            test_receipt_tampering_caught_by_recomputation; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p test_physics_v12_typed_shift.py -k "$name" -v
+          done
+      - name: Typed shifted ADM CLI reproducible positives and refusals
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts/shifted
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_shifted_flat.json \
+            --output /tmp/physqed-v12-receipts/shifted/flat.json
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_shifted_flat.json \
+            --plan --output /tmp/physqed-v12-receipts/shifted/plan.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_shifted_offshell.json \
+            --output /tmp/physqed-v12-receipts/shifted/offshell.json
+          offshell_code=$?
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_shifted_invalid_dimension.json \
+            --output /tmp/physqed-v12-receipts/shifted/invalid.json
+          invalid_code=$?
+          set -e
+          test "$offshell_code" -eq 2
+          test "$invalid_code" -eq 3
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('/tmp/physqed-v12-receipts/shifted')
+          good=json.loads((path/'flat.json').read_text())
+          assert good['status']=='PASS_TYPED_SHIFTED_ADM__SCOPED'
+          assert good['shifted_contract']['homogeneous_constraint_propagation_identities_passed']
+          assert not good['global_constraint_propagation_theorem_proven']
+          bad=json.loads((path/'offshell.json').read_text())
+          assert bad['status']=='REJECTED_TYPED_SHIFTED_ADM'
+          plan=json.loads((path/'plan.json').read_text())
+          assert plan['execution_status']=='NOT_EXECUTED'
+          assert len(plan['obligations'])==14
+          PY
       - name: Reproducible standard-physics receipts
         run: |
           PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
