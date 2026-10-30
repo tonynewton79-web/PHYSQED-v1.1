@@ -24,3 +24,7 @@ from .typed_input import (PhysicsInput, RestrictedExpression,
 
 from .physical_types import TensorType, GeometrizedDimensions, check_tensor_signatures
 from .typed_em_bridge import run_typed_einstein_maxwell
+
+from .adm_shift import (ShiftedEinsteinMaxwellSpec,
+                        evaluate_shifted_einstein_maxwell, replay_shifted_adm)
+from .typed_shift_bridge import run_typed_shifted_adm
