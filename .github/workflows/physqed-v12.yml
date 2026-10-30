@@ -29,6 +29,10 @@ jobs:
       - name: Confirm interpreter (security-patched release)
         run: |
           python -c "import sys; assert sys.version_info[:3] == (3,15,2), sys.version"
+      - name: Syntax-check new backend before importing physics tests
+        run: |
+          python -m compileall -q projects/physqed/v12
+          python -m compileall -q projects/physqed/tests/test_physics_v12*.py
       - name: Install exact-symbolic dependency
         run: |
           python -m pip install --upgrade pip
