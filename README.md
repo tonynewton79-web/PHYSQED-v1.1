@@ -1,3 +1,45 @@
+## PHYSQED v1.2 — Linearized harmonic Einstein boundary-to-constraint map
+
+A **specific linearized generalized-harmonic vacuum Einstein**
+benchmark now verifies the boundary-to-constraint differential map
+on the Minkowski half-space `x>=0`.
+
+- Reduced metric: ten symmetric trace-reversed wave equations
+  `box(bar_h)=0`; harmonic constraints
+  `C_nu=partial^mu bar_h_mu nu`.
+- Exact differential intertwiner:
+  `box(C_nu)=partial^mu box(bar_h_mu nu)`.
+- Boundary: six outgoing `(dt-dx)bar_h_ab=0` conditions
+  for tangent indices a,b in (t,y,z), plus four
+  explicit `C_nu=0` conditions.
+- **Exact normal-mode determinant:**
+  `kappa^4(s+kappa)^6`, excluding nontrivial exponentially
+  decaying homogeneous modes for Re(s)>0, but NOT proving a
+  uniform Kreiss bound near glancing.
+- First temporal corner checks require **both** initial
+  `C=0` and `dt C=0`; they also audit metric
+  Sommerfeld compatibility at orders zero and one.
+- Positive exact transverse wave `bar_h_yz=F(t+x)`,
+  and negative metric Dirichlet, missing constraint
+  velocity, bad corner and **uncoupled 10-Sommerfeld**
+  counterexamples.
+
+```bash
+PYTHONPATH=projects/physqed python -m v12.gh_boundary_cli \
+  --case all --output gh_linearized_boundary.json
+```
+
+[Exact proof architecture, corner formulas and established prior art](
+docs/PHYSQED-v1.2-linearized-GH-boundary-map.md).
+
+**Research claim boundary:** the conditional constraint wave-energy
+uniqueness argument holds for existing sufficiently regular
+finite-energy solutions with zero initial constraints and explicit
+homogeneous constraint boundary data. This module does not prove
+arbitrary-data well-posedness, complete higher corner regularity,
+uniform boundary resolvent estimates or nonlinear Einstein IBVP.
+Native Python 3.15.2 CI and legacy regressions remain necessary.
+
 ## PHYSQED v1.2 — Physical-boundary-to-constraint verification controls
 
 The next stage tests the previously unproved connection between
