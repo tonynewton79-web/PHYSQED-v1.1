@@ -28,3 +28,7 @@ from .typed_em_bridge import run_typed_einstein_maxwell
 from .adm_shift import (ShiftedEinsteinMaxwellSpec,
                         evaluate_shifted_einstein_maxwell, replay_shifted_adm)
 from .typed_shift_bridge import run_typed_shifted_adm
+
+from .frozen_energy import audit_frozen_adm
+from .variable_energy import audit_matrix_energy, adm_constraint_matrices
+from .energy_receipts import issue_energy_receipt, replay_energy_receipt
