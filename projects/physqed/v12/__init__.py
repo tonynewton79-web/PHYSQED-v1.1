@@ -45,3 +45,10 @@ from .typed_adm_domain import (parse_rational_sources,
 
 from .linked_adm_boundary import (certify_linked_adm_boundary,
                                   replay_linked_adm_boundary)
+
+from .maxwell_ibvp_control import (
+    verify_maxwell_shifted_boundary, replay_maxwell_shifted_boundary)
+from .linked_maxwell_ibvp import (
+    verify_linked_maxwell_positive_control, replay_linked_maxwell_positive_control)
+from .harmonic_boundary_obstruction import (
+    verify_harmonic_boundary_obstruction, replay_harmonic_boundary_obstruction)
