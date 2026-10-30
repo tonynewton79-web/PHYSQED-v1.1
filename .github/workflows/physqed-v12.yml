@@ -150,6 +150,61 @@ jobs:
           incoming=json.loads((root/'typed_adm_domain_incoming_flux.json').read_text())
           assert not incoming['conditional_boundary_flux_algebra_proven']
           PY
+      - name: Linked Einstein-Maxwell 18-node and maximal nonnegative constraint boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            test_explicit_shifted_vacuum_solution_and_maximal_flux_faces \
+            test_undercomplete_positive_flux_is_not_maximal \
+            test_source_mismatch_rejected_before_any_field_claim \
+            test_unconserved_maxwell_stress_prevents_joint_pass \
+            test_incoming_trace_flux_rejects_joint_contract \
+            test_rank_deficient_three_column_face \
+            test_hidden_original_metric_pole_not_accepted \
+            test_negative_growth_declaration_refused \
+            test_periodic_assumption_does_not_prove_frame_compatibility \
+            test_tampered_receipt_replay_and_changed_input \
+            test_characteristic_zero_speed_faces_are_not_called_noncharacteristic; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p 'test_physics_v12_linked_adm_boundary.py' -k "$name" -v
+          done
+      - name: Linked exact shifted vacuum domain CLI and adversarial boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts/linked_adm
+          PYTHONPATH=projects/physqed python -m v12.linked_adm_cli \
+            --input projects/physqed/examples/typed/linked_adm_shifted_minkowski.json \
+            --output /tmp/physqed-v12-receipts/linked_adm/vacuum.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.linked_adm_cli \
+            --input projects/physqed/examples/typed/linked_adm_undercomplete_boundary.json \
+            --output /tmp/physqed-v12-receipts/linked_adm/undercomplete.json
+          bad_boundary=$?
+          PYTHONPATH=projects/physqed python -m v12.linked_adm_cli \
+            --input projects/physqed/examples/typed/linked_adm_unconserved_matter.json \
+            --output /tmp/physqed-v12-receipts/linked_adm/nonconserved.json
+          bad_matter=$?
+          set -e
+          test "$bad_boundary" -eq 2
+          test "$bad_matter" -eq 2
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/physqed-v12-receipts/linked_adm')
+          good=json.loads((p/'vacuum.json').read_text())
+          assert good['status']=='PASS_LINKED_EXACT_MODEL_AND_CONDITIONAL_CONSTRAINT_ENERGY'
+          assert len(good['field_contract']['shifted_contract']['nodes'])==18
+          assert good['maximal_nonnegative_constraint_trace_spaces_passed']
+          assert good['uniform_interior_energy_bounds_passed']
+          assert not good['nonlinear_Einstein_IBVP_well_posedness_proven']
+          under=json.loads((p/'undercomplete.json').read_text())
+          assert under['all_face_flux_forms_passed']
+          assert not under['maximal_nonnegative_constraint_trace_spaces_passed']
+          matter=json.loads((p/'nonconserved.json').read_text())
+          assert not matter['all_18_field_nodes_passed']
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
