@@ -228,6 +228,19 @@ jobs:
           Path('/tmp/physqed-v12-receipts/maxwell_moving_wall.json').write_text(
               json.dumps(linked,indent=2,sort_keys=True)+'\n')
           PY
+      - name: Harmonic Einstein wave/constraint boundary counterexample
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_harmonic_boundary_obstruction.py' -v
+          PYTHONPATH=projects/physqed python - <<'PY'
+          from v12.harmonic_boundary_obstruction import verify_harmonic_boundary_obstruction
+          r=verify_harmonic_boundary_obstruction()
+          assert r['status']=='PASS_EXACT_BOUNDARY_TO_CONSTRAINT_OBSTRUCTION'
+          assert r['reduced_wave_equations_zero']
+          assert r['homogeneous_Dirichlet_metric_at_x0']
+          assert r['harmonic_constraints_at_x0']==['0','t','0','0']
+          assert not r['initial_constraint_time_derivative_zero']
+          assert not r['full_linearized_Einstein_equations_verified']
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
