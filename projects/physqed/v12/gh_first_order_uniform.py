@@ -188,7 +188,7 @@ def glancing_diagnostic(n):
     symbol=adapted_normal_symbol()
     values={symbol["s"]:complex(ss),symbol["k"]:complex(kk),
             symbol["eta"]:1,symbol["zeta"]:0}
-    mat=S.matrix2numpy(symbol["B"].subs(values),dtype=complex)
+    mat=symbol["B"].subs(values)
     M=m.matrix([[m.mpc(complex(mat[i,j]).real,complex(mat[i,j]).imag)
                  for j in range(10)] for i in range(10)])
     vals=m.svd(M/lbd,compute_uv=False)
