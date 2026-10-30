@@ -93,6 +93,48 @@ operator. The current code does **not** rule out those options.
 In particular, established harmonic Einstein boundary
 well-posedness results are not contradicted.
 
+### Uniform scalar Sommerfeld positive control
+
+The failure above is specific to the four *gauge-constraint*
+boundary rows, not to the outgoing Sommerfeld factor itself.
+For the scalar wave row \(D_- u=0\), its Laplace–Fourier
+symbol is \(s+\kappa\). For \(\Re s>0\), real transverse
+frequency \(\omega=\sqrt{\eta^2+\zeta^2}\), and the decaying
+branch \(\kappa^2=s^2+\omega^2\), one has the **uniform**
+inequality
+
+\[
+\boxed{|s+\kappa|^2\ge \tfrac12(|s|^2+\omega^2).}
+\]
+
+Here is a complete elementary proof. Write
+\(s=\gamma+i\tau\), \(\kappa=a+ib\) with
+\(\gamma,a>0\). Comparing imaginary parts of
+\(\kappa^2=s^2+\omega^2\) gives \(ab=\gamma\tau\),
+so \(b\) and \(\tau\) have the same sign. Thus
+
+\[
+\operatorname{Re}(s\bar\kappa)=\gamma a+\tau b\ge0,
+\]
+and
+\[
+|s+\kappa|^2
+\ge |s|^2+|\kappa|^2
+= |s|^2+|s^2+\omega^2|.
+\]
+
+The last quantity is at least \(|s|^2\), and by
+the triangle inequality it is also at least
+\(\omega^2\). Consequently it is at least
+\((|s|^2+\omega^2)/2\), establishing the claim
+uniformly, including glancing limits.
+
+The implementation includes four exact rational scalar
+replay cases. **This positive calibration does not
+repair the \(\kappa^4\) gauge block** and does not
+prove the uniform Kreiss estimate of the coupled
+first-order Einstein system.
+
 ## 2. Finite higher-order metric and constraint corners
 
 Let \(f_{\mu\nu}=\bar h_{\mu\nu}(0,\cdot)\) and
@@ -243,7 +285,7 @@ Source and tests:
 - \`projects/physqed/tests/test_physics_v12_gh_glancing_curved.py\`
 
 The independent local prototype of these controls passed
-**14/14 tests** on SymPy 1.14.0, including replay/tamper
+**15/15 tests** on SymPy 1.14.0, including replay/tamper
 refusal. The actual committed GitHub version still requires
 native Python 3.15.2 and legacy CI success before release.
 
