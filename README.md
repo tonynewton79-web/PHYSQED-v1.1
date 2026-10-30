@@ -1,3 +1,47 @@
+## PHYSQED v1.2 — Inhomogeneous first-order GH resolvent (regular sources)
+
+The adapted flat first-order generalized-harmonic boundary model now
+has an explicitly derived **inhomogeneous** Laplace–Fourier
+source-to-solution estimate. For Laplace `gamma=Re(s)>0`,
+frequency `Lambda²=|s|²+eta²+zeta²`, the entire 50-field state
+is reconstructed from arbitrary sufficiently **regular**
+first-order source channels:
+
+```
+D_i=(F_phi_i - partial_i F_psi)/s
+f_eff=F_Pi - s*F_psi - div(D)
+
+||U_weighted|| <= (90/gamma)||f_eff||_L2
+              + (45/sqrt(gamma))||g_boundary||
+              + ||F_psi||_L2 + ||D||_L2 .
+```
+
+This result uses a zero-boundary Dirichlet Green lifting, explicit
+four-constraint/six-Sommerfeld boundary-source correction, and
+the previous uniform null-adapted boundary inverse. Its constants
+are independent of normalized frequencies even near glancing.
+
+The source-class hypotheses **include derivatives**, and the
+reduction defects `D_i` cannot be discarded for general
+first-order source terms. Nonzero adapted boundary data are
+supported; a sourced corner hierarchy checks
+`J_(m+2)=Delta J_m - dt^m F_Pi(0)` and independently requires
+a divergence-free Einstein source before promoting harmonic
+constraint preservation.
+
+```bash
+PYTHONPATH=projects/physqed python -m v12.gh_forced_cli \
+  --output gh_forced_receipt.json
+```
+
+[Exact regular-source theorem, proof and source/corner examples](
+docs/PHYSQED-v1.2-GH-inhomogeneous-regular-resolvent.md).
+
+**Not proved:** a derivative-loss-free arbitrary-L² first-order
+Kreiss estimate, nonlinear/curved Einstein well-posedness, arbitrary
+boundary trace realizability or all temporal corner orders.
+Native Python 3.15.2 CI and inherited tests remain release gates.
+
 ## PHYSQED v1.2 — Uniform first-order harmonic stable-mode boundary test
 
 A **specified first-order reduction** of the ten linearized
