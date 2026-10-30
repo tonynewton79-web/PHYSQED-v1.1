@@ -78,12 +78,18 @@ def covariant_divergence_stress(geometry, stress):
         raise ScopeError("stress dimension mismatch")
     inv=geometry.g_inv
     C=geometry.connection
-    return tuple(S.simplify(sum(inv[a,k]*(
-        S.diff(T[a,b],geometry.x[k]) -
-        sum(C[c][k][a]*T[c,b] + C[c][k][b]*T[a,c]
-            for c in range(n)))
-        for a in range(n) for k in range(n))
-        for b in range(n))
+    result = []
+    for b in range(n):
+        divergence = S.S.Zero
+        for a in range(n):
+            for k in range(n):
+                covariant_part = S.diff(T[a,b], geometry.x[k]) - sum(
+                    C[c][k][a]*T[c,b] + C[c][k][b]*T[a,c]
+                    for c in range(n)
+                )
+                divergence += inv[a,k] * covariant_part
+        result.append(S.simplify(divergence))
+    return tuple(result)
 
 
 def einstein_maxwell_residual(geometry, field):
