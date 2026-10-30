@@ -153,3 +153,38 @@ def certify_glancing_and_corners():
 
 def replay_glancing_corners(stored):
     return isinstance(stored,dict) and stored==certify_glancing_and_corners()
+
+
+def verify_scalar_sommerfeld_reference():
+    """Exact scalar Sommerfeld positive calibration against GH gauge block.
+
+    For s=gamma+i*tau with gamma>0, omega²>=0 and
+    kappa²=s²+omega², Re(kappa)>0:
+    Im(kappa) has sign(tau), so Re(s*conj(kappa))>=0.
+    Also |s|²+|kappa|² >= max(|s|²,omega²) by triangle inequality.
+    Hence |s+kappa|² >= (|s|²+omega²)/2 everywhere, including
+    limits toward glancing. This is an ANALYTIC inequality, not a
+    bounded numerical scan, and applies to the scalar boundary row
+    only; it does not rescue the full GH 10-row boundary operator.
+    """
+    tests=[]
+    for gamma,omega_sq in (
+        (S.Rational(1,4),S.Rational(1)),
+        (S.Rational(1),S.Rational(0)),
+        (S.Rational(1,3),S.Rational(7,5)),
+        (S.Rational(2),S.Rational(9))):
+        kappa=S.sqrt(gamma**2+omega_sq)
+        lhs=S.expand((gamma+kappa)**2)
+        rhs=(gamma**2+omega_sq)/2
+        tests.append({"gamma":str(gamma),"omega_squared":str(omega_sq),
+                      "exact_comparison_passed":bool(S.simplify(lhs-rhs).is_positive)})
+    return {"schema":"physqed.scalar-Sommerfeld-calibration.v1",
+            "scalar_bound":"|s+kappa|² >= (|s|²+omega²)/2",
+            "assumptions":"Re(s)>0; omega²>=0; kappa²=s²+omega²; Re(kappa)>0",
+            "analytic_proof":
+                "Im kappa has sign Im s; Re(s conj kappa)>=0. Triangle inequality gives |s|²+|kappa|²>=omega² and >=|s|², therefore >=(|s|²+omega²)/2.",
+            "analytic_uniform_scalar_bound_established":True,
+            "exact_positive_replay_cases":tests,
+            "all_local_exact_replays_pass":all(v["exact_comparison_passed"] for v in tests),
+            "GH_ten_row_uniform_unweighted_inverse_established":False,
+            "first_order_weighted_Kreiss_estimate_established":False}
