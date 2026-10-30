@@ -77,6 +77,26 @@ class TypedDomainTests(unittest.TestCase):
             parse_rational_sources(("t","x","y","z"),
                 ["__import__('os').system('echo unsafe')"])
 
+    def test_cancelled_boundary_frame_pole_not_hidden(self):
+        v=example()
+        base={"add":["t",{"rational":[-1,2]}]}
+        cancellation={"mul":[base,{"pow":[base,-1]}]}
+        v["boundary_frames"]["x_upper"][0][0]=cancellation
+        r=certify_typed_adm_domain(v)
+        self.assertTrue(r["interior_domain_bounds_proven"])
+        self.assertFalse(r["conditional_boundary_flux_algebra_proven"])
+        face=next(f for f in r["boundary_flux"]["faces"] if f["name"]=="x_upper")
+        self.assertFalse(face["passed"])
+        self.assertTrue(face["source_guards"])
+        self.assertFalse(face["source_guards"][0]["proved"])
+
+    def test_cancelled_source_pole_off_box_is_allowed(self):
+        v=example("adm_domain_hidden_pole.json")
+        v["box"]["t"]=[1,2]
+        r=certify_typed_adm_domain(v)
+        self.assertTrue(r["all_source_guards_certified"])
+        self.assertFalse(r["global_constraint_propagation_theorem_proven"])
+
     def test_negative_lapse_cannot_receive_geometry_certificate(self):
         v=example()
         v["lapse"]=-1
