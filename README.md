@@ -1,3 +1,36 @@
+## PHYSQED v1.2 — Physical-boundary-to-constraint verification controls
+
+The next stage tests the previously unproved connection between
+physical evolution boundary data and **constraint** boundary data.
+
+- **Exact Maxwell positive control:** In the shifted Minkowski model
+  `X=x+v*t`, the source-free Maxwell Gauss constraints satisfy
+  `(dt-v*dx)div(E)=(dt-v*dx)div(B)=0`. In a moving coordinate box
+  with walls `dx/dt=-v`, a perfect-conductor boundary
+  `n cross E=0` is a rank-four maximal-nonnegative Maxwell
+  trace space on every face and has zero outward Poynting flux.
+  The source-linked benchmark requires the same exact 18-node
+  shifted Einstein–Maxwell spacetime model, but **not** an
+  identical ADM fixed-coordinate boundary domain.
+- **Harmonic Einstein negative control:** The linearized
+  trace-reversed perturbation `bar_h_xx=t*x` satisfies
+  `box(bar_h)=0` and homogeneous Dirichlet boundary values at
+  `x=0`, yet `C_x=partial^nu bar_h_xnu=t` at that boundary.
+  Thus reduced evolution + metric Dirichlet data alone do not
+  imply a constraint-preserving boundary condition.
+
+Both are exact, scoped textbook-level checks. The harmonic
+example has a **nonzero initial constraint time derivative**,
+so it is not a zero-data constraint-propagation counterexample.
+Neither result proves nonlinear Einstein–Maxwell IBVP existence
+or general gravitational boundary compatibility.
+
+[Mathematical derivation, limitations and established prior art](
+docs/PHYSQED-v1.2-boundary-to-constraint-positive-negative-controls.md).
+
+**Release:** new GitHub Python 3.15.2 tests are required; PR #14
+remains draft and unmerged pending CI and inherited regressions.
+
 ## PHYSQED v1.2 — Single-source Einstein–Maxwell boundary and energy verification
 
 The **linked ADM boundary contract** combines a single exact
