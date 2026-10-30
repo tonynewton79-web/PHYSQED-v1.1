@@ -121,7 +121,7 @@ class RationalDomainTests(unittest.TestCase):
         Sm,A,B=adm_constraint_matrices((t,x,y,z),h,lapse,beta)
         result=certify_rational_domain_energy((t,x,y,z),
              {t:(0,1),x:(0,1),y:(0,1),z:(0,1)},Sm,A,B,
-             coercivity=1,growth=12,denominator_guards=[1+t],
+             coercivity=1,growth=0,denominator_guards=[1+t],
              original_expression_denominators_complete=True,
              boundary='periodic_solution_assumed')
         self.assertTrue(result['interior_coercivity_proven'])
