@@ -32,6 +32,7 @@ KINDS = {
     "hamiltonian": ("hamilton_equations", "poisson_jacobi"),
     "gauge": ("gauge_bianchi", "yang_mills_vacuum", "flat_connection"),
     "einstein_maxwell": ("linked_einstein_maxwell_adm",),
+    "einstein_maxwell_shift": ("linked_shifted_adm_propagation",),
 }
 FIELDS = ("claim_id", "schema", "kind", "source", "assumptions", "coordinates",
           "parameters", "fields", "positions", "momenta", "metric", "stress",
@@ -40,7 +41,8 @@ FIELDS = ("claim_id", "schema", "kind", "source", "assumptions", "coordinates",
           "algebra", "connection", "claims", "units", "tensor_types",
           "potential", "lapse", "witnesses", "parameter_values",
           "declared_stress", "declared_field_strength",
-          "declared_hamiltonian", "declared_momentum")
+          "declared_hamiltonian", "declared_momentum",
+          "spatial_metric", "shift", "shift_type")
 
 
 def _keys(data, allowed, required=()):
@@ -223,6 +225,11 @@ def load_physics_input(payload: Any) -> PhysicsInput:
             "declared_stress", "declared_field_strength",
             "declared_hamiltonian", "declared_momentum",
         },
+        "einstein_maxwell_shift": {
+            "spatial_metric","lapse","shift","shift_type","potential",
+            "witnesses","parameter_values","units","tensor_types",
+            "cosmological_constant","coupling",
+        },
     }
     _keys(payload, common | specific[kind])
     if len(set(coords + params)) != len(coords) + len(params):
@@ -236,6 +243,13 @@ def plan_physics_obligations(spec: PhysicsInput) -> tuple:
     """Plan obligations without interpreting them as proven physical laws."""
     if not isinstance(spec, PhysicsInput):
         raise ScopeError("typed PhysicsInput required")
+    if spec.kind == "einstein_maxwell_shift":
+        from .typed_shift_bridge import SHIFTED_NODE_NAMES
+        return tuple({"claim":name,
+                      "category": ("propagation_identity" if "propagation_bridge" in name
+                                   else "linked_spacetime_obligation"),
+                      "comparison":"exact shifted ADM and projected Bianchi equations",
+                      "executed":False} for name in SHIFTED_NODE_NAMES)
     if spec.kind == "einstein_maxwell":
         from .typed_em_bridge import LINKED_NODE_NAMES
         return tuple({"claim": name,
@@ -385,6 +399,9 @@ def execute_physics_input(payload: Any) -> dict:
     validity of arbitrary chart domains, quantum field theory or novelty.
     """
     spec=load_physics_input(payload)
+    if spec.kind == "einstein_maxwell_shift":
+        from .typed_shift_bridge import run_typed_shifted_adm
+        return run_typed_shifted_adm(spec)
     if spec.kind == "einstein_maxwell":
         from .typed_em_bridge import run_typed_einstein_maxwell
         return run_typed_einstein_maxwell(spec)
