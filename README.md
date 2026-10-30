@@ -10,7 +10,7 @@ a unit normal-normal metric amplitude has boundary residual
 boundary invertibility fails near glancing. This does **not**
 disprove a properly weighted first-order Kreiss estimate.
 
-A separate higher-corner engine checks the exact temporal
+The isolated scalar Sommerfeld factor has the contrasting **uniform** estimate \`|s+kappa|² >= (|s|²+omega²)/2\`, proved analytically under the decaying-branch assumptions; this does not restore the full ten-row GH inverse.\n\nA separate higher-corner engine checks the exact temporal
 compatibility hierarchy through requested order ≤8. The example
 `f_yz=x^3,g_yz=0` passes temporal orders 0 and 1 but
 fails order 2 with residual `-6`.
