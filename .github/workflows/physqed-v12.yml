@@ -266,6 +266,34 @@ jobs:
           assert not summary['uniform_Kreiss_Lopatinski_proven']
           assert not summary['nonlinear_Einstein_IBVP_proven']
           PY
+      - name: GH glancing counterexample, higher corners and genuinely curved Ricci-flat identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_glancing_curved.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          from pathlib import Path
+          import json
+          from v12.gh_glancing_corners import certify_glancing_and_corners
+          from v12.gh_curved_ppwave import verify_curved_ppwave
+          flat=certify_glancing_and_corners()
+          curved=verify_curved_ppwave()
+          assert flat['status']=='PASS_GH_GLANCING_OBSTRUCTION_AND_FINITE_CORNERS'
+          assert flat['glancing']['status']=='REFUTED_UNWEIGHTED_UNIFORM_BOUNDARY_INVERSE'
+          assert flat['positive_higher_corners']['passed']
+          assert not flat['negative_second_order_corner']['levels'][2]['metric_sommerfeld_zero']
+          assert not flat['glancing']['uniform_weighted_Kreiss_estimate_proven']
+          assert curved['status']=='PASS_EXACT_CURVED_BULK_GH_INTERTWINER'
+          assert curved['Ricci_tensor_zero'] and curved['nonflat_background']
+          assert curved['linearized_Bianchi_div_dG_zero']
+          assert curved['curved_gauge_divergence_identity']
+          assert not curved['curved_background_uniform_energy_proven']
+          for name,data in [('gh_glancing_higher_corners',flat),('gh_curved_ppwave',curved)]:
+              Path('/tmp/physqed-v12-receipts/'+name+'.json').write_text(
+                  json.dumps(data,sort_keys=True,indent=2)+'\n')
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
