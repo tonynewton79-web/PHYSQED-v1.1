@@ -113,6 +113,43 @@ jobs:
           Path('/tmp/physqed-v12-receipts/rational_adm_energy.json').write_text(
               json.dumps(r,sort_keys=True,indent=2)+'\n')
           PY
+      - name: Typed source-preserving ADM geometry and six-face energy flux
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_typed_adm_domain.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.adm_domain_cli \
+            --input projects/physqed/examples/typed/adm_domain_outgoing_flux.json \
+            --output /tmp/physqed-v12-receipts/typed_adm_domain_flux.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.adm_domain_cli \
+            --input projects/physqed/examples/typed/adm_domain_hidden_pole.json \
+            --output /tmp/physqed-v12-receipts/typed_adm_domain_hidden_pole.json
+          pole_status=$?
+          PYTHONPATH=projects/physqed python -m v12.adm_domain_cli \
+            --input projects/physqed/examples/typed/adm_domain_incoming_flux.json \
+            --output /tmp/physqed-v12-receipts/typed_adm_domain_incoming_flux.json
+          incoming_status=$?
+          set -e
+          test "$pole_status" -eq 2
+          test "$incoming_status" -eq 2
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/physqed-v12-receipts')
+          good=json.loads((root/'typed_adm_domain_flux.json').read_text())
+          assert good['status']=='PASS_INTERIOR_AND_CONDITIONAL_BOUNDARY_ALGEBRA__PDE_ASSUMPTIONS_PENDING'
+          assert good['all_source_guards_certified']
+          assert good['geometric_bounds']['passed']
+          assert good['interior_domain_bounds_proven']
+          assert len(good['boundary_flux']['faces'])==6
+          assert all(face['passed'] for face in good['boundary_flux']['faces'])
+          assert not good['boundary_trace_conditions_satisfied_by_solution_proven']
+          assert not good['global_constraint_propagation_theorem_proven']
+          pole=json.loads((root/'typed_adm_domain_hidden_pole.json').read_text())
+          assert not pole['all_source_guards_certified']
+          incoming=json.loads((root/'typed_adm_domain_incoming_flux.json').read_text())
+          assert not incoming['conditional_boundary_flux_algebra_proven']
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
