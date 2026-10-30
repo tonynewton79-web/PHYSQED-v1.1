@@ -58,6 +58,9 @@ jobs:
           Path('/tmp/physqed-v12-receipts/frozen_adm_energy.json').write_text(
               json.dumps(receipt,indent=2,sort_keys=True)+'\n')
           PY
+      - name: Variable-coefficient ADM energy-balance and scope gate
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_variable_energy.py' -v
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
