@@ -94,6 +94,20 @@ class ShiftedADMTests(unittest.TestCase):
             evaluate_shifted_einstein_maxwell(replace(flat_shift(),
                 spatial_metric=S.diag(-1,1,1)))
 
+    def test_spacetime_dependent_gravitational_coupling_refused(self):
+        case=flat_shift()
+        t=case.coordinates[0]
+        with self.assertRaises(ScopeError):
+            evaluate_shifted_einstein_maxwell(replace(case,
+                gravitational_coupling=2+t))
+
+    def test_spacetime_dependent_cosmological_constant_refused(self):
+        case=flat_shift()
+        t=case.coordinates[0]
+        with self.assertRaises(ScopeError):
+            evaluate_shifted_einstein_maxwell(replace(case,
+                cosmological_constant=t))
+
     def test_wrong_shift_dimension_refused(self):
         with self.assertRaises(ScopeError):
             evaluate_shifted_einstein_maxwell(replace(flat_shift(),shift=(1,2)))
