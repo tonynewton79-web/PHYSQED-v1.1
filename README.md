@@ -1,3 +1,36 @@
+## PHYSQED v1.2 — Final GH strong-well-posedness claim audit
+
+**RELEASE HOLD:** The previous regular-source forced resolvent still passes
+its 24/24 independent replay tests, but two exact counterexamples block
+promotion to stronger unrestricted claims.
+
+1. Arbitrary first-order `L²` forcing in the `F0` channel may
+   produce arbitrarily large **frequency-weighted/H¹ metric**
+   response via the auxiliary reduction defects, even with zero
+   initial state and homogeneous incoming/first-order harmonic
+   boundary rows. The explicit source family has fixed source norm
+   but transverse derivative norm growing linearly in integer n.
+   This does **not** refute natural *unweighted* first-order L²
+   estimates or reduction-compatible source theories.
+2. The current null-adapted first-order homogeneous boundary
+   kernel is **not maximally dissipative in the standard
+   Euclidean symmetrizer**: an exact state has incoming
+   characteristic norm squared 2, outgoing 1 and outward
+   energy flux `-1/4`. This does **not** contradict the
+   decaying stable-mode bound or alternative Kreiss multipliers.
+
+The final independent audit ran **43/43 local tests** (the previous
+24 plus 19 additional counterexample/refusal tests). The corresponding
+GitHub final-gate regression suite contains 18 tests and remains
+subject to native Python3.15.2 and inherited regression CI.
+
+[Exact proof, scope, sources and release conditions](
+docs/PHYSQED-v1.2-GH-final-proof-release-audit.md).
+
+PR #14 is **draft and unmerged**. Strong unrestricted well-posedness
+or general nonlinear Einstein/Einstein–Maxwell IBVP existence is
+**not claimed**.
+
 ## PHYSQED v1.2 — Inhomogeneous first-order GH resolvent (regular sources)
 
 The adapted flat first-order generalized-harmonic boundary model now
