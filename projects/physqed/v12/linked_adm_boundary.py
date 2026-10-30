@@ -22,7 +22,7 @@ import sympy as S
 from .rational_energy import (_validate_box, _exact_zero, _rational_interval,
                               DomainScopeError)
 from .typed_adm_domain import (certify_typed_adm_domain, _frame_matrix,
-                               _strict_positive)
+                               _strict_positive, parse_rational_sources)
 from .typed_input import RestrictedExpression, execute_physics_input
 from .variable_energy import adm_constraint_matrices
 
@@ -112,6 +112,19 @@ def certify_linked_adm_boundary(model):
         # otherwise cancelled original domain poles could be hidden.
         if fields.get(key)!=domain.get(key):
             raise DomainScopeError("field and domain original source AST differs: "+key)
+    # Original electromagnetic potential and constant coupling syntax also
+    # carry denominator-domain restrictions, distinct from ADM geometry.
+    # Capture these BEFORE the field backend may simplify a cancelled pole.
+    extras=list(fields.get("potential",()))
+    if len(extras)!=4:
+        raise DomainScopeError("electromagnetic 4-potential is required")
+    extras.extend((fields.get("cosmological_constant",0),
+                   fields.get("coupling",2)))
+    source=parse_rational_sources(fields["coordinates"],extras)
+    coords=tuple(S.Symbol(x,real=True) for x in fields["coordinates"])
+    box=_validate_box(coords,{x:domain["box"][str(x)] for x in coords})
+    source_guards=[_strict_positive(g*g,box,"matter_source_guard_"+str(i))
+                   for i,g in enumerate(source["guard_expressions"])]
     # Call the trusted typed source compiler for all 18 nodes, so
     # the domain certificate is not issued for an unrelated metric.
     shift=execute_physics_input(fields)
@@ -119,10 +132,13 @@ def certify_linked_adm_boundary(model):
     if len(shifted["nodes"])!=18:
         raise DomainScopeError("shifted node schema mismatch")
     domain_result=certify_typed_adm_domain(domain)
-    if not domain_result["interior_domain_bounds_proven"]:
-        return _receipt(model,shift,domain_result,None,False)
-    coords=tuple(S.Symbol(x,real=True) for x in fields["coordinates"])
-    box=_validate_box(coords,{x:domain["box"][str(x)] for x in coords})
+    source_ok=all(g["proved"] for g in source_guards)
+    matter_evidence={"passed":source_ok,
+        "guard_count":len(source_guards),
+        "original_guard_ast":list(source["guard_sources"]),
+        "guard_sign_checks":source_guards}
+    if not domain_result["interior_domain_bounds_proven"] or not source_ok:
+        return _receipt(model,shift,domain_result,None,False,matter_evidence)
     parser=RestrictedExpression(fields["coordinates"])
     h=S.Matrix([[parser.parse(v) for v in row] for row in domain["spatial_metric"]])
     N=parser.parse(domain["lapse"])
@@ -133,7 +149,7 @@ def certify_linked_adm_boundary(model):
         # Purely assumed periodic boundary traces are not a verified
         # frame-by-frame maximal nonnegative compatibility result.
         return _receipt(model,shift,domain_result,{"passed":False,
-             "reason":"BOUNDARY_FRAME_COMPATIBILITY_NOT_REQUESTED"},False)
+             "reason":"BOUNDARY_FRAME_COMPATIBILITY_NOT_REQUESTED"},False,matter_evidence)
     faces=[]
     all_compatible=True
     for axis in range(3):
@@ -168,10 +184,10 @@ def certify_linked_adm_boundary(model):
         "nonlinear_Einstein_boundary_conditions_verified":False,
         "strong_Lopatinski_condition_verified":False,
         "corner_compatibility_verified":False,
-        "smooth_constraint_solution_existence_verified":False}, all_compatible)
+        "smooth_constraint_solution_existence_verified":False}, all_compatible,matter_evidence)
 
 
-def _receipt(model,shift,domain,compatibility,ok):
+def _receipt(model,shift,domain,compatibility,ok,matter_evidence):
     nodes=shift["shifted_contract"]["nodes"]
     required={
        "normal_unit","normal_orthogonal","maxwell_bianchi",
@@ -190,11 +206,12 @@ def _receipt(model,shift,domain,compatibility,ok):
               and shift["shifted_contract"]["trace_reversed_hyperbolic_constraint_closure_passed"])
     interior_ok=bool(domain.get("interior_domain_bounds_proven"))
     boundary_ok=bool(domain.get("conditional_boundary_flux_algebra_proven"))
-    full=field_ok and interior_ok and boundary_ok and ok
+    full=field_ok and interior_ok and boundary_ok and ok and matter_evidence["passed"]
     result={"schema":"physqed.linked-adm-boundary-result.v1",
         "field_model_claim_id":shift["claim_id"],
         "field_contract":shift,
         "domain_contract":domain,
+        "matter_source_domain":matter_evidence,
         "compatibility":compatibility,
         "all_18_field_nodes_passed":bool(field_ok),
         "uniform_interior_energy_bounds_passed":interior_ok,
