@@ -24,12 +24,14 @@ class TypedShiftedADMTests(unittest.TestCase):
         model=fixture("einstein_maxwell_shifted_flat.json")
         result=execute_physics_input(model)
         self.assertEqual(result["status"],"PASS_TYPED_SHIFTED_ADM__SCOPED")
-        self.assertEqual(len(result["linked_obligations"]),14)
+        self.assertEqual(len(result["linked_obligations"]),18)
         self.assertEqual(len(result["index_type_checks"]),6)
         self.assertTrue(all(x["passed"] for x in result["unit_component_checks"]))
         shifted=result["shifted_contract"]
         self.assertTrue(shifted["homogeneous_constraint_propagation_identities_passed"])
         self.assertTrue(shifted["oracle_passed"])
+        self.assertTrue(shifted["symmetric_hyperbolic_principal_symbol_verified"])
+        self.assertTrue(shifted["trace_reversed_hyperbolic_constraint_closure_passed"])
         self.assertFalse(shifted["global_constraint_propagation_theorem_proven"])
 
     def test_offshell_shift_retains_bianchi_but_refuses_field_equations(self):
@@ -41,6 +43,9 @@ class TypedShiftedADMTests(unittest.TestCase):
         self.assertTrue(checks["codazzi_momentum_bridge"])
         self.assertTrue(checks["hamiltonian_propagation_bridge"])
         self.assertTrue(checks["momentum_propagation_bridge"])
+        self.assertTrue(checks["hamiltonian_hyperbolic_propagation_bridge"])
+        self.assertTrue(checks["momentum_hyperbolic_propagation_bridge"])
+        self.assertTrue(checks["principal_symbol_symmetrizer"])
         self.assertFalse(checks["einstein_full"])
         self.assertFalse(result["shifted_contract"]["homogeneous_constraint_propagation_identities_passed"])
 
@@ -75,7 +80,7 @@ class TypedShiftedADMTests(unittest.TestCase):
     def test_planning_is_not_execution(self):
         plan=plan_physics_obligations(
             load_physics_input(fixture("einstein_maxwell_shifted_flat.json")))
-        self.assertEqual(len(plan),14)
+        self.assertEqual(len(plan),18)
         self.assertTrue(all(x["executed"] is False for x in plan))
         self.assertNotIn("passed",plan[0])
 
