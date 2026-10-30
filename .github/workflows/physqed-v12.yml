@@ -305,6 +305,9 @@ jobs:
           from pathlib import Path
           r=json.loads(Path('/tmp/physqed-v12-receipts/gh_extended.json').read_text())
           assert r['status']=='PASS_SCOPED_OBSTRUCTION_AND_CURVED_BULK_CHECKS'
+          assert r['scalar_sommerfeld_calibration']['analytic_uniform_scalar_bound_established']
+          assert r['scalar_sommerfeld_calibration']['all_local_exact_replays_pass']
+          assert not r['scalar_sommerfeld_calibration']['GH_ten_row_uniform_unweighted_inverse_established']
           assert r['glancing_corners']['glancing']['glancing_obstruction_proven']
           assert r['glancing_corners']['positive_higher_corners']['passed']
           assert r['glancing_corners']['negative_second_order_corner']['levels'][2]['metric_residuals'][4]=='-6'
