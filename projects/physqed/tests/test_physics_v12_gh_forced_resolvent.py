@@ -7,7 +7,8 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from v12.gh_forced_resolvent import (
     first_order_forcing_normal_form,boundary_source_lift,
     exact_exponential_volume_and_boundary_solution,
-    prove_regular_source_resolvent,replay_regular_source_resolvent)
+    prove_regular_source_resolvent,replay_regular_source_resolvent,
+    nonzero_reduction_defect_solution)
 from v12.gh_forced_corners import (
     check_sourced_harmonic_corners,sourced_wave_positive_control)
 from v12.gh_first_order_uniform import analytic_uniform_bound
@@ -92,6 +93,13 @@ class ForcedGHTests(unittest.TestCase):
     def test_invalid_corner_order_fails_closed(self):
         with self.assertRaises(ValueError):
             check_sourced_harmonic_corners({},{},{},[],[],max_order=9)
+
+    def test_nonzero_auxiliary_reduction_defect_sample(self):
+        sample=nonzero_reduction_defect_solution()
+        self.assertTrue(sample["first_order_equations_zero"])
+        self.assertTrue(sample["reduction_defect_nonzero"])
+        self.assertTrue(sample["effective_wave_source_zero"])
+        self.assertTrue(sample["regular_source_bound_passes"])
 
     def test_replay_refuses_tampered_theorem(self):
         r=prove_regular_source_resolvent()
