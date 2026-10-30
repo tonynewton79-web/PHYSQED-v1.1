@@ -365,6 +365,34 @@ jobs:
           assert not r['uniform_weighted_Kreiss_estimate_proven']
           assert not r['curved_Einstein_IBVP_wellposedness_proven']
           PY
+      - name: First-order GH adapted incoming boundary and uniform weighted stable-mode estimate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_first_order_uniform.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.gh_first_order_uniform import (
+              certify_first_order_gh, glancing_diagnostic,
+              replay_first_order_gh)
+          result=certify_first_order_gh()
+          assert result['status']=='PASS_ADAPTED_GH_UNIFORM_WEIGHTED_STABLE_MODE'
+          assert result['stable_mode_reduction_verified']
+          assert result['analytic_bound']['determinant_verified']
+          assert result['analytic_bound']['gauge_block_inverse_verified']
+          assert result['analytic_bound']['uniform_homogeneous_stable_mode_trace_estimate_proven']
+          assert not result['full_forced_resolvent_estimate_proven']
+          assert not result['nonlinear_or_curved_Einstein_boundary_theorem_proven']
+          assert replay_first_order_gh(result)
+          samples=[glancing_diagnostic(n) for n in (8,128)]
+          assert all(v['above_analytic_amplitude_threshold'] for v in samples)
+          Path('/tmp/physqed-v12-receipts/gh_first_order_uniform.json').write_text(
+              json.dumps({'proof':result,'glancing':samples},
+                         sort_keys=True,indent=2)+'\n')
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
