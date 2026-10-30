@@ -1,3 +1,35 @@
+## PHYSQED v1.2 — Single-source Einstein–Maxwell boundary and energy verification
+
+The **linked ADM boundary contract** combines a single exact
+shifted Einstein–Maxwell spacetime's 18 field/constraint identities,
+source-preserving rational-domain lapse and spatial-metric bounds,
+and the symmetric-hyperbolic constraint subsystem's *maximal
+nonnegative boundary trace* algebra.
+
+For the shifted Minkowski vacuum
+`h=I, N=1, beta=(1/5,0,0), A=0`, the exact reference
+constraint energy has `S=diag(1,4,4,4)`, `R=0`. The verifier
+checks all six outward boundary flux forms, full rank and maximal
+nonnegative frame dimension (3,1,3,3,3,3). The old undercomplete
+positive-flux boundary control is now **rejected**.
+
+```bash
+PYTHONPATH=projects/physqed python -m v12.linked_adm_cli \
+  --input projects/physqed/examples/typed/linked_adm_shifted_minkowski.json \
+  --output linked_adm_boundary_receipt.json
+```
+
+[Mathematics and six-face boundary proof](
+docs/PHYSQED-v1.2-linked-adm-boundary-compatibility.md).
+
+This proves the exact reference model equations and supplies a
+**conditional constraint-energy uniqueness argument** for existing
+smooth solutions satisfying the declared trace and corner conditions.
+It does not prove arbitrary nonlinear Einstein boundary-data
+existence, strong Lopatinski compatibility or a general
+initial-boundary well-posedness theorem. The new code remains
+unmerged pending native Python 3.15.2 CI and earlier regressions.
+
 ## PHYSQED v1.2 — Original denominator, ADM geometry and boundary-flux proof gates
 
 The typed ADM-domain compiler preserves **negative-power source denominators
