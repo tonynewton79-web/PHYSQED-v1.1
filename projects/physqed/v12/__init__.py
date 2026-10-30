@@ -38,3 +38,7 @@ from .domain_energy import (DomainScopeError, bernstein_bounds,
 
 from .rational_energy import (certify_rational_domain_energy,
                               replay_rational_domain_energy)
+
+from .typed_adm_domain import (parse_rational_sources,
+                               certify_typed_adm_domain,
+                               replay_typed_adm_domain)
