@@ -115,6 +115,33 @@ The native unit test module is
 The v1.2 CI workflow runs these unit tests and the five CLI
 fixtures in addition to legacy and coupled Einstein–Maxwell tests.
 
+## Typed Einstein–Maxwell/ADM automatic bridge
+
+The `einstein_maxwell` kind now accepts a single
+`linked_einstein_maxwell_adm` claim. It automatically constructs the
+specialised 16-node Einstein–Maxwell/ADM consistency specification
+from the metric, Maxwell potential, lapse, exact parameter values and
+curvature witnesses. Unlike the four generic component families, this
+mode checks **all linked conservation, Einstein, Hamiltonian, momentum,
+Gauss–Codazzi and certificate obligations**.
+
+The added `tensor_types` declaration checks five fixed rank/variance
+signatures for the metric, potential, field strength, stress and lapse.
+The required `units` declaration verifies component dimensions in a
+coordinate-aware **geometrized length unit system**. In particular,
+for coordinates of dimension `L^(d_a)`, a covariant metric component
+has dimension `L^(2-d_a-d_b)`. It correctly handles radial/angular
+differences in spherical coordinates. This is not a general SI or
+mixed-index tensor-contraction checker.
+
+Three accompanying fixtures are
+`einstein_maxwell_flat.json`,
+`einstein_maxwell_reissner_nordstrom.json`,
+and `einstein_maxwell_inconsistent_flat.json`. The third should
+be *well typed* but fail the physical dynamical equations.
+See [the complete bridge specification](
+PHYSQED-v1.2-typed-einstein-maxwell-bridge.md).
+
 ## Claim boundaries and current limitations
 
 This layer generates exact, componentwise obligations, not proofs of
