@@ -1,0 +1,297 @@
+{
+  "schema": "physqed.linked-adm-boundary.v1",
+  "field_model": {
+    "schema": "physqed.typed-input.v1",
+    "kind": "einstein_maxwell_shift",
+    "claim_id": "LINKED_SHIFTED_MINKOWSKI",
+    "source": "Minkowski in a uniformly shifted Cartesian chart; zero electromagnetic field",
+    "assumptions": [
+      "-+++ signature, zero electromagnetic potential",
+      "positive-K=(dt h - Lie_beta h)/(2N) convention",
+      "flat Minkowski chart, exact rational coefficients and positive lapse"
+    ],
+    "coordinates": [
+      "t",
+      "x",
+      "y",
+      "z"
+    ],
+    "claims": [
+      "linked_shifted_adm_propagation"
+    ],
+    "units": {
+      "system": "geometrized_length",
+      "coordinates": {
+        "t": 1,
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "parameters": {}
+    },
+    "tensor_types": {
+      "metric": {
+        "variance": "dd",
+        "rank": 2
+      },
+      "potential": {
+        "variance": "d",
+        "rank": 1
+      },
+      "field_strength": {
+        "variance": "dd",
+        "rank": 2
+      },
+      "stress": {
+        "variance": "dd",
+        "rank": 2
+      },
+      "lapse": {
+        "variance": "",
+        "rank": 0
+      }
+    },
+    "shift_type": {
+      "variance": "u",
+      "rank": 1
+    },
+    "parameter_values": {},
+    "spatial_metric": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "lapse": 1,
+    "shift": [
+      {
+        "rational": [
+          1,
+          5
+        ]
+      },
+      0,
+      0
+    ],
+    "potential": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "witnesses": [
+      {
+        "t": 0,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    ]
+  },
+  "domain_model": {
+    "schema": "physqed.typed-adm-domain.v1",
+    "coordinates": [
+      "t",
+      "x",
+      "y",
+      "z"
+    ],
+    "box": {
+      "t": [
+        0,
+        1
+      ],
+      "x": [
+        0,
+        1
+      ],
+      "y": [
+        0,
+        1
+      ],
+      "z": [
+        0,
+        1
+      ]
+    },
+    "spatial_metric": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "lapse": 1,
+    "shift": [
+      0,
+      0,
+      0
+    ],
+    "lapse_floor": "1/2",
+    "metric_floor": 1,
+    "energy_coercivity": 1,
+    "energy_growth": 0,
+    "boundary_mode": "trace_subspaces_assumed",
+    "boundary_frames": {
+      "x_lower": [
+        [
+          1,
+          {
+            "rational": [
+              1,
+              2
+            ]
+          },
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "x_upper": [
+        [
+          1,
+          {
+            "rational": [
+              -1,
+              2
+            ]
+          },
+          0,
+          0
+        ]
+      ],
+      "y_lower": [
+        [
+          1,
+          0,
+          {
+            "rational": [
+              1,
+              2
+            ]
+          },
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "y_upper": [
+        [
+          1,
+          0,
+          {
+            "rational": [
+              -1,
+              2
+            ]
+          },
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "z_lower": [
+        [
+          1,
+          0,
+          0,
+          {
+            "rational": [
+              1,
+              2
+            ]
+          }
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ]
+      ],
+      "z_upper": [
+        [
+          1,
+          0,
+          0,
+          {
+            "rational": [
+              -1,
+              2
+            ]
+          }
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ]
+      ]
+    }
+  }
+}
