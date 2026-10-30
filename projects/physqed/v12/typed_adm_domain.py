@@ -183,7 +183,8 @@ def _boundary_cell(box,coords,s,A,mode,frames,parser):
             if any(not _exact_zero(v,tuple(coords)) for v in restricted-restricted.T):
                 raise DomainScopeError("flux matrix is not symmetric")
             # Source frame denominator signs and nonzero requirements
-            source_guards=[_strict_positive(g*g,remaining,
+            source_guards=[_strict_positive(S.together(g.subs(x,S.Rational(
+                       value.numerator,value.denominator)))**2,remaining,
                       f"{key}_source_guard_{j}") for j,g in enumerate(guards)]
             bounded=_gershgorin_from_bounds(
                 restricted.subs(x,S.Rational(value.numerator,value.denominator)),
@@ -267,6 +268,8 @@ def certify_typed_adm_domain(model):
         "source_guards_extracted_before_simplification":
              parsed["provenance_complete_for_supplied_AST"],
         "source_guard_count":len(guards),
+        "source_guard_original_ast":list(parsed["guard_sources"]),
+        "source_guard_exponents":list(parsed["guard_exponents"]),
         "source_guard_sign_evidence":guards,
         "all_source_guards_certified":guards_ok,
         "geometric_bounds":geo,
