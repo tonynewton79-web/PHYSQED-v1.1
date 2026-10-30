@@ -31,6 +31,18 @@ symbol, mode dispersion, auxiliary reduction constraints,
 gauge-block inverse, norm constants, old glancing failure and
 certificate replay.
 
+**Curved operator calibration:** The Ricci-flat Brinkmann
+pp-wave has a genuine timelike ADM chart after the coordinate
+change `u=(t-z)/sqrt(2),v=(t+z)/sqrt(2)`.
+On `|x|,|y|<=1/2`, the spatial metric satisfies
+`h>=7/8 I`, `8/9<=N²<=8/7`, and the frozen
+normal wave speeds are `1` and `(H-2)/(H+2)<0`.
+Its advective speed `H/(H+2)`, however, crosses
+zero. Therefore the flat uniform boundary estimate has
+**not** been transferred to this curved spacetime.
+[See the curved ADM operator calculation](
+docs/PHYSQED-v1.2-first-order-GH-uniform-stable-boundary.md).
+
 [Complete derivation and limitations](
 docs/PHYSQED-v1.2-first-order-GH-uniform-stable-boundary.md).
 
