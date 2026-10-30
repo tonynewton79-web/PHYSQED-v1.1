@@ -233,7 +233,7 @@ jobs:
           assert bad['status']=='REJECTED_TYPED_SHIFTED_ADM'
           plan=json.loads((path/'plan.json').read_text())
           assert plan['execution_status']=='NOT_EXECUTED'
-          assert len(plan['obligations'])==14
+          assert len(plan['obligations'])==18
           PY
       - name: Reproducible standard-physics receipts
         run: |
