@@ -32,3 +32,6 @@ from .typed_shift_bridge import run_typed_shifted_adm
 from .frozen_energy import audit_frozen_adm
 from .variable_energy import audit_matrix_energy, adm_constraint_matrices
 from .energy_receipts import issue_energy_receipt, replay_energy_receipt
+
+from .domain_energy import (DomainScopeError, bernstein_bounds,
+                            certify_domain_energy, replay_domain_energy)
