@@ -292,3 +292,114 @@ glancing sector, plus full corner/trace and background
 regularity assumptions. The pp-wave bulk identity is a
 valuable positive curvature test, not a substitute for
 that boundary analysis.
+
+
+## Supplement: stronger glancing cancellation and an off-glancing inverse bound
+
+The simpler unit-\(\bar h_{xx}\) obstruction above is not
+quantitatively sharp for this matrix. The more informative exact
+mode uses the two normal perturbation amplitudes
+
+\[
+H_{tx}=\kappa,\qquad H_{xx}=-s,
+\]
+
+with all other modes zero. In the order
+\((tt,ty,tz,yy,yz,zz,tx,xy,xz,xx)\), direct multiplication
+of the 10×10 boundary matrix gives **only one nonzero row**,
+\(C_t=-\kappa^2\). For the explicit sequence
+\(s=\varepsilon+i,\eta=1,\zeta=0\),
+\(\kappa^2=\varepsilon^2+2i\varepsilon\),
+we have
+\[
+\frac{\|BH\|}{p\|H\|}
+\le\sqrt{\frac52}\,\varepsilon\to0,\qquad
+p=\sqrt{|s|^2+\eta^2+\zeta^2}.
+\]
+This identifies an \(O(\varepsilon)\), rather than merely
+\(O(\sqrt\varepsilon)\), upper bound on the normalized
+minimum singular value. It remains a counterexample only
+to the explicitly defined *unweighted metric-amplitude norm*.
+
+For \(|\kappa|\ge\delta p\), \(0<\delta\le1\),
+the six-by-six Sommerfeld block has inverse norm bounded by
+\(\sqrt2/p\). The four-by-four normal block is
+\(-\kappa I+N_0\) where \(N_0^2=0\) and \(\|N_0\|\le p\).
+The mixed tangential-to-constraint block has norm at most \(2p\).
+Consequently the explicit conservative bound
+\[
+\boxed{\|H\|\le\frac{
+ \sqrt2+(\delta^{-1}+\delta^{-2})(1+2\sqrt2)}
+ {p}\|BH\|}
+\]
+holds on the strictly off-glancing sector. Its constant
+diverges as \(\delta\downarrow0\), consistently with the
+counterexample. The distinct implementation
+\`v12/gh_glancing.py\` checks the exact cancellation,
+and stores that bound and its scope separately.
+
+## Supplement: a later fourth-power corner failure
+
+The additional bounded jet checker
+\`v12/gh_higher_corners.py\` verifies the same
+recurrence through temporal order eight on explicitly
+supplied reduced-wave data. A useful later obstruction is
+\(\bar h_{yz}=(t-x)^4\). It obeys the reduced wave and
+harmonic constraints and has
+\[
+D_-\bar h_{yz}|_{x=0}=8t^3.
+\]
+The order-0, order-1 and order-2 corner checks all
+pass, whereas the **order-3** derivative equals \(48\).
+Thus even an order-2 audit can miss a higher regularity
+failure. Smooth outgoing families \(F(t+x)\) have
+identically zero harmonic and Sommerfeld residuals at
+all orders whenever the required derivatives exist;
+finite tests do not convert arbitrary inputs into
+an infinite-order theorem.
+
+## Supplement: an explicit reduced-but-not-full Einstein mode on the pp-wave
+
+For the same genuinely curved Ricci-flat plane wave,
+the extra source \(\bar h_{ab}=u^2g_{ab}\) gives
+\[
+C_b=\nabla^a\bar h_{ab}=2u\,\partial_bu,\qquad
+\Box_g C_b=0,
+\quad
+(\Box_g\bar h_{ab}+2R_{acbd}\bar h^{cd})=0.
+\]
+Yet, because its corresponding physical metric variation is
+\(\delta g_{ab}=-u^2g_{ab}\), direct conformal
+linearization gives
+\[
+\delta G_{ab}=2(\partial_a u)(\partial_bu)\ne0.
+\]
+This is a separate **curved reduced-vs-full field
+equation negative control**, not a solution of the
+linearized Einstein system. The coordinates are harmonic
+and the Ricci tensor vanishes, while
+\(R_{uxux}=-1\) and \(R_{uyuy}=1\).
+On \(|x|,|y|\le1/2\),
+the time covector \(dt=(du+dv)/\sqrt2\)
+obeys \(g^{-1}(dt,dt)\le-7/8\) and
+the surfaces \(x=\mathrm{constant}\) are timelike.
+The module \`v12/gh_curved_plane_wave.py\` retains
+these exact source/model distinctions and explicitly
+marks the curved boundary resolvent and nonlinear IBVP
+as **unproved**.
+
+The two curved pp-wave controls serve different roles:
+\`gh_curved_ppwave.py\` verifies the bulk linearized
+Bianchi/intertwiner for a multicomponent off-shell
+perturbation, whereas \`gh_curved_plane_wave.py\`
+checks a particularly transparent reduced-wave solution
+whose full Einstein residual does not vanish.
+Both use the same exact Ricci-flat spacetime and neither
+is a curved-boundary well-posedness proof.
+
+The expanded tests
+\`test_physics_v12_gh_uniform_sector.py\` complement
+the existing \`test_physics_v12_gh_glancing_curved.py\`.
+They belong to the same native Python 3.15.2 CI release
+gate and must not be marked successful until that run
+actually completes.
