@@ -1,3 +1,30 @@
+## PHYSQED v1.2 — Nonzero ADM shift and conditional constraint propagation
+
+The general typed JSON compiler can now generate a **shifted 3+1
+Einstein–Maxwell contract** for spatial metric `h_ij`, lapse `N`,
+contravariant shift `beta^i` and electromagnetic potential.
+
+The 18-node suite checks the full Einstein/Maxwell system, Hamiltonian
+and momentum projections, off-shell Gauss/Codazzi and projected Bianchi
+propagation identities, trace-reversed spatial evolution, and the
+symmetric-hyperbolic principal-symbol identity. Tensor index rank,
+variance and coordinate-aware physical length dimensions are enforced
+before solving symbolic components.
+
+```bash
+PYTHONPATH=projects/physqed python -m v12.typed_cli \
+  --input projects/physqed/examples/typed/einstein_maxwell_shifted_flat.json \
+  --output shifted_adm_receipt.json
+```
+
+[Shifted-ADM propagation mathematics and explicit assumptions](
+docs/PHYSQED-v1.2-shifted-adm-propagation.md).
+**This is not a global Einstein Cauchy-problem proof.** The conditional
+energy uniqueness statement requires smooth coefficients, proper
+boundary flux and trace-reversed evolution/matter conservation
+throughout the spacetime domain. All new code remains subject to
+Python 3.15.2 CI and inherited regression tests; the PR is unmerged.
+
 ## PHYSQED v1.2 — Automatic Einstein–Maxwell/ADM type-checked contracts
 
 The general JSON physics-input compiler is now connected directly to
