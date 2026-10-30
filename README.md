@@ -1,3 +1,34 @@
+## PHYSQED v1.2 — Original denominator, ADM geometry and boundary-flux proof gates
+
+The typed ADM-domain compiler preserves **negative-power source denominators
+before SymPy simplification**, certifies a strictly positive lapse,
+positive-definite spatial metric, and uniform metric/constraint-energy
+matrix bounds on a rational spacetime box.
+
+It checks outward energy-flux quadratic forms on **all six spatial faces**
+for a user-declared boundary trace subspace, or checks matching coefficients
+for *assumed* periodic boundary traces. These are conditional boundary
+algebra checks, **not proof of boundary trace realizability or PDE
+well-posedness**.
+
+```bash
+PYTHONPATH=projects/physqed python -m v12.adm_domain_cli \
+  --input projects/physqed/examples/typed/adm_domain_outgoing_flux.json \
+  --output adm_domain_receipt.json
+```
+
+The included ADM reference model has `h=diag(1+t,1,1)`, `N=1+t`
+and `beta=(1/5,0,0)` on `[0,1]^4`. It admits exact
+`S>=I`, `R<=0`, and positive outward energy-flux tests on the
+**declared one-dimensional trace subspaces**. Separate negative controls
+refuse a cancelled source pole and an incoming-flux boundary.
+
+[Derivation, restricted JSON grammar and mathematical claim boundaries](
+docs/PHYSQED-v1.2-typed-adm-source-geometry-boundary.md).
+
+**Release:** draft branch, pending native Python 3.15.2 and inherited
+CI; no merge or formal global Einstein theorem claimed.
+
 ## PHYSQED v1.2 — Exact rational-function ADM domain certification
 
 The existing polynomial-only domain-energy checker now has a
