@@ -19,10 +19,14 @@ SHIFTED_NODE_NAMES=(
     "normal_unit","normal_orthogonal",
     "maxwell_bianchi","maxwell_equations","matter_conservation",
     "einstein_full","spatial_einstein_evolution",
+    "trace_reversed_spatial_evolution",
     "hamilton_constraint","momentum_constraint",
     "gauss_hamiltonian_bridge","codazzi_momentum_bridge",
     "einstein_stress_bianchi_bridge",
     "hamiltonian_propagation_bridge","momentum_propagation_bridge",
+    "hamiltonian_hyperbolic_propagation_bridge",
+    "momentum_hyperbolic_propagation_bridge",
+    "principal_symbol_symmetrizer",
 )
 
 
