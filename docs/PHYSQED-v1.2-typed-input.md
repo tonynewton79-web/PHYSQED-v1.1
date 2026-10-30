@@ -142,6 +142,36 @@ be *well typed* but fail the physical dynamical equations.
 See [the complete bridge specification](
 PHYSQED-v1.2-typed-einstein-maxwell-bridge.md).
 
+## Nonzero-shift Einstein–Maxwell and propagation contracts
+
+The `einstein_maxwell_shift` input kind accepts the requested theorem
+`linked_shifted_adm_propagation`. It parses a **spatial 3×3 metric**,
+lapse, **contravariant 3-vector shift**, Maxwell one-form, coordinate-aware
+geometrized-length units and exact rational witnesses.
+
+The corresponding 18-node backend verifies the full Einstein/Maxwell
+equations, Hamiltonian and momentum projections, Gauss/Codazzi
+identities, both off-shell Bianchi propagation identities,
+trace-reversed spatial evolution, and a positive
+symmetric-hyperbolic principal-symbol symmetrizer.
+
+The shift unit rule is `[beta^i]=L^(d_i-d_t)`.
+Its required `shift_type` declaration is `{"variance":"u","rank":1}`.
+The ordinary metric/potential/stress/lapse tensor signatures are
+unchanged. The engine refuses incorrect spatial index variance,
+unit-incompatible shifts and unsupported general ADM claims.
+
+**Examples:** `einstein_maxwell_shifted_flat.json`,
+`einstein_maxwell_shifted_offshell.json`,
+and `einstein_maxwell_shifted_invalid_dimension.json`.
+
+See [the mathematical propagation and conditional energy theorem note](
+PHYSQED-v1.2-shifted-adm-propagation.md).
+A passing symmetric-principal-symbol node is a local algebraic
+verification. The full PDE energy/uniqueness conclusion still requires
+smooth domain coefficients, conservation, the trace-reversed spatial
+evolution equations, initial constraints and controlled boundary flux.
+
 ## Claim boundaries and current limitations
 
 This layer generates exact, componentwise obligations, not proofs of
