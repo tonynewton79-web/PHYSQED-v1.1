@@ -16,11 +16,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: physqed-v12-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   physics-exact:
     name: Python 3.15.2 textbook checks
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v6
@@ -177,6 +181,8 @@ jobs:
             test_invalid_negative_lapse_witness_refused \
             test_invalid_indefinite_spatial_witness_refused \
             test_wrong_shift_dimension_refused \
+            test_spacetime_dependent_gravitational_coupling_refused \
+            test_spacetime_dependent_cosmological_constant_refused \
             test_recompute_receipt_rejects_tampering; do
             python -m unittest discover -s projects/physqed/tests \
               -p test_physics_v12_adm_shift.py -k "$name" -v
