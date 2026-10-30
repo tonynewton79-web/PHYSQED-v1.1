@@ -31,12 +31,16 @@ KINDS = {
     "lagrangian": ("euler_lagrange", "translation_noether"),
     "hamiltonian": ("hamilton_equations", "poisson_jacobi"),
     "gauge": ("gauge_bianchi", "yang_mills_vacuum", "flat_connection"),
+    "einstein_maxwell": ("linked_einstein_maxwell_adm",),
 }
 FIELDS = ("claim_id", "schema", "kind", "source", "assumptions", "coordinates",
           "parameters", "fields", "positions", "momenta", "metric", "stress",
           "cosmological_constant", "coupling", "lagrangian", "expected_eom",
           "hamiltonian", "expected_dq", "expected_dp", "jacobi_test",
-          "algebra", "connection", "claims")
+          "algebra", "connection", "claims", "units", "tensor_types",
+          "potential", "lapse", "witnesses", "parameter_values",
+          "declared_stress", "declared_field_strength",
+          "declared_hamiltonian", "declared_momentum")
 
 
 def _keys(data, allowed, required=()):
@@ -99,6 +103,10 @@ class RestrictedExpression:
             raise ScopeError("expression must be a single-tag typed AST node")
         key, value = next(iter(node.items()))
         child = lambda obj: self.parse(obj, depth + 1)
+        if key == "constant":
+            if value != "pi":
+                raise ScopeError("only the mathematical constant pi is supported")
+            return S.pi
         if key == "rational":
             if (not isinstance(value, list) or len(value) != 2 or
                 any(type(v) is not int or abs(v) > 10**40 for v in value) or
@@ -209,6 +217,12 @@ def load_physics_input(payload: Any) -> PhysicsInput:
         "hamiltonian": {"positions", "momenta", "hamiltonian",
                         "expected_dq", "expected_dp", "jacobi_test"},
         "gauge": {"algebra", "connection", "metric"},
+        "einstein_maxwell": {
+            "metric", "potential", "lapse", "witnesses", "parameter_values",
+            "units", "tensor_types", "cosmological_constant", "coupling",
+            "declared_stress", "declared_field_strength",
+            "declared_hamiltonian", "declared_momentum",
+        },
     }
     _keys(payload, common | specific[kind])
     if len(set(coords + params)) != len(coords) + len(params):
@@ -222,6 +236,14 @@ def plan_physics_obligations(spec: PhysicsInput) -> tuple:
     """Plan obligations without interpreting them as proven physical laws."""
     if not isinstance(spec, PhysicsInput):
         raise ScopeError("typed PhysicsInput required")
+    if spec.kind == "einstein_maxwell":
+        from .typed_em_bridge import LINKED_NODE_NAMES
+        return tuple({"claim": name,
+                      "category": ("cross_law_identity" if "bridge" in name
+                                   else "linked_physics_obligation"),
+                      "comparison": "typed 16-node Einstein-Maxwell/ADM exact components",
+                      "executed": False}
+                     for name in LINKED_NODE_NAMES)
     return tuple({
         "claim": c,
         "category": ("asserted_dynamics" if c in (
@@ -363,6 +385,9 @@ def execute_physics_input(payload: Any) -> dict:
     validity of arbitrary chart domains, quantum field theory or novelty.
     """
     spec=load_physics_input(payload)
+    if spec.kind == "einstein_maxwell":
+        from .typed_em_bridge import run_typed_einstein_maxwell
+        return run_typed_einstein_maxwell(spec)
     raw=spec.raw
     parser=RestrictedExpression(spec.coordinates,spec.parameters,
           raw.get("fields",()) if spec.kind=="lagrangian" else (),
