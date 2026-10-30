@@ -1,3 +1,48 @@
+## PHYSQED v1.2 — Uniform first-order harmonic stable-mode boundary test
+
+A **specified first-order reduction** of the ten linearized
+trace-reversed harmonic metric waves now has explicit wave
+characteristics (ten incoming, ten outgoing, thirty zero-speed
+fields) and an exact ten-dimensional decaying Laplace–Fourier
+stable-mode subspace.
+
+The earlier six-tangential-Sommerfeld/four-constraint boundary
+system was **not uniformly invertible** at glancing. A new
+**null-adapted six-combination Sommerfeld hierarchy** retains
+the four exact harmonic constraint boundary equations but has
+
+```
+det B_adapted = (s+kappa)^10 .
+```
+
+More importantly, an explicit Sherman–Morrison inverse and
+fixed-complement decomposition yield the analytic **uniform
+weighted stable-state trace estimate**
+
+```
+||B a|| >= (1/60) ||(Lambda psi, Pi, Phi_x, Phi_y, Phi_z)||
+Lambda^2 = |s|^2 + eta^2 + zeta^2,    Re(s)>0 .
+```
+
+The proof is analytic for *all* real transverse frequencies,
+including approaches to glancing; high-precision SVD checks
+are only independent diagnostics. New tests audit the normal
+symbol, mode dispersion, auxiliary reduction constraints,
+gauge-block inverse, norm constants, old glancing failure and
+certificate replay.
+
+[Complete derivation and limitations](
+docs/PHYSQED-v1.2-first-order-GH-uniform-stable-boundary.md).
+
+**Important:** this is a **homogeneous stable-mode trace**
+inequality for a zero-shift flat frozen-coefficient linearized
+GH principal reduction. It does **not** prove a forced
+source-to-solution resolvent, higher-order boundary regularity,
+nonzero-shift or curved-background GH boundary theorem,
+nor nonlinear Einstein initial-boundary well-posedness.
+PR #14 remains draft pending native Python3.15.2 and
+inherited regression results.
+
 ## PHYSQED v1.2 — Glancing boundary obstruction, higher corners and curved GH
 
 The next generalized-harmonic verification stage has identified a
