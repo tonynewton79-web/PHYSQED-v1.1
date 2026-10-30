@@ -35,3 +35,6 @@ from .energy_receipts import issue_energy_receipt, replay_energy_receipt
 
 from .domain_energy import (DomainScopeError, bernstein_bounds,
                             certify_domain_energy, replay_domain_energy)
+
+from .rational_energy import (certify_rational_domain_energy,
+                              replay_rational_domain_energy)
