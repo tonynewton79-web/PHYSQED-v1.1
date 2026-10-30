@@ -106,7 +106,13 @@ For this **specified coefficient system**, exact Bernstein/Gershgorin calculatio
 \boxed{S\succeq I,\qquad R\preceq 0}
 \]
 
-on the entire four-dimensional box, with the source denominator \(1+t\) strictly positive. The certificate also verifies the received coefficient denominators and the principal symmetrizer identities.
+on the entire four-dimensional box, with the source denominator \(1+t\) strictly positive. In fact, direct substitution of the generated lower-order and principal matrices gives the exact diagonal defect
+
+\[
+R=\operatorname{diag}\!\left(-\frac{2}{1+t},-\frac{8}{(1+t)^2},-\frac{4}{1+t},-\frac{4}{1+t}\right),
+\]
+
+which is negative definite throughout this box. Therefore the conditional source-free energy estimate is \(\mathcal E(t)\le\mathcal E(0)\) whenever the required boundary and smooth-solution hypotheses hold. The certificate also verifies the received coefficient denominators and the principal symmetrizer identities.
 
 This is a nontrivial rational-ADM **constraint-propagation coefficient bound**. It does **not** mean that the chosen \(h,N,\beta\) satisfy Einstein equations or that the constraint PDE has a smooth solution with arbitrary data. The spatial periodicity or boundary flux of actual solutions remains separately assumed.
 
