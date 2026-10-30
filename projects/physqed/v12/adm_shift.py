@@ -203,6 +203,44 @@ def evaluate_shifted_einstein_maxwell(spec):
     Hfree=S.simplify(DtnH-2*N*(divM+2*accelM-trK*H/2))
     Mfree=(DtnM-N*(-trK*M+H*accel/2)).applyfunc(S.simplify)
 
+    # Equivalently impose trace-reversed spatial Einstein evolution:
+    # Q_ij = C_ij-(H/2) h_ij. If Q=0, 4D Einstein
+    # residual E may still have nonzero Hamiltonian/momentum components.
+    # The constraint propagation system now has symmetric-hyperbolic
+    # principal part and a positive symmetrizer.
+    Q=(C-h*H/2).applyfunc(S.simplify)
+    Qmix=(hinv*Q).applyfunc(S.simplify)
+    divQ=S.Matrix(_spatial_divergence_mixed(hgeo,Qmix))
+    aQ=(Qmix.T*accel).applyfunc(S.simplify)
+    KQ=S.simplify(S.trace(Km*Qmix))
+    gradH=S.Matrix([S.diff(H,x[i+1]) for i in range(3)])
+    PHhyper=S.simplify(DtnH-2*N*(divM+2*accelM-trK*H-KQ-Jn))
+    PMhyper=(DtnM-N*(-trK*M+H*accel+gradH/2+
+                              divQ+aQ-Ji)).applyfunc(S.simplify)
+    Hhyper_free=S.simplify(DtnH-2*N*(divM+2*accelM-trK*H))
+    Mhyper_free=(DtnM-N*(-trK*M+H*accel+gradH/2)).applyfunc(S.simplify)
+
+    # Principal symbol A(xi) for U=(H,M_1,M_2,M_3) with
+    # dt U + A^i partial_i U = lower-order terms.
+    # S = diag(1,4 h^{ij}) symmetrizes every A^i. This is a
+    # pointwise symbolic verification of the required positivity
+    # structure, NOT a certified global PDE energy estimate.
+    principal=[]
+    for direction in range(3):
+        Ad=S.zeros(4)
+        for i in range(4):
+            Ad[i,i]=-b[direction]
+        for i in range(3):
+            Ad[0,i+1]=-2*N*hinv[direction,i]
+            Ad[i+1,0]=-N*S.KroneckerDelta(i,direction)/2
+        principal.append(Ad)
+    symmetrizer=S.diag(1,1,1,1)
+    for i,j in product(range(3),repeat=2):
+        symmetrizer[i+1,j+1]=4*hinv[i,j]
+    symmetrizer_residual=tuple(
+        S.simplify(v) for Ad in principal
+        for v in symmetrizer*Ad-(symmetrizer*Ad).T)
+
     nodes=(
         _node("normal_unit",(nn.T*g*nn)[0]+1,"geometry"),
         _node("normal_orthogonal",[(nn.T*g[:,i+1])[0] for i in range(3)],"geometry"),
@@ -211,6 +249,7 @@ def evaluate_shifted_einstein_maxwell(spec):
         _node("matter_conservation",divT,"matter_dynamics"),
         _node("einstein_full",E,"gravity_dynamics"),
         _node("spatial_einstein_evolution",C,"evolution_equations"),
+        _node("trace_reversed_spatial_evolution",Q,"evolution_equations"),
         _node("hamilton_constraint",H,"adm_constraint"),
         _node("momentum_constraint",M,"adm_constraint"),
         _node("gauss_hamiltonian_bridge",H-2*A,"off_shell_identity"),
@@ -220,6 +259,9 @@ def evaluate_shifted_einstein_maxwell(spec):
             "off_shell_identity"),
         _node("hamiltonian_propagation_bridge",PH,"off_shell_identity"),
         _node("momentum_propagation_bridge",PM,"off_shell_identity"),
+        _node("hamiltonian_hyperbolic_propagation_bridge",PHhyper,"off_shell_identity"),
+        _node("momentum_hyperbolic_propagation_bridge",PMhyper,"off_shell_identity"),
+        _node("principal_symbol_symmetrizer",symmetrizer_residual,"algebraic_hyperbolicity"),
     )
     results=[v for v in nodes]
     independent=[{
@@ -232,12 +274,20 @@ def evaluate_shifted_einstein_maxwell(spec):
     fail=[v["name"] for v in results if not v["passed"]]
     off_shell_names={"gauss_hamiltonian_bridge","codazzi_momentum_bridge",
                      "einstein_stress_bianchi_bridge",
-                     "hamiltonian_propagation_bridge","momentum_propagation_bridge"}
+                     "hamiltonian_propagation_bridge","momentum_propagation_bridge",
+                     "hamiltonian_hyperbolic_propagation_bridge",
+                     "momentum_hyperbolic_propagation_bridge",
+                     "principal_symbol_symmetrizer"}
     off_shell_ok=all(v["passed"] for v in results if v["name"] in off_shell_names)
     evolution_ok=all(v["passed"] for v in results if v["name"] in
                       {"spatial_einstein_evolution","matter_conservation"})
     homogeneous_ok=(evolution_ok and off_shell_ok and
                     zero(Hfree) and all(zero(z) for z in Mfree))
+    trace_reversed_evolution_ok=all(v["passed"] for v in results
+        if v["name"] in {"trace_reversed_spatial_evolution",
+                        "matter_conservation"})
+    hyperbolic_closure_ok=(trace_reversed_evolution_ok and off_shell_ok and
+         zero(Hhyper_free) and all(zero(z) for z in Mhyper_free))
     status=("PASS_SCOPED_SHIFTED_EINSTEIN_MAXWELL" if not fail and oracle_ok
             else "REJECTED_SHIFTED_EINSTEIN_MAXWELL")
     result={
@@ -254,6 +304,13 @@ def evaluate_shifted_einstein_maxwell(spec):
         "off_shell_projection_and_propagation_identities_passed":off_shell_ok,
         "spatial_evolution_and_matter_conservation_passed":evolution_ok,
         "homogeneous_constraint_propagation_identities_passed":homogeneous_ok,
+        "trace_reversed_spatial_evolution_passed":trace_reversed_evolution_ok,
+        "symmetric_hyperbolic_principal_symbol_verified":
+            next(v["passed"] for v in results
+                 if v["name"]=="principal_symbol_symmetrizer"),
+        "trace_reversed_hyperbolic_constraint_closure_passed":hyperbolic_closure_ok,
+        "conditional_energy_uniqueness_context":
+            "Smooth regular coefficients, compact spatial slices or compatible boundary flux; vanishing initial constraints imply vanishing constraints by the standard symmetric-hyperbolic energy estimate ONLY if trace-reversed spatial Einstein evolution and matter conservation hold",
         "global_constraint_propagation_theorem_proven":False,
         "pde_well_posedness_proven":False,
         "assumption_domain_verified":False,
