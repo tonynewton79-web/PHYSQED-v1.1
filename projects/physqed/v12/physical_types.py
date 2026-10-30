@@ -47,7 +47,9 @@ class TensorType:
 
     def validate(self):
         expected = TENSOR_SIGNATURES.get(self.name)
-        if expected is None or (self.variance, self.rank) != expected:
+        if (expected is None or type(self.variance) is not str or
+                type(self.rank) is not int or
+                (self.variance, self.rank) != expected):
             raise ScopeError("tensor rank/index variance mismatch for " + self.name)
         return self
 
