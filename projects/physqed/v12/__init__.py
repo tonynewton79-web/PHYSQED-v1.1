@@ -17,3 +17,7 @@ __version__="1.2.0"
 from .contracts import EinsteinMaxwellSpec, ContractNode, evaluate_contract, save_contract
 
 from .contracts import replay_contract_receipt
+
+from .typed_input import (PhysicsInput, RestrictedExpression,
+                          load_physics_input, plan_physics_obligations,
+                          execute_physics_input, replay_physics_input)
