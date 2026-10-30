@@ -408,6 +408,46 @@ jobs:
           assert bulk['status']=='PASS_EXACT_CURVED_BULK_GH_INTERTWINER'
           assert bulk['nonflat_background'] and bulk['Ricci_tensor_zero']
           PY
+      - name: Inhomogeneous regular-source first-order GH resolvent and sourced corners
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_forced_resolvent.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.gh_forced_resolvent import (
+              prove_regular_source_resolvent, replay_regular_source_resolvent,
+              exact_exponential_volume_and_boundary_solution,
+              nonzero_reduction_defect_solution)
+          from v12.gh_forced_corners import sourced_wave_positive_control
+          theorem=prove_regular_source_resolvent()
+          source=exact_exponential_volume_and_boundary_solution()
+          defect=nonzero_reduction_defect_solution()
+          good=sourced_wave_positive_control()
+          bad=sourced_wave_positive_control(bad_second_order=True)
+          nonconserved=sourced_wave_positive_control(nonconserved=True)
+          assert theorem['status']=='PASS_REGULAR_SOURCE_INHOMOGENEOUS_GH_HALFSPACE_ESTIMATE'
+          assert theorem['constants_exactly_verified']
+          assert replay_regular_source_resolvent(theorem)
+          assert source['direct_boundary_equals_corrected_B_amplitude']
+          assert source['estimate_holds_for_exact_specimen']
+          assert defect['reduction_defect_nonzero'] and defect['first_order_equations_zero']
+          assert good['requested_corner_orders_passed'] and good['source_divergence_free']
+          assert bad['levels'][0]['all_ten_corner_equations_passed']
+          assert bad['levels'][1]['all_ten_corner_equations_passed']
+          assert not bad['levels'][2]['all_ten_corner_equations_passed']
+          assert not nonconserved['conditional_harmonic_constraint_preservation']
+          assert not theorem['arbitrary_L2_first_order_source_no_loss_theorem_proven']
+          assert not theorem['strong_time_domain_wellposedness_proven']
+          Path('/tmp/physqed-v12-receipts/gh_regular_forced.json').write_text(
+              json.dumps({'theorem':theorem,'forced_reference':source,
+                  'nonzero_reduction_defect':defect,'good_corners':good,
+                  'failed_corners':bad,'nonconserved_source':nonconserved},
+                  sort_keys=True,indent=2)+'\n')
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
