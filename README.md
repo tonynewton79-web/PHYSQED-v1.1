@@ -1,3 +1,38 @@
+## PHYSQED v1.2 — Exact rational-function ADM domain certification
+
+The existing polynomial-only domain-energy checker now has a
+**rational-function extension**, needed for inverse spatial metrics,
+lapse factors and 3+1 connection coefficients.
+
+`v12/rational_energy.py` proves nonvanishing signs of denominators
+over *entire rational coordinate boxes* using exact Bernstein
+polynomial bounds, combines certified numerator/denominator intervals,
+and checks the matrix inequalities
+`S >= s*I`, `R <= CS` by sufficient Gershgorin bounds.
+Deterministic dyadic box refinement can close cases that one global
+Bernstein enclosure cannot certify.
+
+All received rational coefficient denominators are audited **before**
+derived-matrix cancellations. If earlier source simplification erased a
+pole, supply its original denominator in `denominator_guards`.
+Complete source-domain provenance is a caller assertion, not yet an
+independently established guarantee.
+
+A nonzero-shift **ADM example with h=diag(1+t,1,1), N=1+t** and
+`beta=(1/5,0,0)` certifies `S >= I` and `R <= 12S` on
+`[0,1]^4` by exact arithmetic. It does **not** certify the
+underlying Einstein equations, nonlinear existence, periodic solution
+data or boundary flux.
+
+[Mathematical theorem, exact example and failure boundaries](
+docs/PHYSQED-v1.2-rational-energy-certificates.md).
+
+New 14-case rational-domain regression suite:
+`projects/physqed/tests/test_physics_v12_rational_energy.py`.
+
+**Release status:** Still a draft feature branch, subject to the
+actual Python 3.15.2 and legacy GitHub CI results.
+
 ## PHYSQED v1.2 — Exact spacetime-box energy certificates
 
 The **domain-wide energy gate** checks (S\succeq s_*I) and
