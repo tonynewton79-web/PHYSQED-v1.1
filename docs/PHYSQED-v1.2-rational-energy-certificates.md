@@ -103,7 +103,7 @@ PHYSQED's \`adm_constraint_matrices\` derives the full principal and lower-order
 For this **specified coefficient system**, exact Bernstein/Gershgorin calculations certify
 
 \[
-\boxed{S\succeq I,\qquad R\preceq 12S}
+\boxed{S\succeq I,\qquad R\preceq 0}
 \]
 
 on the entire four-dimensional box, with the source denominator \(1+t\) strictly positive. The certificate also verifies the received coefficient denominators and the principal symmetrizer identities.
