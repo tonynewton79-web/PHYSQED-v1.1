@@ -10,6 +10,14 @@ from v12 import gh_curved_ppwave as curved
 
 
 class ExactGHExtendedTests(unittest.TestCase):
+    def test_uniform_scalar_Sommerfeld_calibration(self):
+        r=flat.verify_scalar_sommerfeld_reference()
+        self.assertTrue(r["analytic_uniform_scalar_bound_established"])
+        self.assertTrue(r["all_local_exact_replays_pass"])
+        self.assertEqual(len(r["exact_positive_replay_cases"]),4)
+        self.assertFalse(r["GH_ten_row_uniform_unweighted_inverse_established"])
+        self.assertFalse(r["first_order_weighted_Kreiss_estimate_established"])
+
     def test_glancing_exact_frequency_formula(self):
         r=flat.glancing_obstruction(8)
         self.assertTrue(r["strict_upper_bound_verified"])
