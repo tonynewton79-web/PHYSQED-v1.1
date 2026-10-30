@@ -344,6 +344,27 @@ jobs:
           Path('/tmp/physqed-v12-receipts/gh_glancing_curved.json').write_text(
               json.dumps(result,sort_keys=True,indent=2)+'\n')
           PY
+      - name: Unified GH glancing, corner and nonflat curved vacuum reproducibility receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=projects/physqed python -m v12.gh_frontier_cli \
+            --corner-order 4 --output /tmp/physqed-v12-receipts/gh_frontier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/physqed-v12-receipts/gh_frontier.json')
+          r=json.loads(p.read_text())
+          assert r['status']=='PASS_SCOPED_GH_FRONTIER_CONTROLS'
+          assert r['glancing_exact']['algebra']['uniform_unweighted_normalized_lopatinski_bound_refuted']
+          assert r['higher_corner_positive']['all_temporal_orders_passed']
+          assert not r['higher_corner_negative']['all_temporal_orders_passed']
+          assert r['higher_corner_negative']['first_failure']['sommerfeld']==3
+          assert r['curved_covariant_bulk_intertwiner']['linearized_Bianchi_div_dG_zero']
+          assert r['curved_reduced_full_control']['full_linearized_Einstein_nonzero_uu']=='2'
+          assert not r['uniform_weighted_Kreiss_estimate_proven']
+          assert not r['curved_Einstein_IBVP_wellposedness_proven']
+          PY
       - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
         run: |
           python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
