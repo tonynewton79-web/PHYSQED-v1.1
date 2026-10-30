@@ -180,9 +180,6 @@ def evaluate_shifted_einstein_maxwell(spec):
 
     accel=S.Matrix([S.simplify(S.diff(N,x[i+1])/N) for i in range(3)])
     KdotC=S.simplify(S.trace(Km*Cmix))
-    divB=_spatial_divergence_mixed(hgeo,S.Matrix(3,3,
-              lambda i,j: S.simplify(sum(hinv[i,k]*M[k] for k in range(3))
-                                       if j==0 else S.S.Zero)))
     # Divergence of a spatial vector M^i, computed with h-compatible connection.
     raisedM=hinv*M
     CB=hgeo.connection
