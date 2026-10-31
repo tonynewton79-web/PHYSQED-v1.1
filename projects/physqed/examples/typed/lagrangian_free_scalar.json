@@ -1,0 +1,51 @@
+{
+  "schema": "physqed.typed-input.v1",
+  "claim_id": "LAGRANGIAN_FREE_SCALAR",
+  "kind": "lagrangian",
+  "source": "standard textbook model",
+  "assumptions": [
+    "regular local coordinate chart; formal exact expressions"
+  ],
+  "coordinates": [
+    "t"
+  ],
+  "claims": [
+    "euler_lagrange",
+    "translation_noether"
+  ],
+  "fields": [
+    "phi"
+  ],
+  "lagrangian": {
+    "mul": [
+      {
+        "rational": [
+          1,
+          2
+        ]
+      },
+      {
+        "pow": [
+          {
+            "derivative": [
+              "phi",
+              "t"
+            ]
+          },
+          2
+        ]
+      }
+    ]
+  },
+  "expected_eom": [
+    {
+      "neg": {
+        "derivative": [
+          "phi",
+          "t",
+          2
+        ]
+      }
+    }
+  ]
+}

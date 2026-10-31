@@ -1,0 +1,35 @@
+{
+  "schema": "physqed.typed-input.v1",
+  "claim_id": "MAXWELL_FALSE_FLATNESS",
+  "kind": "gauge",
+  "source": "standard textbook model",
+  "assumptions": [
+    "regular local coordinate chart; formal exact expressions"
+  ],
+  "coordinates": [
+    "t",
+    "x"
+  ],
+  "claims": [
+    "flat_connection"
+  ],
+  "algebra": "u1",
+  "metric": [
+    [
+      -1,
+      0
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "connection": [
+    [
+      0
+    ],
+    [
+      "t"
+    ]
+  ]
+}

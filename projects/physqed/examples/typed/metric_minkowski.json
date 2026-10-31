@@ -1,0 +1,47 @@
+{
+  "schema": "physqed.typed-input.v1",
+  "claim_id": "METRIC_MINKOWSKI",
+  "kind": "metric",
+  "source": "standard textbook model",
+  "assumptions": [
+    "regular local coordinate chart; formal exact expressions"
+  ],
+  "coordinates": [
+    "t",
+    "x",
+    "y",
+    "z"
+  ],
+  "claims": [
+    "metric_compatibility",
+    "first_bianchi",
+    "contracted_bianchi",
+    "vacuum_einstein"
+  ],
+  "metric": [
+    [
+      -1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ]
+  ]
+}

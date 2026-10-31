@@ -1,0 +1,142 @@
+{
+  "schema": "physqed.typed-input.v1",
+  "kind": "einstein_maxwell_shift",
+  "claim_id": "SHIFTED_OFFSHELL_JSON",
+  "source": "Off-shell time/spatial dependent 3+1 metric",
+  "assumptions": [
+    "zero electromagnetic source and flat Cartesian spatial metric",
+    "positive lapse, zero cosmological constant, geometrized units",
+    "positive-K=(partial_t h-L_beta h)/(2N) convention"
+  ],
+  "coordinates": [
+    "t",
+    "x",
+    "y",
+    "z"
+  ],
+  "parameters": [
+    "tau"
+  ],
+  "parameter_values": {
+    "tau": 2
+  },
+  "units": {
+    "system": "geometrized_length",
+    "coordinates": {
+      "t": 1,
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "parameters": {
+      "tau": 1
+    }
+  },
+  "tensor_types": {
+    "metric": {
+      "variance": "dd",
+      "rank": 2
+    },
+    "potential": {
+      "variance": "d",
+      "rank": 1
+    },
+    "field_strength": {
+      "variance": "dd",
+      "rank": 2
+    },
+    "stress": {
+      "variance": "dd",
+      "rank": 2
+    },
+    "lapse": {
+      "variance": "",
+      "rank": 0
+    }
+  },
+  "shift_type": {
+    "variance": "u",
+    "rank": 1
+  },
+  "claims": [
+    "linked_shifted_adm_propagation"
+  ],
+  "spatial_metric": [
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      {
+        "pow": [
+          {
+            "add": [
+              1,
+              {
+                "mul": [
+                  "t",
+                  "x",
+                  {
+                    "pow": [
+                      "tau",
+                      -2
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          2
+        ]
+      },
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ]
+  ],
+  "shift": [
+    {
+      "mul": [
+        "t",
+        {
+          "pow": [
+            "tau",
+            -1
+          ]
+        }
+      ]
+    },
+    0,
+    0
+  ],
+  "lapse": 1,
+  "potential": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "witnesses": [
+    {
+      "t": {
+        "rational": [
+          1,
+          2
+        ]
+      },
+      "x": {
+        "rational": [
+          1,
+          3
+        ]
+      },
+      "y": 0,
+      "z": 0
+    }
+  ]
+}

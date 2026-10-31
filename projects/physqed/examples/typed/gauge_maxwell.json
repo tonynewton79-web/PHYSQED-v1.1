@@ -1,0 +1,36 @@
+{
+  "schema": "physqed.typed-input.v1",
+  "claim_id": "MAXWELL_CONSTANT_E_FIELD",
+  "kind": "gauge",
+  "source": "standard textbook model",
+  "assumptions": [
+    "regular local coordinate chart; formal exact expressions"
+  ],
+  "coordinates": [
+    "t",
+    "x"
+  ],
+  "claims": [
+    "gauge_bianchi",
+    "yang_mills_vacuum"
+  ],
+  "algebra": "u1",
+  "metric": [
+    [
+      -1,
+      0
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "connection": [
+    [
+      0
+    ],
+    [
+      "t"
+    ]
+  ]
+}

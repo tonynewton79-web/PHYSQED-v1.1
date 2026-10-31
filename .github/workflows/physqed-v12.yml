@@ -1,0 +1,715 @@
+name: PHYSQED v1.2 physics-backend certificates
+
+on:
+  push:
+    paths:
+      - "projects/physqed/v12/**"
+      - "projects/physqed/tests/test_physics_v12*.py"
+      - ".github/workflows/physqed-v12.yml"
+  pull_request:
+    paths:
+      - "projects/physqed/v12/**"
+      - "projects/physqed/tests/test_physics_v12*.py"
+      - ".github/workflows/physqed-v12.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: physqed-v12-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  physics-exact:
+    name: Python 3.15.2 textbook checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.15.2'
+      - name: Confirm interpreter (security-patched release)
+        run: |
+          python -c "import sys; assert sys.version_info[:3] == (3,15,2), sys.version"
+      - name: Syntax-check new backend before importing physics tests
+        run: |
+          python -m compileall -q projects/physqed/v12
+          python -m compileall -q projects/physqed/tests/test_physics_v12*.py
+      - name: Install exact-symbolic dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-test.txt
+      - name: Independent Fraction frozen periodic ADM constraint-energy gate
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_frozen_energy.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          from fractions import Fraction as F
+          from pathlib import Path
+          import json
+          from v12.frozen_energy import audit_frozen_adm
+          h=[[2,F(1,3),0],[F(1,3),3,0],[0,0,F(5,4)]]
+          receipt=audit_frozen_adm(h,F(3,2),[F(1,5),-F(2,7),F(1,9)])
+          assert receipt['status']=='PASS_FROZEN_PERIODIC_CONSTRAINT_ENERGY_ALGEBRA'
+          assert receipt['all_three_principal_symbols_symmetrized']
+          assert not receipt['global_einstein_solution_proven']
+          Path('/tmp/physqed-v12-receipts/frozen_adm_energy.json').write_text(
+              json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Variable-coefficient ADM energy-balance and scope gate
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_variable_energy.py' -v
+      - name: Replay exact variable-coefficient energy receipts and reject tampering
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_energy_receipts.py' -v
+      - name: Exact rational Bernstein domain-wide energy inequality gates
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_domain_energy.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          from pathlib import Path
+          import json
+          import sympy as S
+          from v12.domain_energy import certify_domain_energy
+          t,x=S.symbols("t x")
+          receipt=certify_domain_energy(
+              (t,x),{t:(0,1),x:(0,1)},
+              S.diag(1+t,2+t),[S.diag(1,2)],S.zeros(2),
+              coercivity=1,growth=2,
+              boundary="periodic_solution_assumed")
+          assert receipt["status"]=="PASS_INTERIOR_DOMAIN_BOUNDS__PDE_HYPOTHESES_PENDING"
+          assert receipt["coercivity_bound_proved"] and receipt["growth_bound_proved"]
+          assert not receipt["underlying_smooth_solution_existence_proven"]
+          Path('/tmp/physqed-v12-receipts/domain_energy.json').write_text(
+              json.dumps(receipt,sort_keys=True,indent=2)+'\n')
+          PY
+      - name: Exact rational-function ADM domain and denominator sign gates
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_rational_energy.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          import sympy as S
+          from v12.variable_energy import adm_constraint_matrices
+          from v12.rational_energy import certify_rational_domain_energy, replay_rational_domain_energy
+          t,x,y,z=S.symbols('t x y z')
+          Sm,A,B=adm_constraint_matrices((t,x,y,z),S.diag(1+t,1,1),1+t,
+                                          [S.Rational(1,5),0,0])
+          box={t:(0,1),x:(0,1),y:(0,1),z:(0,1)}
+          options={'coercivity':1,'growth':0,
+                   'denominator_guards':[1+t],
+                   'original_expression_denominators_complete':True,
+                   'boundary':'periodic_solution_assumed'}
+          r=certify_rational_domain_energy((t,x,y,z),box,Sm,A,B,**options)
+          assert r['status']=='PASS_RATIONAL_INTERIOR_BOUNDS__PDE_HYPOTHESES_PENDING'
+          assert r['all_received_coefficient_denominators_certified']
+          assert r['all_required_original_denominator_guards_certified']
+          assert replay_rational_domain_energy((t,x,y,z),box,Sm,A,B,r,**options)
+          assert not r['boundary_flux_control_proven']
+          assert not r['global_Einstein_Cauchy_theorem_proven']
+          Path('/tmp/physqed-v12-receipts/rational_adm_energy.json').write_text(
+              json.dumps(r,sort_keys=True,indent=2)+'\n')
+          PY
+      - name: Typed source-preserving ADM geometry and six-face energy flux
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_typed_adm_domain.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.adm_domain_cli \
+            --input projects/physqed/examples/typed/adm_domain_outgoing_flux.json \
+            --output /tmp/physqed-v12-receipts/typed_adm_domain_flux.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.adm_domain_cli \
+            --input projects/physqed/examples/typed/adm_domain_hidden_pole.json \
+            --output /tmp/physqed-v12-receipts/typed_adm_domain_hidden_pole.json
+          pole_status=$?
+          PYTHONPATH=projects/physqed python -m v12.adm_domain_cli \
+            --input projects/physqed/examples/typed/adm_domain_incoming_flux.json \
+            --output /tmp/physqed-v12-receipts/typed_adm_domain_incoming_flux.json
+          incoming_status=$?
+          set -e
+          test "$pole_status" -eq 2
+          test "$incoming_status" -eq 2
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/physqed-v12-receipts')
+          good=json.loads((root/'typed_adm_domain_flux.json').read_text())
+          assert good['status']=='PASS_INTERIOR_AND_CONDITIONAL_BOUNDARY_ALGEBRA__PDE_ASSUMPTIONS_PENDING'
+          assert good['all_source_guards_certified']
+          assert good['geometric_bounds']['passed']
+          assert good['interior_domain_bounds_proven']
+          assert len(good['boundary_flux']['faces'])==6
+          assert all(face['passed'] for face in good['boundary_flux']['faces'])
+          assert not good['boundary_trace_conditions_satisfied_by_solution_proven']
+          assert not good['global_constraint_propagation_theorem_proven']
+          pole=json.loads((root/'typed_adm_domain_hidden_pole.json').read_text())
+          assert not pole['all_source_guards_certified']
+          incoming=json.loads((root/'typed_adm_domain_incoming_flux.json').read_text())
+          assert not incoming['conditional_boundary_flux_algebra_proven']
+          PY
+      - name: Linked Einstein-Maxwell 18-node and maximal nonnegative constraint boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            test_explicit_shifted_vacuum_solution_and_maximal_flux_faces \
+            test_undercomplete_positive_flux_is_not_maximal \
+            test_source_mismatch_rejected_before_any_field_claim \
+            test_unconserved_maxwell_stress_prevents_joint_pass \
+            test_incoming_trace_flux_rejects_joint_contract \
+            test_rank_deficient_three_column_face \
+            test_hidden_original_metric_pole_not_accepted \
+            test_cancelled_electromagnetic_source_pole_refused \
+            test_negative_growth_declaration_refused \
+            test_periodic_assumption_does_not_prove_frame_compatibility \
+            test_tampered_receipt_replay_and_changed_input \
+            test_characteristic_zero_speed_faces_are_not_called_noncharacteristic; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p 'test_physics_v12_linked_adm_boundary.py' -k "$name" -v
+          done
+      - name: Linked exact shifted vacuum domain CLI and adversarial boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts/linked_adm
+          PYTHONPATH=projects/physqed python -m v12.linked_adm_cli \
+            --input projects/physqed/examples/typed/linked_adm_shifted_minkowski.json \
+            --output /tmp/physqed-v12-receipts/linked_adm/vacuum.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.linked_adm_cli \
+            --input projects/physqed/examples/typed/linked_adm_undercomplete_boundary.json \
+            --output /tmp/physqed-v12-receipts/linked_adm/undercomplete.json
+          bad_boundary=$?
+          PYTHONPATH=projects/physqed python -m v12.linked_adm_cli \
+            --input projects/physqed/examples/typed/linked_adm_unconserved_matter.json \
+            --output /tmp/physqed-v12-receipts/linked_adm/nonconserved.json
+          bad_matter=$?
+          set -e
+          test "$bad_boundary" -eq 2
+          test "$bad_matter" -eq 2
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/physqed-v12-receipts/linked_adm')
+          good=json.loads((p/'vacuum.json').read_text())
+          assert good['status']=='PASS_LINKED_EXACT_MODEL_AND_CONDITIONAL_CONSTRAINT_ENERGY'
+          assert len(good['field_contract']['shifted_contract']['nodes'])==18
+          assert good['maximal_nonnegative_constraint_trace_spaces_passed']
+          assert good['uniform_interior_energy_bounds_passed']
+          assert not good['nonlinear_Einstein_IBVP_well_posedness_proven']
+          under=json.loads((p/'undercomplete.json').read_text())
+          assert under['all_face_flux_forms_passed']
+          assert not under['maximal_nonnegative_constraint_trace_spaces_passed']
+          matter=json.loads((p/'nonconserved.json').read_text())
+          assert not matter['all_18_field_nodes_passed']
+          PY
+      - name: Shifted Maxwell Gauss and moving-boundary energy positive controls
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_maxwell_ibvp_control.py' -v
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_linked_maxwell_ibvp.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.maxwell_ibvp_control import verify_maxwell_shifted_boundary
+          from v12.linked_maxwell_ibvp import verify_linked_maxwell_positive_control
+          receipt=verify_maxwell_shifted_boundary('1/5')
+          assert receipt['status']=='PASS_EXACT_SHIFTED_MAXWELL_BOUNDARY_ALGEBRA'
+          assert len(receipt['boundary_faces'])==6
+          assert all(f['passed'] for f in receipt['boundary_faces'])
+          m=json.loads(Path('projects/physqed/examples/typed/linked_adm_shifted_minkowski.json').read_text())
+          linked=verify_linked_maxwell_positive_control(m['field_model'])
+          assert linked['status']=='PASS_FIELD_AND_MAXWELL_POSITIVE_CONTROL__GR_BOUNDARY_LINK_OPEN'
+          assert linked['all_18_Einstein_Maxwell_nodes_passed']
+          assert not linked['constraint_energy_boundary_from_GR_evolution_proven']
+          Path('/tmp/physqed-v12-receipts/maxwell_moving_wall.json').write_text(
+              json.dumps(linked,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Harmonic Einstein wave/constraint boundary counterexample
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_harmonic_boundary_obstruction.py' -v
+          PYTHONPATH=projects/physqed python - <<'PY'
+          from v12.harmonic_boundary_obstruction import verify_harmonic_boundary_obstruction
+          r=verify_harmonic_boundary_obstruction()
+          assert r['status']=='PASS_EXACT_BOUNDARY_TO_CONSTRAINT_OBSTRUCTION'
+          assert r['reduced_wave_equations_zero']
+          assert r['homogeneous_Dirichlet_metric_at_x0']
+          assert r['harmonic_constraints_at_x0']==['0','t','0','0']
+          assert not r['initial_constraint_time_derivative_zero']
+          assert not r['full_linearized_Einstein_equations_verified']
+          PY
+      - name: Linearized GH Einstein constraint-boundary intertwiner and corner controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_boundary_map.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.gh_boundary_cli \
+            --case all --output /tmp/physqed-v12-receipts/gh_linearized_boundary.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('/tmp/physqed-v12-receipts/gh_linearized_boundary.json').read_text())
+          summary=result['symbol_and_control_summary']
+          assert summary['status']=='PASS_SCOPED_LINEARIZED_GH_DIFFERENTIAL_BOUNDARY_MAP'
+          assert summary['Laplace_Fourier_normal_mode_determinant']=='k**4*(k + s)**6'
+          assert summary['operator_intertwiner_verified']
+          assert result['positive']['full_linearized_vacuum_Einstein_passed']
+          assert result['positive']['initial_corner']['first_order_compatibility_passed']
+          assert not result['initial_velocity']['initial_corner']['dt_C_initial_zero']
+          assert not result['metric_corner']['initial_corner']['metric_corner_order0_zero']
+          assert result['naive_sommerfeld']['exact_obstruction_passed']
+          assert not summary['uniform_Kreiss_Lopatinski_proven']
+          assert not summary['nonlinear_Einstein_IBVP_proven']
+          PY
+      - name: GH glancing counterexample, higher corners and genuinely curved Ricci-flat identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_glancing_curved.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          from pathlib import Path
+          import json
+          from v12.gh_glancing_corners import certify_glancing_and_corners
+          from v12.gh_curved_ppwave import verify_curved_ppwave
+          flat=certify_glancing_and_corners()
+          curved=verify_curved_ppwave()
+          assert flat['status']=='PASS_GH_GLANCING_OBSTRUCTION_AND_FINITE_CORNERS'
+          assert flat['glancing']['status']=='REFUTED_UNWEIGHTED_UNIFORM_BOUNDARY_INVERSE'
+          assert flat['positive_higher_corners']['passed']
+          assert not flat['negative_second_order_corner']['levels'][2]['metric_sommerfeld_zero']
+          assert not flat['glancing']['uniform_weighted_Kreiss_estimate_proven']
+          assert curved['status']=='PASS_EXACT_CURVED_BULK_GH_INTERTWINER'
+          assert curved['Ricci_tensor_zero'] and curved['nonflat_background']
+          assert curved['linearized_Bianchi_div_dG_zero']
+          assert curved['curved_gauge_divergence_identity']
+          assert not curved['curved_background_uniform_energy_proven']
+          for name,data in [('gh_glancing_higher_corners',flat),('gh_curved_ppwave',curved)]:
+              Path('/tmp/physqed-v12-receipts/'+name+'.json').write_text(
+                  json.dumps(data,sort_keys=True,indent=2)+'\n')
+          PY
+      - name: Reproduce GH glancing, higher-corner and curved bulk receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=projects/physqed python -m v12.gh_extended_cli \
+            --case all --output /tmp/physqed-v12-receipts/gh_extended.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/physqed-v12-receipts/gh_extended.json').read_text())
+          assert r['status']=='PASS_SCOPED_OBSTRUCTION_AND_CURVED_BULK_CHECKS'
+          assert r['scalar_sommerfeld_calibration']['analytic_uniform_scalar_bound_established']
+          assert r['scalar_sommerfeld_calibration']['all_local_exact_replays_pass']
+          assert not r['scalar_sommerfeld_calibration']['GH_ten_row_uniform_unweighted_inverse_established']
+          assert r['glancing_corners']['glancing']['glancing_obstruction_proven']
+          assert r['glancing_corners']['positive_higher_corners']['passed']
+          assert r['glancing_corners']['negative_second_order_corner']['levels'][2]['metric_residuals'][4]=='-6'
+          assert r['curved_ppwave']['status']=='PASS_EXACT_CURVED_BULK_GH_INTERTWINER'
+          assert not r['scope']['first_order_Kreiss_estimate_proven']
+          assert not r['scope']['curved_boundary_wellposedness_proven']
+          PY
+      - name: Glancing unweighted obstruction and higher GH corner hierarchy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_glancing_curved.py' -v
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_uniform_sector.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.gh_glancing_corners import certify_glancing_and_corners
+          from v12.gh_curved_ppwave import verify_curved_ppwave
+          from v12.gh_glancing import certify_glancing_gate
+          from v12.gh_curved_plane_wave import verify_curved_gh_control
+          result={"glancing_corner":certify_glancing_and_corners(),
+                  "glancing_refined":certify_glancing_gate(),
+                  "curved_bulk":verify_curved_ppwave(),
+                  "curved_mode":verify_curved_gh_control()}
+          assert result["glancing_corner"]["status"]=="PASS_GH_GLANCING_OBSTRUCTION_AND_FINITE_CORNERS"
+          assert result["glancing_refined"]["algebra"]["uniform_unweighted_normalized_lopatinski_bound_refuted"]
+          assert result["curved_bulk"]["status"]=="PASS_EXACT_CURVED_BULK_GH_INTERTWINER"
+          assert result["curved_mode"]["status"]=="PASS_EXACT_CURVED_GH_BACKGROUND_AND_REDUCED_CONTROL"
+          assert not result["curved_bulk"]["curved_background_uniform_energy_proven"]
+          assert not result["curved_mode"]["nonlinear_Einstein_IBVP_proven"]
+          Path('/tmp/physqed-v12-receipts/gh_glancing_curved.json').write_text(
+              json.dumps(result,sort_keys=True,indent=2)+'\n')
+          PY
+      - name: Unified GH glancing, corner and nonflat curved vacuum reproducibility receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=projects/physqed python -m v12.gh_frontier_cli \
+            --corner-order 4 --output /tmp/physqed-v12-receipts/gh_frontier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/physqed-v12-receipts/gh_frontier.json')
+          r=json.loads(p.read_text())
+          assert r['status']=='PASS_SCOPED_GH_FRONTIER_CONTROLS'
+          assert r['glancing_exact']['algebra']['uniform_unweighted_normalized_lopatinski_bound_refuted']
+          assert r['higher_corner_positive']['all_temporal_orders_passed']
+          assert not r['higher_corner_negative']['all_temporal_orders_passed']
+          assert r['higher_corner_negative']['first_failure']['sommerfeld']==3
+          assert r['curved_covariant_bulk_intertwiner']['linearized_Bianchi_div_dG_zero']
+          assert r['curved_reduced_full_control']['full_linearized_Einstein_nonzero_uu']=='2'
+          assert not r['uniform_weighted_Kreiss_estimate_proven']
+          assert not r['curved_Einstein_IBVP_wellposedness_proven']
+          PY
+      - name: First-order GH adapted incoming boundary and uniform weighted stable-mode estimate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_first_order_uniform.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.gh_first_order_uniform import (
+              certify_first_order_gh, glancing_diagnostic,
+              replay_first_order_gh)
+          result=certify_first_order_gh()
+          assert result['status']=='PASS_ADAPTED_GH_UNIFORM_WEIGHTED_STABLE_MODE'
+          assert result['stable_mode_reduction_verified']
+          assert result['analytic_bound']['determinant_verified']
+          assert result['analytic_bound']['gauge_block_inverse_verified']
+          assert result['analytic_bound']['uniform_homogeneous_stable_mode_trace_estimate_proven']
+          assert not result['full_forced_resolvent_estimate_proven']
+          assert not result['nonlinear_or_curved_Einstein_boundary_theorem_proven']
+          assert replay_first_order_gh(result)
+          samples=[glancing_diagnostic(n) for n in (8,128)]
+          assert all(v['above_analytic_amplitude_threshold'] for v in samples)
+          Path('/tmp/physqed-v12-receipts/gh_first_order_uniform.json').write_text(
+              json.dumps({'proof':result,'glancing':samples},
+                         sort_keys=True,indent=2)+'\n')
+          PY
+      - name: Curved Ricci-flat pp-wave timelike ADM frozen characteristic gates
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_gh_curved_timelike_frozen.py' -v
+          PYTHONPATH=projects/physqed python - <<'PY'
+          from v12.gh_curved_timelike_frozen import verify_ppwave_timelike_frozen
+          from v12.gh_curved_ppwave import verify_curved_ppwave
+          r=verify_ppwave_timelike_frozen()
+          bulk=verify_curved_ppwave()
+          assert r['status']=='PASS_CURVED_TIMELIKE_ADM_FROZEN_PRINCIPAL'
+          assert r['normal_wave_pair_strict_signs_proved']
+          assert r['advective_normal_speed_changes_sign_at_H_zero']
+          assert not r['globally_uniform_boundary_inertia_proven']
+          assert bulk['status']=='PASS_EXACT_CURVED_BULK_GH_INTERTWINER'
+          assert bulk['nonflat_background'] and bulk['Ricci_tensor_zero']
+          PY
+      - name: Inhomogeneous regular-source first-order GH resolvent and sourced corners
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_forced_resolvent.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.gh_forced_resolvent import (
+              prove_regular_source_resolvent, replay_regular_source_resolvent,
+              exact_exponential_volume_and_boundary_solution,
+              nonzero_reduction_defect_solution)
+          from v12.gh_forced_corners import sourced_wave_positive_control
+          theorem=prove_regular_source_resolvent()
+          source=exact_exponential_volume_and_boundary_solution()
+          defect=nonzero_reduction_defect_solution()
+          good=sourced_wave_positive_control()
+          bad=sourced_wave_positive_control(bad_second_order=True)
+          nonconserved=sourced_wave_positive_control(nonconserved=True)
+          assert theorem['status']=='PASS_REGULAR_SOURCE_INHOMOGENEOUS_GH_HALFSPACE_ESTIMATE'
+          assert theorem['constants_exactly_verified']
+          assert replay_regular_source_resolvent(theorem)
+          assert source['direct_boundary_equals_corrected_B_amplitude']
+          assert source['estimate_holds_for_exact_specimen']
+          assert defect['reduction_defect_nonzero'] and defect['first_order_equations_zero']
+          assert good['requested_corner_orders_passed'] and good['source_divergence_free']
+          assert bad['levels'][0]['all_ten_corner_equations_passed']
+          assert bad['levels'][1]['all_ten_corner_equations_passed']
+          assert not bad['levels'][2]['all_ten_corner_equations_passed']
+          assert not nonconserved['conditional_harmonic_constraint_preservation']
+          assert not theorem['arbitrary_L2_first_order_source_no_loss_theorem_proven']
+          assert not theorem['strong_time_domain_wellposedness_proven']
+          Path('/tmp/physqed-v12-receipts/gh_regular_forced.json').write_text(
+              json.dumps({'theorem':theorem,'forced_reference':source,
+                  'nonzero_reduction_defect':defect,'good_corners':good,
+                  'failed_corners':bad,'nonconserved_source':nonconserved},
+                  sort_keys=True,indent=2)+'\n')
+          PY
+      - name: Replay exact inhomogeneous GH regular-source and sourced corner CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.gh_forced_cli \
+            --output /tmp/physqed-v12-receipts/gh_forced_cli.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('/tmp/physqed-v12-receipts/gh_forced_cli.json').read_text())
+          assert a['status']=='PASS_REGULAR_FORCED_GH_CHECKS_ONLY'
+          assert a['theorem']['constants_exactly_verified']
+          assert a['exponential_forced_solution']['Green_boundary_source_J_exact']
+          assert a['sourced_corners_positive']['source_divergence_free']
+          assert not a['sourced_corners_bad_order2']['requested_corner_orders_passed']
+          assert not a['sourced_corners_nonconserved']['source_divergence_free']
+          assert not a['arbitrary_L2_strong_wellposedness_proven']
+          PY
+      - name: Final GH arbitrary-source weighted norm and Euclidean boundary-flux refusal
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s projects/physqed/tests \
+            -p 'test_physics_v12_gh_final_release_gate.py' -v
+          mkdir -p /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python - <<'PY'
+          import json
+          from pathlib import Path
+          from v12.gh_final_release_gate import (
+              certify_final_gh_release_gate, replay_final_gh_release_gate)
+          r=certify_final_gh_release_gate()
+          assert r['status']=='HOLD_STRONG_WELLPOSEDNESS__TWO_EXACT_SCOPE_OBSTRUCTIONS'
+          assert all(a['all_forced_first_order_equations_zero'] for a in r['arbitrary_source_examples'])
+          assert all(a['all_initial_first_order_and_reduction_fields_zero'] for a in r['arbitrary_source_examples'])
+          assert r['boundary_standard_energy']['outward_standard_energy_flux']=='-1/4'
+          assert r['boundary_standard_energy']['outward_flux_negative']
+          assert not r['unrestricted_L2_to_weighted_H1_psi_estimate_proven']
+          assert not r['natural_unweighted_first_order_L2_wellposedness_disproved']
+          assert not r['nonlinear_Einstein_IBVP_proven']
+          assert replay_final_gh_release_gate(r)
+          Path('/tmp/physqed-v12-receipts/gh_final_release_audit.json').write_text(
+              json.dumps(r,sort_keys=True,indent=2)+'\n')
+          PY
+      - name: Standard GR/gauge/quantum/QFT/canonical and refusal cases
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12.py' -v
+      - name: Independent standard-library arithmetic oracle
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_oracle.py' -v
+      - name: Independent exact tensor 2-jet oracle
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_jet_oracle.py' -v
+      - name: Coupled Einstein-Maxwell positive and negative controls
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_einstein_maxwell.py' -v
+      - name: Spherical conservation trigonometric exactness and refusal
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_trig.py' -v
+      - name: Typed coupled Einstein-Maxwell/ADM contracts (isolated SymPy processes)
+        shell: bash
+        run: |
+          set -euo pipefail
+          for test in \
+            test_valid_einstein_maxwell_full_linked_contract \
+            test_wrong_coupling_fails_dynamics_but_not_geometry_bridge \
+            test_wrong_cosmological_constant \
+            test_declared_inconsistent_stress \
+            test_nonclosed_declared_field_is_detected \
+            test_wrong_claimed_constraints_refused \
+            test_wrong_lapse_raises_not_green \
+            test_wrong_signature_witness_refused \
+            test_offshell_codazzi_bridge_nontrivial \
+            test_matter_noether_bridge_offshell_maxwell \
+            test_tampered_receipt_refused; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p 'test_physics_v12_contract.py' -k "$test" -v
+          done
+      - name: Typed four-domain JSON compiler and refusal tests
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_physics_v12_typed_input.py' -v
+      - name: Textbook typed input CLI positive and adversarial JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts/typed
+          for stem in metric_minkowski lagrangian_free_scalar hamiltonian_oscillator gauge_maxwell; do
+            PYTHONPATH=projects/physqed python -m v12.typed_cli \
+              --input "projects/physqed/examples/typed/${stem}.json" \
+              --output "/tmp/physqed-v12-receipts/typed/${stem}.json"
+          done
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/metric_minkowski.json \
+            --plan --output /tmp/physqed-v12-receipts/typed/minkowski_plan.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/negative_nonflat_field.json \
+            --output /tmp/physqed-v12-receipts/typed/negative_nonflat_field.json
+          exit_code=$?
+          set -e
+          if [ "$exit_code" -ne 2 ]; then echo "False flatness should fail with exit 2"; exit 1; fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/physqed-v12-receipts/typed')
+          for stem in ('metric_minkowski','lagrangian_free_scalar','hamiltonian_oscillator','gauge_maxwell'):
+              r=json.loads((p/(stem+'.json')).read_text())
+              assert r['status'].startswith('PASS_SCOPED_'), stem
+              assert not r['physical_truth_proven']
+          bad=json.loads((p/'negative_nonflat_field.json').read_text())
+          assert bad['status']=='REJECTED_UNSATISFIED_PHYSICS_OBLIGATION'
+          plan=json.loads((p/'minkowski_plan.json').read_text())
+          assert plan['execution_status']=='NOT_EXECUTED'
+          PY
+      - name: Typed Einstein-Maxwell ADM 16-node bridge, unit and variance gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          for test in \
+            test_flat_all_sixteen_linked \
+            test_nonflat_electrovacuum_reissner_nordstrom \
+            test_wrong_electric_source_fails_physics_after_type_pass \
+            test_plan_exposes_sixteen_but_does_not_prove \
+            test_wrong_covariant_index_variance_refused \
+            test_wrong_tensor_rank_refused \
+            test_missing_unit_system_refused \
+            test_dimensionally_inconsistent_potential_refused \
+            test_dimensionally_inconsistent_spherical_metric_refused \
+            test_wrong_parameter_dimension_refused \
+            test_nontrivial_trigonometric_argument_dimension_refused \
+            test_nonzero_shift_refused_by_existing_ADM_backend \
+            test_claimed_hamiltonian_false_but_dimension_correct \
+            test_wrong_cosmological_constant_dimension_refused \
+            test_tampered_linked_receipt_refused_by_full_replay; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p 'test_physics_v12_typed_em_bridge.py' -k "$test" -v
+          done
+      - name: Typed Einstein-Maxwell CLI positive and refusal receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts/typed
+          for stem in einstein_maxwell_flat einstein_maxwell_reissner_nordstrom; do
+            PYTHONPATH=projects/physqed python -m v12.typed_cli \
+              --input "projects/physqed/examples/typed/${stem}.json" \
+              --output "/tmp/physqed-v12-receipts/typed/${stem}.json"
+          done
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_flat.json \
+            --plan --output /tmp/physqed-v12-receipts/typed/einstein_maxwell_plan.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_inconsistent_flat.json \
+            --output /tmp/physqed-v12-receipts/typed/einstein_maxwell_inconsistent_flat.json
+          refusal=$?
+          set -e
+          if [ "$refusal" -ne 2 ]; then echo "Expected wrong Einstein-Maxwell source refusal"; exit 1; fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/physqed-v12-receipts/typed')
+          for stem in ('einstein_maxwell_flat', 'einstein_maxwell_reissner_nordstrom'):
+              result=json.loads((root/(stem+'.json')).read_text())
+              assert result['status']=='PASS_TYPED_EINSTEIN_MAXWELL_ADM__SCOPED'
+              assert len(result['coupled_contract']['nodes'])==16
+              assert len(result['tensor_index_signature_checks'])==5
+              assert not result['global_theorem_proven']
+          bad=json.loads((root/'einstein_maxwell_inconsistent_flat.json').read_text())
+          assert bad['status']=='REJECTED_LINKED_PHYSICS_OBLIGATIONS'
+          planned=json.loads((root/'einstein_maxwell_plan.json').read_text())
+          assert planned['execution_status']=='NOT_EXECUTED'
+          assert len(planned['obligations'])==16
+          PY
+      - name: Shifted ADM normal/momentum and off-shell Bianchi propagation
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            test_time_dependent_nonzero_shift_flat_solution \
+            test_spatially_dependent_shift_offshell_bianchi \
+            test_shifted_minkowski_with_spatial_shift_gradient \
+            test_offshell_maxwell_stress_refuses_homogeneous_closure \
+            test_invalid_negative_lapse_witness_refused \
+            test_invalid_indefinite_spatial_witness_refused \
+            test_wrong_shift_dimension_refused \
+            test_spacetime_dependent_gravitational_coupling_refused \
+            test_spacetime_dependent_cosmological_constant_refused \
+            test_recompute_receipt_rejects_tampering; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p test_physics_v12_adm_shift.py -k "$name" -v
+          done
+      - name: Typed shifted ADM unit and index gate regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            test_time_dependent_shifted_minkowski_full_contract \
+            test_offshell_shift_retains_bianchi_but_refuses_field_equations \
+            test_shift_dimension_wrong_refused_before_equations \
+            test_covariant_shift_signature_refused \
+            test_shift_missing_declared_refused \
+            test_wrong_spatial_metric_units_refused \
+            test_wrong_shift_rank_refused \
+            test_planning_is_not_execution \
+            test_receipt_tampering_caught_by_recomputation; do
+            python -m unittest discover -s projects/physqed/tests \
+              -p test_physics_v12_typed_shift.py -k "$name" -v
+          done
+      - name: Typed shifted ADM CLI reproducible positives and refusals
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/physqed-v12-receipts/shifted
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_shifted_flat.json \
+            --output /tmp/physqed-v12-receipts/shifted/flat.json
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_shifted_flat.json \
+            --plan --output /tmp/physqed-v12-receipts/shifted/plan.json
+          set +e
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_shifted_offshell.json \
+            --output /tmp/physqed-v12-receipts/shifted/offshell.json
+          offshell_code=$?
+          PYTHONPATH=projects/physqed python -m v12.typed_cli \
+            --input projects/physqed/examples/typed/einstein_maxwell_shifted_invalid_dimension.json \
+            --output /tmp/physqed-v12-receipts/shifted/invalid.json
+          invalid_code=$?
+          set -e
+          test "$offshell_code" -eq 2
+          test "$invalid_code" -eq 3
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('/tmp/physqed-v12-receipts/shifted')
+          good=json.loads((path/'flat.json').read_text())
+          assert good['status']=='PASS_TYPED_SHIFTED_ADM__SCOPED'
+          assert good['shifted_contract']['homogeneous_constraint_propagation_identities_passed']
+          assert not good['global_constraint_propagation_theorem_proven']
+          bad=json.loads((path/'offshell.json').read_text())
+          assert bad['status']=='REJECTED_TYPED_SHIFTED_ADM'
+          plan=json.loads((path/'plan.json').read_text())
+          assert plan['execution_status']=='NOT_EXECUTED'
+          assert len(plan['obligations'])==18
+          PY
+      - name: Reproducible standard-physics receipts
+        run: |
+          PYTHONPATH=projects/physqed python -m v12.benchmarks --out-dir /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.contract_benchmark --out-dir /tmp/physqed-v12-receipts
+          PYTHONPATH=projects/physqed python -m v12.coupled_benchmark \
+            --output /tmp/physqed-v12-receipts/STD-GR-EM-RN-001.json \
+            --negative-output /tmp/physqed-v12-receipts/STD-GR-EM-RN-NEG.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: physqed-v12-standard-receipts
+          path: /tmp/physqed-v12-receipts
+          if-no-files-found: warn
+      - name: Existing legacy engine regression
+        run: |
+          python -m unittest discover -s projects/physqed/tests -p 'test_engine.py' -v
+      - name: Compile all new Python modules
+        run: |
+          python -m compileall -q projects/physqed/v12
+

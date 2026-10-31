@@ -1,0 +1,116 @@
+{
+  "schema": "physqed.typed-input.v1",
+  "kind": "einstein_maxwell",
+  "source": "standard textbook Einstein–Maxwell electrovacuum",
+  "assumptions": [
+    "signature -+++, zero shift, positive lapse",
+    "regular chart at supplied witness, geometrized units",
+    "local classical equations with action R-F_ab F^ab"
+  ],
+  "claims": [
+    "linked_einstein_maxwell_adm"
+  ],
+  "tensor_types": {
+    "metric": {
+      "variance": "dd",
+      "rank": 2
+    },
+    "potential": {
+      "variance": "d",
+      "rank": 1
+    },
+    "field_strength": {
+      "variance": "dd",
+      "rank": 2
+    },
+    "stress": {
+      "variance": "dd",
+      "rank": 2
+    },
+    "lapse": {
+      "variance": "",
+      "rank": 0
+    }
+  },
+  "claim_id": "EM_ADM_FALSE_ELECTRIC_VACUUM",
+  "coordinates": [
+    "t",
+    "x",
+    "y",
+    "z"
+  ],
+  "units": {
+    "system": "geometrized_length",
+    "coordinates": {
+      "t": 1,
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "parameters": {
+      "Q": 1
+    }
+  },
+  "parameter_values": {
+    "Q": {
+      "rational": [
+        1,
+        2
+      ]
+    }
+  },
+  "metric": [
+    [
+      -1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "potential": [
+    {
+      "mul": [
+        "Q",
+        {
+          "pow": [
+            "x",
+            -1
+          ]
+        }
+      ]
+    },
+    0,
+    0,
+    0
+  ],
+  "lapse": 1,
+  "witnesses": [
+    {
+      "t": 0,
+      "x": 4,
+      "y": 0,
+      "z": 0
+    }
+  ],
+  "parameters": [
+    "Q"
+  ]
+}
