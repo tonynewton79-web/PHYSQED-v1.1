@@ -1,3 +1,5 @@
+**Copyright © 2026 Tony Newton.** See [copyright notice](COPYRIGHT.md).
+
 ## Associated research paper and citation
 
 [![PHYSQED paper DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23837777.svg)](https://doi.org/10.5281/zenodo.23837777)
