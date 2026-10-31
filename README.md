@@ -1,3 +1,20 @@
+## Associated research paper and citation
+
+[![PHYSQED paper DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23837777.svg)](https://doi.org/10.5281/zenodo.23837777)
+
+**Paper:** Tony Newton, *PHYSQED: Exact Certificates for Restricted Claims in Mathematical Physics*.
+Zenodo DOI: [10.5281/zenodo.23837777](https://doi.org/10.5281/zenodo.23837777).
+
+**Software source:** [PHYSQED GitHub repository](https://github.com/tonynewton79-web/PHYSQED-v1.1).
+
+**DOI scope:** The identifier above is the DOI supplied for the associated manuscript.
+It is not asserted to be a DOI minted by Zenodo's GitHub-release archiving
+service. A GitHub release will receive its own DOI only after the
+repository is enabled in Zenodo and a new release is archived.
+
+See [`CITATION.cff`](CITATION.cff) for machine-readable citation metadata.
+
+---
 ## PHYSQED v1.2 — Final GH strong-well-posedness claim audit
 
 **RELEASE HOLD:** The previous regular-source forced resolvent still passes
