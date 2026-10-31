@@ -15,6 +15,17 @@ repository is enabled in Zenodo and a new release is archived.
 See [`CITATION.cff`](CITATION.cff) for machine-readable citation metadata.
 
 ---
+## Quantum triangle-finding: finite PHYSQED verification benchmark (research)
+
+The exact graph-Boolean triangle-existence test and deliberately incorrect
+polynomial-identity refusal are now part of the default branch.
+Run: `python -m unittest discover -s projects/physqed/tests -p 'test_triangle_query_scope.py' -v`.
+The companion [PHYSQED-Q coherent adjacency-query backend](https://github.com/tonynewton79-web/PHYSQED-Q/blob/main/docs/adjacency_oracle.md)
+checks separately scoped quantum circuits and oracle ledgers. These finite tests
+are *not* a quantum triangle-finding algorithm, do not establish O(n) query
+complexity, and do not lift the v1.2 GH release hold. New main-branch CI is
+pending verification; a successful local script does not certify hosted CI.
+
 ## PHYSQED v1.2 — Final GH strong-well-posedness claim audit
 
 **RELEASE HOLD:** The previous regular-source forced resolvent still passes
