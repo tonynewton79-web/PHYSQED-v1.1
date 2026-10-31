@@ -27,9 +27,12 @@ subject to native Python3.15.2 and inherited regression CI.
 [Exact proof, scope, sources and release conditions](
 docs/PHYSQED-v1.2-GH-final-proof-release-audit.md).
 
-PR #14 is **draft and unmerged**. Strong unrestricted well-posedness
-or general nonlinear Einstein/Einstein–Maxwell IBVP existence is
-**not claimed**.
+**Research-source integration notice:** making v1.2 code available on the default
+branch does **not** lift this RELEASE HOLD or certify the v1.2 theorem.
+Strong unrestricted well-posedness and general nonlinear
+Einstein/Einstein–Maxwell IBVP existence are **not claimed**.
+A stable research release remains gated on native GitHub CI and the
+explicit proof obligations in the final audit.
 
 ## PHYSQED v1.2 — Inhomogeneous first-order GH resolvent (regular sources)
 
