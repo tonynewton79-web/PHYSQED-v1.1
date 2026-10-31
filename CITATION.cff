@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use PHYSQED, please cite the associated research manuscript below."
+type: software
+title: "PHYSQED: Proof-Carrying Physics"
+authors:
+  - given-names: Tony
+    family-names: Newton
+    affiliation: Newton Astro Labs
+version: 1.2.0
+repository-code: "https://github.com/tonynewton79-web/PHYSQED-v1.1"
+url: "https://github.com/tonynewton79-web/PHYSQED-v1.1"
+abstract: >-
+  Experimental proof-carrying research software for finite exact claim
+  contracts, constructive hypothesis-essentiality certificates, local
+  mathematical-physics component checks, and scoped counterexample gates.
+  The physics backends are research-stage and do not independently establish
+  physical-law truth or general Einstein well-posedness.
+keywords:
+  - computational physics
+  - exact arithmetic
+  - mathematical verification
+  - proof-carrying claims
+  - generalized harmonic Einstein equations
+preferred-citation:
+  type: report
+  authors:
+    - given-names: Tony
+      family-names: Newton
+  title: "PHYSQED: Exact Certificates for Restricted Claims in Mathematical Physics"
+  doi: "10.5281/zenodo.23837777"
+  year: 2026
+  url: "https://doi.org/10.5281/zenodo.23837777"
