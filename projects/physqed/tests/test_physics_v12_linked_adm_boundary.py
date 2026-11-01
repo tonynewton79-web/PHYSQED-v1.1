@@ -77,7 +77,7 @@ class LinkedADMBoundaryTests(unittest.TestCase):
 
     def test_hidden_original_metric_pole_not_accepted(self):
         case=read()
-        base={"add":["t",{"rational":[-1,2]}]}
+        base={"mul":[{"rational":[1,2]},"t"]}  # length-consistent; pole at t=0
         cancel={"mul":[base,{"pow":[base,-1]}]}
         case["field_model"]["lapse"]=cancel
         case["domain_model"]["lapse"]=copy.deepcopy(cancel)
@@ -88,7 +88,7 @@ class LinkedADMBoundaryTests(unittest.TestCase):
 
     def test_cancelled_electromagnetic_source_pole_refused(self):
         case=read()
-        base={"add":["t",{"rational":[-1,2]}]}
+        base={"mul":[{"rational":[1,2]},"t"]}  # length-consistent; pole at t=0
         case["field_model"]["potential"][0]={
              "mul":[base,{"pow":[base,-1]}]}
         result=certify_linked_adm_boundary(case)

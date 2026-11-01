@@ -147,7 +147,7 @@ def run_typed_einstein_maxwell(spec):
                                             f"declared_momentum[{i}]"))
         declared_M=tuple(S.simplify(a.subs(substitutions))
                          for a in _array(m,3,compiler))
-    witnesses=_witnesses(raw,spec.coordinates,compiler,substitutions)
+    witnesses=_witnesses(raw["witnesses"],spec.coordinates,compiler,substitutions)
     contract=EinsteinMaxwellSpec(
         claim_id=spec.claim_id,coordinates=coords,metric=metric,
         potential=potential,lapse=lapse,witnesses=witnesses,

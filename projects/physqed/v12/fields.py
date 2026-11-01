@@ -99,6 +99,6 @@ def first_order_phi4_two_point(covariance, left, right, couplings):
     C=S.Matrix(covariance)
     if len(couplings)!=C.rows or not (0<=left<C.rows and 0<=right<C.rows):
         raise ScopeError("phi4 indices and couplings")
-    return S.simplify(-sum(couplings[k]/24*(
+    return S.simplify(-sum(S.Rational(1,24)*S.sympify(couplings[k])*(
         wick([left,right]+[k]*4,C) - C[left,right]*wick([k]*4,C))
         for k in range(C.rows)))
