@@ -10,6 +10,8 @@ on:
       - "projects/physqed/research/stochastic_waterfall_bias_gate.py"
       - "projects/physqed/research/inflaton_exact_spinodal.py"
       - "projects/physqed/research/inflaton_wall_pressure_certificate.py"
+      - "projects/physqed/research/inflaton_radiation_causal_cone_gate.py"
+      - "projects/physqed/research/inflaton_stochastic_noncmc_gate.py"
       - "projects/physqed/research/inflaton_causal_transfer_gate.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
@@ -23,6 +25,8 @@ on:
       - "projects/physqed/research/stochastic_waterfall_bias_gate.py"
       - "projects/physqed/research/inflaton_exact_spinodal.py"
       - "projects/physqed/research/inflaton_wall_pressure_certificate.py"
+      - "projects/physqed/research/inflaton_radiation_causal_cone_gate.py"
+      - "projects/physqed/research/inflaton_stochastic_noncmc_gate.py"
       - "projects/physqed/research/inflaton_causal_transfer_gate.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
@@ -62,6 +66,12 @@ jobs:
         with:
           name: inflaton-causal-transfer-refusal
           path: inflaton_causal_transfer_receipt.json
+      - name: Moving-wall radiation-source causal-cone exact negative control
+        run: python projects/physqed/research/inflaton_radiation_causal_cone_gate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflaton-radiation-causal-cone-receipt
+          path: inflaton_causal_radiation_receipt.json
       - name: Exact two-field spinodal and pivot-displacement no-overlap certificate
         run: python projects/physqed/research/inflaton_exact_spinodal.py
       - uses: actions/upload-artifact@v4
@@ -107,6 +117,12 @@ jobs:
         with:
           name: inflaton-gauge-invariant-modes
           path: inflaton_ms_receipt.json
+      - name: Non-CMC stochastic Einstein momentum-constraint compatibility
+        run: python projects/physqed/research/inflaton_stochastic_noncmc_gate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflaton-stochastic-noncmc-momentum-receipt
+          path: inflaton_noncmc_momentum_receipt.json
       - name: Scoped Gaussian-seed separate-universe stochastic delta-N regression
         run: |
           python projects/physqed/research/stochastic_waterfall_deltaN.py \
