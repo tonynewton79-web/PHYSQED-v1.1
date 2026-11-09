@@ -1,0 +1,547 @@
+{
+  "schema": "physqed.typed-input.v1",
+  "kind": "lagrangian",
+  "claim_id": "INFLATON_WATERFALL_MINISUPERSPACE",
+  "source": "Conditional flat-FLRW homogeneous two-scalar benchmark; a field-theoretic ansatz, not an ABJM derivation",
+  "assumptions": [
+    "Flat FLRW homogeneous lapse-fixed minisuperspace with b(t)>0; tau=Lambda^2 physical_time/mu",
+    "Canonically normalized x=phi/mu, z=chi/mu, xi=(M_Pl/mu)^2, alpha=(4+delta)/2",
+    "These are exact equations of a declared finite-dimensional action, not a cosmological or quantum-gravity existence theorem",
+    "Hamiltonian Friedmann constraint and phenomenological radiation transfer must be separately checked"
+  ],
+  "coordinates": [
+    "t"
+  ],
+  "parameters": [
+    "xi",
+    "alpha",
+    "kappa",
+    "lam",
+    "yc"
+  ],
+  "fields": [
+    "b",
+    "x",
+    "z"
+  ],
+  "claims": [
+    "euler_lagrange",
+    "translation_noether"
+  ],
+  "lagrangian": {
+    "add": [
+      {
+        "neg": {
+          "mul": [
+            3,
+            "xi",
+            "b",
+            {
+              "pow": [
+                {
+                  "derivative": [
+                    "b",
+                    "t"
+                  ]
+                },
+                2
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "mul": [
+          {
+            "rational": [
+              1,
+              2
+            ]
+          },
+          {
+            "pow": [
+              "b",
+              3
+            ]
+          },
+          {
+            "add": [
+              {
+                "pow": [
+                  {
+                    "derivative": [
+                      "x",
+                      "t"
+                    ]
+                  },
+                  2
+                ]
+              },
+              {
+                "pow": [
+                  {
+                    "derivative": [
+                      "z",
+                      "t"
+                    ]
+                  },
+                  2
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "neg": {
+          "mul": [
+            {
+              "pow": [
+                "b",
+                3
+              ]
+            },
+            {
+              "add": [
+                3,
+                {
+                  "neg": {
+                    "mul": [
+                      "alpha",
+                      {
+                        "pow": [
+                          "x",
+                          2
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "mul": [
+                    {
+                      "rational": [
+                        1,
+                        2
+                      ]
+                    },
+                    {
+                      "pow": [
+                        "x",
+                        4
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "mul": [
+                    {
+                      "rational": [
+                        1,
+                        2
+                      ]
+                    },
+                    "kappa",
+                    {
+                      "add": [
+                        "yc",
+                        {
+                          "neg": {
+                            "pow": [
+                              "x",
+                              2
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "pow": [
+                        "z",
+                        2
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "mul": [
+                    {
+                      "rational": [
+                        1,
+                        4
+                      ]
+                    },
+                    "lam",
+                    {
+                      "pow": [
+                        "z",
+                        4
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "expected_eom": [
+    {
+      "add": [
+        {
+          "mul": [
+            3,
+            "xi",
+            {
+              "pow": [
+                {
+                  "derivative": [
+                    "b",
+                    "t"
+                  ]
+                },
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "mul": [
+            6,
+            "xi",
+            "b",
+            {
+              "derivative": [
+                "b",
+                "t",
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "mul": [
+            {
+              "rational": [
+                3,
+                2
+              ]
+            },
+            {
+              "pow": [
+                "b",
+                2
+              ]
+            },
+            {
+              "add": [
+                {
+                  "pow": [
+                    {
+                      "derivative": [
+                        "x",
+                        "t"
+                      ]
+                    },
+                    2
+                  ]
+                },
+                {
+                  "pow": [
+                    {
+                      "derivative": [
+                        "z",
+                        "t"
+                      ]
+                    },
+                    2
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "neg": {
+            "mul": [
+              3,
+              {
+                "pow": [
+                  "b",
+                  2
+                ]
+              },
+              {
+                "add": [
+                  3,
+                  {
+                    "neg": {
+                      "mul": [
+                        "alpha",
+                        {
+                          "pow": [
+                            "x",
+                            2
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "mul": [
+                      {
+                        "rational": [
+                          1,
+                          2
+                        ]
+                      },
+                      {
+                        "pow": [
+                          "x",
+                          4
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "mul": [
+                      {
+                        "rational": [
+                          1,
+                          2
+                        ]
+                      },
+                      "kappa",
+                      {
+                        "add": [
+                          "yc",
+                          {
+                            "neg": {
+                              "pow": [
+                                "x",
+                                2
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "pow": [
+                          "z",
+                          2
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "mul": [
+                      {
+                        "rational": [
+                          1,
+                          4
+                        ]
+                      },
+                      "lam",
+                      {
+                        "pow": [
+                          "z",
+                          4
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "neg": {
+        "add": [
+          {
+            "mul": [
+              {
+                "pow": [
+                  "b",
+                  3
+                ]
+              },
+              {
+                "derivative": [
+                  "x",
+                  "t",
+                  2
+                ]
+              }
+            ]
+          },
+          {
+            "mul": [
+              3,
+              {
+                "pow": [
+                  "b",
+                  2
+                ]
+              },
+              {
+                "derivative": [
+                  "b",
+                  "t"
+                ]
+              },
+              {
+                "derivative": [
+                  "x",
+                  "t"
+                ]
+              }
+            ]
+          },
+          {
+            "mul": [
+              {
+                "pow": [
+                  "b",
+                  3
+                ]
+              },
+              {
+                "add": [
+                  {
+                    "neg": {
+                      "mul": [
+                        2,
+                        "alpha",
+                        "x"
+                      ]
+                    }
+                  },
+                  {
+                    "mul": [
+                      2,
+                      {
+                        "pow": [
+                          "x",
+                          3
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "neg": {
+                      "mul": [
+                        "kappa",
+                        "x",
+                        {
+                          "pow": [
+                            "z",
+                            2
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "neg": {
+        "add": [
+          {
+            "mul": [
+              {
+                "pow": [
+                  "b",
+                  3
+                ]
+              },
+              {
+                "derivative": [
+                  "z",
+                  "t",
+                  2
+                ]
+              }
+            ]
+          },
+          {
+            "mul": [
+              3,
+              {
+                "pow": [
+                  "b",
+                  2
+                ]
+              },
+              {
+                "derivative": [
+                  "b",
+                  "t"
+                ]
+              },
+              {
+                "derivative": [
+                  "z",
+                  "t"
+                ]
+              }
+            ]
+          },
+          {
+            "mul": [
+              {
+                "pow": [
+                  "b",
+                  3
+                ]
+              },
+              {
+                "add": [
+                  {
+                    "mul": [
+                      "kappa",
+                      {
+                        "add": [
+                          "yc",
+                          {
+                            "neg": {
+                              "pow": [
+                                "x",
+                                2
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "z"
+                    ]
+                  },
+                  {
+                    "mul": [
+                      "lam",
+                      {
+                        "pow": [
+                          "z",
+                          3
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
