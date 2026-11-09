@@ -5,6 +5,7 @@ on:
     paths:
       - "projects/physqed/research/inflaton_waterfall_dynamics.py"
       - "projects/physqed/research/inflaton_waterfall_next_test.py"
+      - "projects/physqed/research/inflaton_two_field_ms.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -12,6 +13,7 @@ on:
     paths:
       - "projects/physqed/research/inflaton_waterfall_dynamics.py"
       - "projects/physqed/research/inflaton_waterfall_next_test.py"
+      - "projects/physqed/research/inflaton_two_field_ms.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -69,3 +71,11 @@ jobs:
         with:
           name: inflaton-next-test-actual-exit-receipt
           path: inflaton_next_test_receipt.json
+      - name: Gauge-invariant two-field scalar/tensor mode check
+        run: |
+          python projects/physqed/research/inflaton_two_field_ms.py \
+            --before 5 --output inflaton_ms_receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflaton-gauge-invariant-modes
+          path: inflaton_ms_receipt.json
