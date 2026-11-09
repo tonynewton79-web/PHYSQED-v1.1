@@ -6,6 +6,7 @@ on:
       - "projects/physqed/research/inflaton_waterfall_dynamics.py"
       - "projects/physqed/research/inflaton_waterfall_next_test.py"
       - "projects/physqed/research/inflaton_two_field_ms.py"
+      - "projects/physqed/research/stochastic_waterfall_deltaN.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -14,6 +15,7 @@ on:
       - "projects/physqed/research/inflaton_waterfall_dynamics.py"
       - "projects/physqed/research/inflaton_waterfall_next_test.py"
       - "projects/physqed/research/inflaton_two_field_ms.py"
+      - "projects/physqed/research/stochastic_waterfall_deltaN.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -79,3 +81,11 @@ jobs:
         with:
           name: inflaton-gauge-invariant-modes
           path: inflaton_ms_receipt.json
+      - name: Scoped Gaussian-seed separate-universe stochastic delta-N regression
+        run: |
+          python projects/physqed/research/stochastic_waterfall_deltaN.py \
+            --n 96 --output stochastic_waterfall_receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflaton-stochastic-deltaN-receipt
+          path: stochastic_waterfall_receipt.json
