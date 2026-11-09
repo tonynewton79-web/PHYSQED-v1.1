@@ -1,7 +1,7 @@
 {
   "schema": "physqed.typed-input.v1",
   "kind": "lagrangian",
-  "claim_id": "INFLATON_WATERFALL_MINISUPERSPACE",
+  "claim_id": "INFLATON_WF_MINISUPERSPACE",
   "source": "Conditional flat-FLRW homogeneous two-scalar benchmark; a field-theoretic ansatz, not an ABJM derivation",
   "assumptions": [
     "Flat FLRW homogeneous lapse-fixed minisuperspace with b(t)>0; tau=Lambda^2 physical_time/mu",
