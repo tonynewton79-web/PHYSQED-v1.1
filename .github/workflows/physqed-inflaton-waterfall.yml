@@ -4,12 +4,14 @@ on:
   push:
     paths:
       - "projects/physqed/research/inflaton_waterfall_dynamics.py"
+      - "projects/physqed/research/inflaton_waterfall_next_test.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
   pull_request:
     paths:
       - "projects/physqed/research/inflaton_waterfall_dynamics.py"
+      - "projects/physqed/research/inflaton_waterfall_next_test.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -59,3 +61,11 @@ jobs:
         with:
           name: inflaton-numerical-benchmark-receipt
           path: inflaton_dynamics_receipt.json
+      - name: Next test, reselect pivot relative to the first actual inflationary exit
+        run: |
+          python projects/physqed/research/inflaton_waterfall_next_test.py \
+            --output inflaton_next_test_receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflaton-next-test-actual-exit-receipt
+          path: inflaton_next_test_receipt.json
