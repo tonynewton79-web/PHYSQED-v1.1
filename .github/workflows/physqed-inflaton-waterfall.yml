@@ -7,6 +7,7 @@ on:
       - "projects/physqed/research/inflaton_waterfall_next_test.py"
       - "projects/physqed/research/inflaton_two_field_ms.py"
       - "projects/physqed/research/stochastic_waterfall_deltaN.py"
+      - "projects/physqed/research/stochastic_waterfall_bias_gate.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -16,6 +17,7 @@ on:
       - "projects/physqed/research/inflaton_waterfall_next_test.py"
       - "projects/physqed/research/inflaton_two_field_ms.py"
       - "projects/physqed/research/stochastic_waterfall_deltaN.py"
+      - "projects/physqed/research/stochastic_waterfall_bias_gate.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -89,3 +91,9 @@ jobs:
         with:
           name: inflaton-stochastic-deltaN-receipt
           path: stochastic_waterfall_receipt.json
+      - name: Bias-induced metastable vacuum and opposite basin negative controls
+        run: python projects/physqed/research/stochastic_waterfall_bias_gate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflaton-stochastic-bias-gate
+          path: inflaton_bias_gate_receipt.json
