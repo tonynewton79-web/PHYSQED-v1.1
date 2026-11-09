@@ -9,6 +9,7 @@ on:
       - "projects/physqed/research/stochastic_waterfall_deltaN.py"
       - "projects/physqed/research/stochastic_waterfall_bias_gate.py"
       - "projects/physqed/research/inflaton_exact_spinodal.py"
+      - "projects/physqed/research/inflaton_wall_pressure_certificate.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -20,6 +21,7 @@ on:
       - "projects/physqed/research/stochastic_waterfall_deltaN.py"
       - "projects/physqed/research/stochastic_waterfall_bias_gate.py"
       - "projects/physqed/research/inflaton_exact_spinodal.py"
+      - "projects/physqed/research/inflaton_wall_pressure_certificate.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -46,6 +48,12 @@ jobs:
           PYTHONPATH=projects/physqed python -m v12.typed_cli \
             --input projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json \
             --output inflaton_typed_receipt.json
+      - name: Exact unbiased wall tension and weak-bias pressure/gravity scale gate
+        run: python projects/physqed/research/inflaton_wall_pressure_certificate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflaton-wall-pressure-gravity-certificate
+          path: inflaton_wall_pressure_receipt.json
       - name: Exact two-field spinodal and pivot-displacement no-overlap certificate
         run: python projects/physqed/research/inflaton_exact_spinodal.py
       - uses: actions/upload-artifact@v4
