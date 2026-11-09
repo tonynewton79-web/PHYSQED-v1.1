@@ -10,6 +10,7 @@ on:
       - "projects/physqed/research/stochastic_waterfall_bias_gate.py"
       - "projects/physqed/research/inflaton_exact_spinodal.py"
       - "projects/physqed/research/inflaton_wall_pressure_certificate.py"
+      - "projects/physqed/research/inflaton_causal_transfer_gate.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -22,6 +23,7 @@ on:
       - "projects/physqed/research/stochastic_waterfall_bias_gate.py"
       - "projects/physqed/research/inflaton_exact_spinodal.py"
       - "projects/physqed/research/inflaton_wall_pressure_certificate.py"
+      - "projects/physqed/research/inflaton_causal_transfer_gate.py"
       - "projects/physqed/examples/typed/inflaton_waterfall_minisuperspace.json"
       - "projects/physqed/tests/test_inflaton_waterfall_typed.py"
       - ".github/workflows/physqed-inflaton-waterfall.yml"
@@ -54,6 +56,12 @@ jobs:
         with:
           name: inflaton-wall-pressure-gravity-certificate
           path: inflaton_wall_pressure_receipt.json
+      - name: Exact causal radiation-cone negative control and stochastic projection
+        run: python projects/physqed/research/inflaton_causal_transfer_gate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflaton-causal-transfer-refusal
+          path: inflaton_causal_transfer_receipt.json
       - name: Exact two-field spinodal and pivot-displacement no-overlap certificate
         run: python projects/physqed/research/inflaton_exact_spinodal.py
       - uses: actions/upload-artifact@v4
