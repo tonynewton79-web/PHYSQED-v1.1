@@ -104,7 +104,7 @@ def classical_conservation_search(model):
                   "complete_integrability_proven":False,
                   "global_flows_established":False},
                  checks=[{"gate":"independent_fraction_poisson_replay","passed":True},
-                         {"gate":"exact_nullspace_matrix","passed":C* S.Matrix.zeros(C.cols,1)==S.zeros(C.rows,1)}],
+                         {"gate":"exact_nullspace_matrix","passed":all(C*v==S.zeros(C.rows,1) for v in vectors)}],
                  independent=True,
                  next_step="Test larger polynomial grammars, functional independence, global regularity and prior art.")
 
