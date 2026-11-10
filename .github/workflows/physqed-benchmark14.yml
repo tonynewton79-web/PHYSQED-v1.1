@@ -1,8 +1,6 @@
 name: PHYSQED Benchmark 14 Independent Exact Challenge
 on:
   push:
-    branches:
-      - upgrade/physqed-benchmark14-20261110
     paths:
       - 'research/physqed-benchmark14/**'
       - '.github/workflows/physqed-benchmark14.yml'
