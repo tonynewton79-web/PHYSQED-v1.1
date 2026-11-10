@@ -262,5 +262,42 @@ class ResearchSolverTests(unittest.TestCase):
             solve_research_problem(sample("pde_ansatz_residual","fluid",model))
 
 
+    def test_classical_polynomial_integral_discovery(self):
+        H=mul(rat(1,2),add(pow_("p",2),pow_("q",2)))
+        model={"positions":["q"],"momenta":["p"],"hamiltonian":H,"max_degree":2}
+        r=solve_research_problem(sample("classical_conservation_search","classical",model))
+        self.assertEqual(r["analysis"]["status"],"CANDIDATES_EXACTLY_CERTIFIED_IN_BOUNDED_CLASS")
+        self.assertGreaterEqual(r["analysis"]["results"]["nonconstant_integral_basis_dimension"],1)
+        self.assertTrue(all(x["fraction_poisson_bracket_zero"]
+                            for x in r["analysis"]["results"]["basis"]))
+        self.assertFalse(r["analysis"]["results"]["complete_integrability_proven"])
+        self.assertFalse(r["analysis"]["results"]["discovery_novelty_proven"])
+
+    def test_two_dimensional_isotropic_oscillator_symmetry_discovery(self):
+        H=mul(rat(1,2),add(pow_("p1",2),pow_("p2",2),
+                            pow_("q1",2),pow_("q2",2)))
+        model={"positions":["q1","q2"],"momenta":["p1","p2"],
+               "hamiltonian":H,"max_degree":2}
+        r=solve_research_problem(sample("classical_conservation_search","classical",model))
+        self.assertEqual(r["analysis"]["status"],"CANDIDATES_EXACTLY_CERTIFIED_IN_BOUNDED_CLASS")
+        self.assertGreaterEqual(r["analysis"]["results"]["nonconstant_integral_basis_dimension"],3)
+
+    def test_finite_quantum_degeneracy_symmetry_discovery(self):
+        H=[[1,0,0],[0,1,0],[0,0,2]]
+        r=solve_research_problem(sample("finite_quantum_symmetry_search","quantum",
+                                       {"hamiltonian":H}))
+        self.assertEqual(r["analysis"]["status"],"CANDIDATES_EXACTLY_CERTIFIED_IN_BOUNDED_CLASS")
+        self.assertEqual(r["analysis"]["results"]["commutant_dimension"],5)
+        self.assertTrue(r["analysis"]["results"]["commutant_exceeds_polynomial_H_dimension"])
+        self.assertFalse(r["analysis"]["results"]["discovery_novelty_proven"])
+        self.assertTrue(all(x["commutator_zero"] for x in r["analysis"]["results"]["commuting_matrices"]))
+
+    def test_nonsymmetric_quantum_discovery_refused(self):
+        H=[[1,2],[0,3]]
+        with self.assertRaises(ScopeError):
+            solve_research_problem(sample("finite_quantum_symmetry_search","quantum",
+                                          {"hamiltonian":H}))
+
+
 if __name__=="__main__":
     unittest.main()
