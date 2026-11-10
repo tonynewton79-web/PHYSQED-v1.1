@@ -1,7 +1,7 @@
+import Mathlib
 /-! PHYSQED 0.1: elementary algebraic physics examples.
     These results are not empirical validations or proofs of physical laws.
     Lean proves only the formally stated propositions below. -/
-import Mathlib
 
 namespace PHYSQED
 

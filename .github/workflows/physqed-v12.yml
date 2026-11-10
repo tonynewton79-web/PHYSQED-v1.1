@@ -5,11 +5,15 @@ on:
     paths:
       - "projects/physqed/v12/**"
       - "projects/physqed/tests/test_physics_v12*.py"
+      - "projects/physqed/examples/typed/**"
+      - "requirements-test.txt"
       - ".github/workflows/physqed-v12.yml"
   pull_request:
     paths:
       - "projects/physqed/v12/**"
       - "projects/physqed/tests/test_physics_v12*.py"
+      - "projects/physqed/examples/typed/**"
+      - "requirements-test.txt"
       - ".github/workflows/physqed-v12.yml"
   workflow_dispatch:
 
