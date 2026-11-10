@@ -10,7 +10,7 @@ BEFORE ANY STATEMENT IS LABELLED LEAN-KERNEL VERIFIED.
 namespace PHYSQEDConservation
 
 /-- Mechanical energy. Valid interpretation requires x'=v and v'=a. -/
-def energy (m k : ℝ) (x v : ℝ → ℝ) (t : ℝ) : ℝ :=
+noncomputable def energy (m k : ℝ) (x v : ℝ → ℝ) (t : ℝ) : ℝ :=
   (m / 2) * (v t) ^ 2 + (k / 2) * (x t) ^ 2
 
 /-- Exact power balance, conditional on the declared differentiability and
