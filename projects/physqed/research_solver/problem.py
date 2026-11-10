@@ -20,6 +20,7 @@ from .backends import (exact_identity,hamiltonian_flow,euler_lagrange_system,
                        quantum_commutator,metric_curvature,finite_statistical,
                        typed_obligations)
 from .frontiers import rational_linear_system,pde_ansatz_residual
+from .discovery import classical_conservation_search,finite_quantum_symmetry_search
 
 SCHEMA="physqed.research-problem.v1"
 RESULT_SCHEMA="physqed.research-solver.v2-alpha"
@@ -40,6 +41,8 @@ TASKS={
     "finite_statistical": (finite_statistical,{"statistical","condensed_matter"}),
     "rational_linear_system": (rational_linear_system,DOMAINS),
     "pde_ansatz_residual": (pde_ansatz_residual,{"fluid","plasma","classical","field","spacetime","cosmology"}),
+    "classical_conservation_search": (classical_conservation_search,{"classical","field"}),
+    "finite_quantum_symmetry_search": (finite_quantum_symmetry_search,{"quantum","condensed_matter"}),
     "typed_obligations": (typed_obligations,
                           {"classical","field","spacetime","gauge",
                            "electromagnetism","plasma","fluid","cosmology"}),
@@ -130,6 +133,7 @@ def _backend_manifest():
         Path(__file__).with_name("backends.py"),
         Path(__file__).with_name("exact.py"),
         Path(__file__).with_name("frontiers.py"),
+        Path(__file__).with_name("discovery.py"),
         root/"v12"/"typed_input.py",
         root/"v12"/"geometry.py",
         root/"v12"/"quantum.py",
@@ -160,6 +164,10 @@ def _plan(task):
                                 "compare SymPy rank","replay candidate solution"],
        "pde_ansatz_residual":["parse local coordinate ansatz","apply bounded linear differential operator",
                               "replay alternative symbolic normal form","search for a rational residual witness"],
+       "classical_conservation_search":["compile polynomial Hamiltonian","generate bounded monomial candidates",
+                                       "solve exact Lie-derivative nullspace","independently verify every candidate using Fraction polynomial Poisson bracket"],
+       "finite_quantum_symmetry_search":["compile real symmetric rational Hamiltonian","build commutator superoperator",
+                                        "find its exact nullspace","independently replay Fraction commutators and report candidate generators"],
     }
     return [{"step":i+1,"action":name} for i,name in enumerate(plans.get(
         task,["identify unsupported problem; do not guess or fabricate an answer"]))]
