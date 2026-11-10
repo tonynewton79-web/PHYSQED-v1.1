@@ -22,6 +22,10 @@ def zero(x):
     before trigonometric simplification. Without it, correctly conserved
     Maxwell stress may be falsely refused in spherical coordinates.
     """
+    if isinstance(x, S.MatrixBase):
+        return all(zero(v) for v in x)
+    if isinstance(x, S.NDimArray):
+        return all(zero(x[idx]) for idx in product(*(range(k) for k in x.shape)))
     try:
         if S.simplify(S.cancel(S.together(x))) == 0:
             return True
