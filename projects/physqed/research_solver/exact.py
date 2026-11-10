@@ -7,13 +7,14 @@ from __future__ import annotations
 
 from fractions import Fraction as Q
 from itertools import product
+from v12.geometry import ScopeError
 
 MAX_TERMS = 2048
 MAX_DEGREE = 16
 MAX_NODES = 600
 
 
-class PolynomialScope(ValueError):
+class PolynomialScope(ScopeError):
     """The bounded exact-polynomial backend cannot certify this input."""
 
 
