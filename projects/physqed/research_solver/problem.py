@@ -101,7 +101,7 @@ def _parse_input(payload: Any):
     if (not isinstance(payload["id"],str) or
         not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,47}",payload["id"])):
         raise ScopeError("invalid research ID")
-    if payload["domain"] not in DOMAINS:
+    if not isinstance(payload["domain"],str) or payload["domain"] not in DOMAINS:
         raise ScopeError("unknown physics domain")
     if (not isinstance(payload["task"],str) or
         not re.fullmatch(r"[a-z][a-z_]{0,63}",payload["task"])):
@@ -185,12 +185,12 @@ def solve_research_problem(payload: Any) -> dict:
         operation=handler(problem["model"])
     status=operation["status"]
     release="EXACT_FORMAL_MATHEMATICS_ONLY" if status in RELEASE_MATH else "NOT_RELEASED"
-    if status in ERRONEOUS:
+    if status=="UNSUPPORTED_TASK":
+        decision="UNSUPPORTED"
+    elif status in ERRONEOUS:
         decision="REFUTED_WITHIN_FORMAL_SCOPE"
     elif status in ABSTAIN:
         decision="ABSTAIN_OR_NEEDS_INDEPENDENT_PROOF"
-    elif status=="UNSUPPORTED_TASK":
-        decision="UNSUPPORTED"
     elif status in RELEASE_MATH:
         decision="EXACT_MATHEMATICS_VERIFIED_NOT_PHYSICS"
     elif status.startswith("DERIVED_") or status.startswith("PASS_SCOPED"):
