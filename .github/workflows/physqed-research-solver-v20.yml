@@ -1,0 +1,49 @@
+name: PHYSQED Research Solver 2.0 Scoped Research CI
+on:
+  push:
+    paths:
+      - 'projects/physqed/research_solver/**'
+      - 'projects/physqed/tests/test_research_solver_v20.py'
+      - 'research/physqed-research-solver-v20/**'
+      - '.github/workflows/physqed-research-solver-v20.yml'
+  pull_request:
+    paths:
+      - 'projects/physqed/research_solver/**'
+      - 'projects/physqed/tests/test_research_solver_v20.py'
+      - 'research/physqed-research-solver-v20/**'
+      - '.github/workflows/physqed-research-solver-v20.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python-scoped-multidomain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned exact symbolic dependency
+        run: python -m pip install sympy==1.14.0
+      - name: Run independent theorem/refutation and multi-domain physics probes
+        run: python -m unittest discover -s projects/physqed/tests -p 'test_research_solver_v20.py' -v
+      - name: Check executable research solver CLI on a published fixture
+        run: |
+          PYTHONPATH=projects/physqed python -m research_solver \
+            research/physqed-research-solver-v20/fixtures/exact_identity.json \
+            --output /tmp/research_solver_receipt.json
+          python - <<'PY'
+          import json
+          data=json.load(open('/tmp/research_solver_receipt.json'))
+          assert data['research_decision']=='EXACT_MATHEMATICS_VERIFIED_NOT_PHYSICS'
+          assert data['physical_law_proven'] is False
+          assert data['universal_solver_claim_proven'] is False
+          PY
+      - name: Fail closed on an unsupported universal request
+        run: |
+          if PYTHONPATH=projects/physqed python -m research_solver \
+            research/physqed-research-solver-v20/fixtures/unsupported.json; then
+            echo "Incorrect universal certification"; exit 1
+          fi
+      - name: Verify standalone release exclusions
+        run: python projects/physqed/standalone_guard.py
