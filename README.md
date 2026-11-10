@@ -17,6 +17,32 @@ repository is enabled in Zenodo and a new release is archived.
 See [`CITATION.cff`](CITATION.cff) for machine-readable citation metadata.
 
 ---
+## PHYSQED Research Solver 2.0 Alpha — bounded multidisciplinary research
+
+**Integrated research front end (not a certified universal physics solver).**
+The new typed solver records explicit provenance, assumptions, units and coordinate scope;
+it routes mathematical tasks to suitable exact methods, generates candidate deductions
+and symmetries, independently replays supported certificates, searches for exact
+counterexamples, and abstains when assumptions or techniques are insufficient.
+
+Supported bounded routes: rational polynomial proofs, exact linear systems,
+Hamiltonian and Euler–Lagrange equations, finite quantum operators, chart curvature,
+finite canonical ensembles, linear PDE ansatz checks, existing typed physics obligations,
+degree-bounded classical first-integral searches, and finite quantum commutant searches.
+
+**Scientific claim boundary:** formally checked identities and finite model deductions
+are not evidence of globally solved PDEs, experimental physics, novel research, or a
+complete universal solver. External blinded comparisons and specialist peer review
+remain future gates; v1.2 generalized-harmonic release holds remain unchanged.
+
+[Research solver technical guide and reproducibility instructions](
+research/physqed-research-solver-v20/README.md).
+
+Run with Python 3.11 and SymPy 1.14.0:
+
+    PYTHONPATH=projects/physqed python -m research_solver research/physqed-research-solver-v20/fixtures/exact_identity.json
+
+---
 ## Quantum triangle-finding: finite PHYSQED verification benchmark (research)
 
 The exact graph-Boolean triangle-existence test and deliberately incorrect

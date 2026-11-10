@@ -1,0 +1,58 @@
+{
+  "schema": "physqed.research-problem.v1",
+  "id": "Polynomial_Difference_Squares",
+  "domain": "mathematics",
+  "task": "exact_identity",
+  "research_question": "Does the difference of two squares factor exactly in Q[x,y]?",
+  "source": "Algebra textbook identity, deterministic public positive control",
+  "assumptions": [
+    "The variables x and y range over real scalars, no physical interpretation."
+  ],
+  "conventions": {
+    "units": "dimensionless",
+    "frame": "algebraic variable basis x,y",
+    "domain": "entire real affine plane"
+  },
+  "model": {
+    "variables": [
+      "x",
+      "y"
+    ],
+    "lhs": {
+      "add": [
+        {
+          "pow": [
+            "x",
+            2
+          ]
+        },
+        {
+          "neg": {
+            "pow": [
+              "y",
+              2
+            ]
+          }
+        }
+      ]
+    },
+    "rhs": {
+      "mul": [
+        {
+          "add": [
+            "x",
+            {
+              "neg": "y"
+            }
+          ]
+        },
+        {
+          "add": [
+            "x",
+            "y"
+          ]
+        }
+      ]
+    }
+  }
+}
