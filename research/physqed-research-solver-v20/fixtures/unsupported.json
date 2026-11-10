@@ -1,0 +1,17 @@
+{
+  "schema": "physqed.research-problem.v1",
+  "id": "Quantum_Gravity_Unrestricted",
+  "domain": "spacetime",
+  "task": "solve_quantum_gravity",
+  "research_question": "Prove a complete theory of quantum gravity.",
+  "source": "Deliberately unsupported research request for abstention test",
+  "assumptions": [
+    "The variables x and y range over real scalars, no physical interpretation."
+  ],
+  "conventions": {
+    "units": "dimensionless",
+    "frame": "algebraic variable basis x,y",
+    "domain": "entire real affine plane"
+  },
+  "model": {}
+}
