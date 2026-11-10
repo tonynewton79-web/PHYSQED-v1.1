@@ -1,0 +1,30 @@
+name: PHYSQED v1.3 Independent Exact Regression Probes
+on:
+  push:
+    branches:
+      - benchmark/independent-20261110
+    paths:
+      - 'research/physqed-v13-independent/**'
+      - '.github/workflows/physqed-v13-independent.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-and-adversarial-regressions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned independent symbolic arithmetic package
+        run: python -m pip install sympy==1.14.0
+      - name: Run exact oracle, negative controls and typed physics gate
+        run: python research/physqed-v13-independent/benchmark.py
+      - name: Upload complete receipt even if regressions fail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: physqed-v13-benchmark-receipt
+          path: benchmark_receipt.json
+          if-no-files-found: warn
