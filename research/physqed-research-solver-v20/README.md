@@ -20,6 +20,8 @@ PHYSQED's research solver is a typed, evidence-first framework for doing control
 | finite_statistical | Finite partition function, mean energy, fluctuation identity | No thermodynamic limit |
 | pde_ansatz_residual | Linear PDE operator on supplied ansatz, algebraic residual, rational witnesses | Substitution only; no global PDE well-posedness |
 | typed_obligations | Existing v1.2 metric/gauge/ADM/Einstein–Maxwell inputs, full replay | Inherits native status and all release holds |
+| classical_conservation_search | Generate degree-bounded polynomial first-integral candidates; exact Poisson nullspace with independent Fraction-polynomial replay | Bounded ansatz only; not complete integrability or novelty |
+| finite_quantum_symmetry_search | Generate real rational finite Hamiltonian commutants; independent Fraction commutator replay | Finite matrix symmetry only; no physical locality or novelty |
 
 The system does not infer physical laws from unrestricted prose, independently retrieve literature, prove experimental data, benchmark a competitor or confer Lean-kernel verification. It requires the researcher to freeze provenance, assumptions, conventions and formal statements; all remain visible in the auditable output.
 
