@@ -216,6 +216,51 @@ class ResearchSolverTests(unittest.TestCase):
                              "REFUTED_EXACT_POLYNOMIAL_IDENTITY")
             self.assertIsNotNone(bad["analysis"]["counterexample"])
 
+    def test_unique_exact_linear_solution_and_independent_rref(self):
+        model={"variables":["x","y"],"coefficients":[[2,1],[1,-1]],"rhs":[7,1]}
+        inp=sample("rational_linear_system","mathematics",model)
+        r=solve_research_problem(inp)
+        self.assertEqual(r["analysis"]["status"],"PROVED_SCOPED_UNIQUE_LINEAR_SOLUTION")
+        self.assertEqual(r["analysis"]["results"]["solution"],{"x":"8/3","y":"5/3"})
+        self.assertTrue(r["analysis"]["independent_exact_backend"])
+        self.assertTrue(replay_research_problem(inp,r))
+
+    def test_inconsistent_and_underdetermined_linear_systems(self):
+        model={"variables":["x","y"],"coefficients":[[1,1],[2,2]],"rhs":[1,3]}
+        r=solve_research_problem(sample("rational_linear_system","mathematics",model))
+        self.assertEqual(r["analysis"]["status"],"REFUTED_LINEAR_SYSTEM_FEASIBILITY")
+        self.assertFalse(r["physical_law_proven"])
+        model["rhs"]=[1,2]
+        r=solve_research_problem(sample("rational_linear_system","mathematics",model))
+        self.assertEqual(r["analysis"]["status"],"UNDERDETERMINED_LINEAR_SYSTEM")
+        self.assertEqual(r["research_decision"],"ABSTAIN_OR_NEEDS_INDEPENDENT_PROOF")
+
+    def test_wave_equation_pde_ansatz(self):
+        sine={"func":{"name":"sin","arg":add("x",neg("t"))}}
+        model={"coordinates":["x","t"],"ansatz":sine,
+               "terms":[{"coefficient":1,"derivatives":["t","t"]},
+                        {"coefficient":-1,"derivatives":["x","x"]}],
+               "source":0}
+        r=solve_research_problem(sample("pde_ansatz_residual","field",model))
+        self.assertEqual(r["analysis"]["status"],"DERIVED_SCOPED_PDE_SOLUTION_ANSATZ")
+        self.assertFalse(r["global_theorem_proven"])
+
+    def test_wrong_wave_ansatz_has_rational_witness(self):
+        model={"coordinates":["x","t"],"ansatz":add(pow_("x",2),"t"),
+               "terms":[{"coefficient":1,"derivatives":["t","t"]},
+                        {"coefficient":-1,"derivatives":["x","x"]}],
+               "source":0}
+        r=solve_research_problem(sample("pde_ansatz_residual","field",model))
+        self.assertEqual(r["analysis"]["status"],"REFUTED_PDE_ANSATZ_BY_COUNTEREXAMPLE")
+        self.assertEqual(r["analysis"]["counterexample"]["residual"],"-2")
+        self.assertFalse(r["physical_law_proven"])
+
+    def test_pde_derivative_scope_rejection(self):
+        model={"coordinates":["x"],"ansatz":"x",
+               "terms":[{"coefficient":1,"derivatives":["x"]*5}],"source":0}
+        with self.assertRaises(ScopeError):
+            solve_research_problem(sample("pde_ansatz_residual","fluid",model))
+
 
 if __name__=="__main__":
     unittest.main()
