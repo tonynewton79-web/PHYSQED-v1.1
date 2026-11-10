@@ -1,0 +1,36 @@
+name: PHYSQED Benchmark 14 Independent Exact Challenge
+on:
+  push:
+    branches:
+      - upgrade/physqed-benchmark14-20261110
+    paths:
+      - 'research/physqed-benchmark14/**'
+      - '.github/workflows/physqed-benchmark14.yml'
+      - 'projects/physqed/**'
+  pull_request:
+    paths:
+      - 'research/physqed-benchmark14/**'
+      - '.github/workflows/physqed-benchmark14.yml'
+      - 'projects/physqed/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-challenge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install independently used symbolic algebra
+        run: python -m pip install sympy==1.14.0
+      - name: Run 1440 exact synthetic challenges and log independent gold
+        run: python research/physqed-benchmark14/benchmark.py
+      - name: Preserve result and errors regardless of exit code
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: physqed-benchmark14-receipt
+          path: benchmark14_receipt.json
+          if-no-files-found: warn
