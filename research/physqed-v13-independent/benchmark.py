@@ -163,7 +163,7 @@ attempt("einstein-maxwell-wrong-index-refusal",em_negative)
 
 summary={
     "suite":"PHYSQED-v1.3 independent-exact regression probes",
-    "source_branch":"benchmark/independent-20261110",
+    "source_branch":"benchmark/independent-fix-20261110",
     "scope":"finite symbolic, algebraic, controlled-input and receipt checks",
     "external_blind_gold":False,
     "competitor_benchmark":False,
