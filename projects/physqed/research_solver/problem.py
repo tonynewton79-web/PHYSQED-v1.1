@@ -19,6 +19,7 @@ from v12.geometry import ScopeError
 from .backends import (exact_identity,hamiltonian_flow,euler_lagrange_system,
                        quantum_commutator,metric_curvature,finite_statistical,
                        typed_obligations)
+from .frontiers import rational_linear_system,pde_ansatz_residual
 
 SCHEMA="physqed.research-problem.v1"
 RESULT_SCHEMA="physqed.research-solver.v2-alpha"
@@ -37,13 +38,15 @@ TASKS={
     "quantum_commutator": (quantum_commutator,{"quantum"}),
     "metric_curvature": (metric_curvature,{"spacetime","cosmology"}),
     "finite_statistical": (finite_statistical,{"statistical","condensed_matter"}),
+    "rational_linear_system": (rational_linear_system,DOMAINS),
+    "pde_ansatz_residual": (pde_ansatz_residual,{"fluid","plasma","classical","field","spacetime","cosmology"}),
     "typed_obligations": (typed_obligations,
                           {"classical","field","spacetime","gauge",
                            "electromagnetism","plasma","fluid","cosmology"}),
 }
-RELEASE_MATH={"PROVED_SCOPED_POLYNOMIAL_IDENTITY"}
-ERRONEOUS={"REFUTED_EXACT_POLYNOMIAL_IDENTITY","REJECTED_MODEL_PREDICTION"}
-ABSTAIN={"UNSUPPORTED_TASK","INCONCLUSIVE_ORACLE_DISAGREEMENT","INCONCLUSIVE_SYMBOLIC_ONLY"}
+RELEASE_MATH={"PROVED_SCOPED_POLYNOMIAL_IDENTITY","PROVED_SCOPED_UNIQUE_LINEAR_SOLUTION"}
+ERRONEOUS={"REFUTED_EXACT_POLYNOMIAL_IDENTITY","REJECTED_MODEL_PREDICTION","REFUTED_LINEAR_SYSTEM_FEASIBILITY","REFUTED_PDE_ANSATZ_BY_COUNTEREXAMPLE"}
+ABSTAIN={"UNSUPPORTED_TASK","INCONCLUSIVE_ORACLE_DISAGREEMENT","INCONCLUSIVE_SYMBOLIC_ONLY","UNDERDETERMINED_LINEAR_SYSTEM","INCONCLUSIVE_PDE_RESIDUAL"}
 
 
 def _canon(value):
@@ -126,6 +129,7 @@ def _backend_manifest():
         Path(__file__),
         Path(__file__).with_name("backends.py"),
         Path(__file__).with_name("exact.py"),
+        Path(__file__).with_name("frontiers.py"),
         root/"v12"/"typed_input.py",
         root/"v12"/"geometry.py",
         root/"v12"/"quantum.py",
@@ -152,6 +156,10 @@ def _plan(task):
                              "check mean-energy derivative","check finite fluctuation identity"],
        "typed_obligations":["load existing v1.2 typed problem","run all named local obligations",
                             "replay complete certificate","retain physics claim boundaries"],
+       "rational_linear_system":["compile exact rational matrix","independent Fraction RREF",
+                                "compare SymPy rank","replay candidate solution"],
+       "pde_ansatz_residual":["parse local coordinate ansatz","apply bounded linear differential operator",
+                              "replay alternative symbolic normal form","search for a rational residual witness"],
     }
     return [{"step":i+1,"action":name} for i,name in enumerate(plans.get(
         task,["identify unsupported problem; do not guess or fabricate an answer"]))]
