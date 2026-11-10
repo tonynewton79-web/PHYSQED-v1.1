@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - benchmark/independent-20261110
+      - benchmark/independent-fix-20261110
     paths:
       - 'research/physqed-v13-independent/**'
       - '.github/workflows/physqed-v13-independent.yml'
