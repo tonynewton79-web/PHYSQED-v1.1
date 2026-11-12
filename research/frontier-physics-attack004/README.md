@@ -50,7 +50,7 @@ From the repository root:
     python research/frontier-physics-attack004/attack004_fraction_replay.py
     python research/frontier-physics-attack004/attack004_flrw_numeric.py
 
-The analytic checks and four-dimensional tensor route share SymPy. The Fraction script replays exact rational local cases without SymPy; SciPy numerically integrates the **gradient-unstable** local bounce. Local corresponding calculations passed 12 November 2026. Hosted GitHub CI and inherited PHYSQED regressions remain **unverified**; GH release hold is unchanged. These are theoretical/numerical consistency tests, not observed gravitational-wave fits.
+The analytic checks and four-dimensional tensor route share SymPy. The Fraction script replays exact rational local cases without SymPy; SciPy numerically integrates the **gradient-unstable** local bounce. Local corresponding calculations passed 12 November 2026. The dedicated Attack 004 GitHub Actions run [43324325968](https://github.com/tonynewton79-web/PHYSQED-v1.1/actions/runs/43324325968) **passed all four checks** on commit 0cdd13e8622173944b890fe6861b670d5438478d (12 Nov 2026). The inherited full PHYSQED regression suite remains **unverified**; GH release hold is unchanged. These are theoretical/numerical consistency tests, not observed gravitational-wave fits.
 
 The minimal Einstein–Hilbert tensor sector has c_T=1, compatible with the GW170817 tensor-propagation bound, but this does not validate the new scalar. July 2026 LVK GWTC-5.0 tests found no departure from GR, so matching Schwarzschild at the background level produces no new discriminatory observation: https://ligo.org/science-summaries/o4b_tgr/.
 
