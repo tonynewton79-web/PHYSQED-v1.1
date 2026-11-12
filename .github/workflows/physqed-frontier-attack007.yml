@@ -1,0 +1,27 @@
+name: PHYSQED Frontier Attack007 Exact BVP
+on:
+  pull_request:
+    paths:
+      - "research/frontier-physics-attack007/**"
+      - ".github/workflows/physqed-frontier-attack007.yml"
+  workflow_dispatch:
+jobs:
+  banach-horizon-asymptotic-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Pin exact symbolic engine
+        run: python -m pip install "sympy==1.14.0"
+      - name: Direct exact radial normal-form equivalence
+        run: python research/frontier-physics-attack007/attack007_normal_form.py
+      - name: Fraction-only nonlinear mixed BVP existence and horizon certificate
+        run: python research/frontier-physics-attack007/attack007_bvp_certificate.py
+      - name: Independent symbolic-versus-interval Jacobian audit
+        run: python research/frontier-physics-attack007/attack007_jacobian_replay.py
+      - name: Exact epsilon-zero inverse and scope
+        run: python research/frontier-physics-attack007/attack007_linear_inverse.py
+      - name: Conditional asymptotic power-tail rigidity
+        run: python research/frontier-physics-attack007/attack007_asymptotics.py
