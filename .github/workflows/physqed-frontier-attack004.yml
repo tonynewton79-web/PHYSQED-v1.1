@@ -1,0 +1,25 @@
+name: PHYSQED Frontier Attack004 Research Controls
+on:
+  pull_request:
+    paths:
+      - "research/frontier-physics-attack004/**"
+      - ".github/workflows/physqed-frontier-attack004.yml"
+  workflow_dispatch:
+jobs:
+  scoped-exact-and-negative-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install research-only dependencies
+        run: python -m pip install "sympy==1.14.0" "numpy>=1.26" "scipy>=1.12"
+      - name: Exact coupled scalar and obstruction test
+        run: python research/frontier-physics-attack004/attack004_exact.py
+      - name: Four-dimensional tensor test
+        run: python research/frontier-physics-attack004/attack004_tensor.py
+      - name: Fraction independent arithmetic test
+        run: python research/frontier-physics-attack004/attack004_fraction_replay.py
+      - name: Numerical gradient-unstable FLRW control
+        run: python research/frontier-physics-attack004/attack004_flrw_numeric.py
