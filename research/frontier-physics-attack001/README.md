@@ -10,9 +10,10 @@ From the repository root with SymPy 1.14.0:
 python research/frontier-physics-attack001/frontier_filters.py
 python research/frontier-physics-attack001/full_tensor_check.py
 python research/frontier-physics-attack001/koide_check.py
+python research/frontier-physics-attack001/scalar_gauss_bonnet_probe.py
 ~~~
 
-The three local Python checks passed on 12 November 2026 in the authoring environment. GitHub Actions and all inherited PHYSQED tests have **not** been run for this branch; the existing generalized-harmonic (GH) release hold remains in force.
+The four local Python checks passed on 12 November 2026 in the authoring environment. GitHub Actions and all inherited PHYSQED tests have **not** been run for this branch; the existing generalized-harmonic (GH) release hold remains in force.
 
 ### 1. Vacuum-energy screening obstruction for a restricted f(R) theory
 
@@ -62,6 +63,22 @@ With m_e=0.51099895 MeV, m_mu=105.6583755 MeV, and PDG 2025-update m_tau=1776.93
     Q − 2/3 = −0.00000220325216649...
 
 Imposing Q=2/3 algebraically and using the electron and muon mass inputs gives m_tau=1776.969027... MeV, 0.03903 MeV above the reported central value. This comparison is a **consistency check of an empirical relation, not a derivation of the mass hierarchy or a prediction independent of fitted masses**. A genuine flavor proposal must specify a radiatively consistent Lagrangian or symmetry, conventions for pole/running masses, and an additional independent observable.
+
+
+### 5. Curvature-sensitive scalar--Gauss--Bonnet probe
+
+The *known* fixed-background shift-symmetric scalar--Gauss--Bonnet example has the scalar-sector Lagrangian −(1/2)(∇φ)²+ηφ𝒢, where 𝒢=Riemann²−4 Ricci²+R². Schwarzschild is Ricci-flat but 𝒢=48M²/r⁶ is nonzero. On the fixed Schwarzschild metric the static scalar equation is
+
+    (r² A φ')' = −48ηM²/r⁴,    A=1−2M/r.
+
+Integrating and selecting the integration constant that gives a finite derivative at r=2M returns the exact exterior profile
+
+    φ(r) = φ∞ + 2η/(Mr) + 2η/r² + 8ηM/(3r³).
+
+Its scalar equation residual is exactly zero. Unlike a Ricci-only f(R) modification, the scalar senses Schwarzschild's nonzero Riemann curvature and cannot remain constant when η≠0. However the fixed background remains Schwarzschild and the scalar itself diverges toward r=0. This **does not** resolve the central singularity; metric backreaction, global evolution and perturbative stability have not been solved. The existence of scalar hair in this model is established prior art, including Sotiriou & Zhou (2014).
+
+- Sotiriou & Zhou, *Black hole hair in generalized scalar-tensor gravity* (2014): https://doi.org/10.1103/PhysRevLett.112.251102
+- Sotiriou & Zhou, *Black hole hair in generalized scalar-tensor gravity: An explicit example* (2014): https://doi.org/10.1103/PhysRevD.90.124063
 
 ## Next admissible physics candidate
 
