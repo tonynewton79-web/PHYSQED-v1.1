@@ -17,5 +17,7 @@ jobs:
         run: python -m pip install "sympy==1.14.0"
       - name: Exact full spherical ADM variation and linear backreaction
         run: python research/frontier-physics-attack006/attack006_radial.py
+      - name: Independently verify Taylor-zero premises from nonlinear EL action
+        run: python research/frontier-physics-attack006/attack006_linearized_replay.py
       - name: Independent rational interval nonlinear residual certificate
         run: python research/frontier-physics-attack006/attack006_interval_certificate.py
