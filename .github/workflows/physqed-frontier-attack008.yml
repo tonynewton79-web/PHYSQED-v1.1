@@ -1,0 +1,25 @@
+name: PHYSQED Frontier Attack008 Exterior No-Go and WKB
+on:
+  pull_request:
+    paths:
+      - "research/frontier-physics-attack008/**"
+      - ".github/workflows/physqed-frontier-attack008.yml"
+  workflow_dispatch:
+jobs:
+  rigorous-exterior-and-local-principal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install exact and numerical diagnostics dependencies
+        run: python -m pip install "sympy==1.14.0" "numpy>=1.26" "scipy>=1.12"
+      - name: Exact on-shell exterior transport and mass-rigidity identities
+        run: python research/frontier-physics-attack008/attack008_exterior_rigidity.py
+      - name: Independent Fraction-only local high-k checks
+        run: python research/frontier-physics-attack008/attack008_local_wkb.py
+      - name: Frozen ADM scalar constraint Schur complement
+        run: python research/frontier-physics-attack008/attack008_frozen_adm.py
+      - name: Nonrigorous exterior diagnostic cross-solver control
+        run: python research/frontier-physics-attack008/attack008_outer_diagnostic.py

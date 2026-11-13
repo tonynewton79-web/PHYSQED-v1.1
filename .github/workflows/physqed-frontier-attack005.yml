@@ -1,0 +1,21 @@
+name: PHYSQED Frontier Attack005 Research Controls
+on:
+  pull_request:
+    paths:
+      - "research/frontier-physics-attack005/**"
+      - ".github/workflows/physqed-frontier-attack005.yml"
+  workflow_dispatch:
+jobs:
+  exact-eft-model-selection:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned symbolic dependency
+        run: python -m pip install "sympy==1.14.0"
+      - name: Exact quadratic mode, ADM and Schwarzschild obstruction checks
+        run: python research/frontier-physics-attack005/attack005_exact.py
+      - name: Fraction-only independent replay
+        run: python research/frontier-physics-attack005/attack005_fraction_replay.py
