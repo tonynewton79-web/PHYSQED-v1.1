@@ -1,0 +1,25 @@
+name: PHYSQED Frontier Attack011 Horizon Rigidity and Matching
+on:
+  pull_request:
+    paths:
+      - "research/frontier-physics-attack011/**"
+      - ".github/workflows/physqed-frontier-attack011.yml"
+  workflow_dispatch:
+jobs:
+  exact-structural-and-numerical-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install exact and numerical dependencies
+        run: python -m pip install "sympy==1.14.0" "numpy>=1.26" "scipy>=1.12"
+      - name: Exact horizon rigidity and regular-center obstruction
+        run: python research/frontier-physics-attack011/attack011_horizon_rigidity.py
+      - name: Fraction uniform infinite-domain Banach no-matching family
+        run: python research/frontier-physics-attack011/attack011_uniform_family.py
+      - name: Exact compact-support negative physical flat scalar test
+        run: python research/frontier-physics-attack011/attack011_spectral_witness.py
+      - name: Nonrigorous large amplitude shooting cross-check
+        run: python research/frontier-physics-attack011/attack011_large_C_shoot.py
