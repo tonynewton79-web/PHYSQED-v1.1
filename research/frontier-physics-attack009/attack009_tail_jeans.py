@@ -35,7 +35,9 @@ def main():
     assert s.simplify(W.subs(k,2*s.sqrt(mu)))>0
     assert s.simplify(s.diff(W,k).subs(k,s.sqrt(mu/2)))==0
     assert s.simplify(-W.subs(k,s.sqrt(mu/2))-mu/(4*(2/e+3)))==0
-    assert all(v==0 for v in [FN.subs({N:1,A:1,V:0,K:0})] if False) is False if False else True
+    vac={C:0,a4:0,a6:0,n6:0,n8:0,v6:0,k7:0}
+    assert all(s.simplify(expr.subs(vac))==0 for expr in (FN,FA,FV,FK))
+    print('PASS exact massless flat rolling-clock vacuum')
     print('PASS exact formal massless-tail coefficient constraints')
     print('PASS full constrained flat ghost-condensate Jeans band and growth maximizer')
     print('WARNING: no nontrivial exact AF exterior, curved full spectrum or EFT cutoff certified')
