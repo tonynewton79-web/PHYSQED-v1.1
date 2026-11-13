@@ -13,12 +13,11 @@ I,D=old.I,old.D
 
 def main():
     Cmax=Q(7,250);R=Q(1997,1000)
-    old.C=I(0,Cmax);old.R=R
-    C=old.C
+    C=I(0,Cmax)
     t=D(I(0,1/R))
     y=[D.var(I(-2,2),0),D.var(I(-2,2),1),
        D.var(I(Q(4,5),Q(6,5)),2),D.var(I(-2,2),3)]
-    F,G,J,N,T=old.scaled(t,*y)
+    F,G,J,N,T=old.sources(t,*y,C)
     ff,gg,jj=(z.v.mag() for z in (F,G,J))
     u_self=(ff+gg)/3;z_self=jj/5
     nt=N.v/T.v
