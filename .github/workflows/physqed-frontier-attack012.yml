@@ -1,0 +1,23 @@
+name: PHYSQED Frontier Attack012 Uniform Exterior Tail
+on:
+  pull_request:
+    paths:
+      - "research/frontier-physics-attack012/**"
+      - ".github/workflows/physqed-frontier-attack012.yml"
+  workflow_dispatch:
+jobs:
+  exact-infinity-manifold:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install exact symbolic dependency
+        run: python -m pip install "sympy==1.14.0"
+      - name: Exact all-amplitudes far-exterior rational Banach
+        run: python research/frontier-physics-attack012/attack012_all_amplitudes.py
+      - name: Exact uniform centered large-C infinity solution-distance proof
+        run: python research/frontier-physics-attack012/attack012_centered_tail.py
+      - name: Independent exact full radial-to-Green transformation
+        run: python research/frontier-physics-attack012/attack012_exact_replay.py
