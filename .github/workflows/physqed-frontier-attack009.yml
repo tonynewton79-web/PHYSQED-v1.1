@@ -1,0 +1,21 @@
+name: PHYSQED Frontier Attack009 Massless Sector
+on:
+  pull_request:
+    paths:
+      - "research/frontier-physics-attack009/**"
+      - ".github/workflows/physqed-frontier-attack009.yml"
+  workflow_dispatch:
+jobs:
+  exact-massless-and-jeans:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install exact symbolic dependency
+        run: python -m pip install "sympy==1.14.0"
+      - name: Exact massless vacuum, formal tail and flat Jeans
+        run: python research/frontier-physics-attack009/attack009_tail_jeans.py
+      - name: Fraction independent coefficient and growth replay
+        run: python research/frontier-physics-attack009/attack009_fraction_replay.py
