@@ -1,6 +1,28 @@
+# PHYSQED — Research Solver 2.0 Alpha
+
+**Current flagship research implementation · default branch: `main`**
+
+PHYSQED (Proof-Carrying Physics) is an evidence-first scientific research and verification platform. **Research Solver 2.0 Alpha is the current mainline research front end**, merged into `main` on 10 November 2026. It routes explicitly specified, bounded mathematical and physical problems to supported exact backends; derives and checks candidate results; searches for counterexamples, conserved quantities and finite quantum symmetries; and produces independently replayable, scope-labelled certificates.
+
+**Start with the current version:** [Research Solver 2.0 technical guide](research/physqed-research-solver-v20/README.md) · [Mainline solver code](projects/physqed/research_solver/) · [Dedicated research tests](projects/physqed/tests/test_research_solver_v20.py) · [2.0 Alpha merge](https://github.com/tonynewton79-web/PHYSQED-v1.1/pull/19).
+
+```bash
+python -m pip install sympy==1.14.0
+PYTHONPATH=projects/physqed python -m research_solver research/physqed-research-solver-v20/fixtures/exact_identity.json --output receipt.json
+python -m unittest discover -s projects/physqed/tests -p 'test_research_solver_v20.py' -v
+```
+
+**Release and evidence boundary:** 2.0 Alpha is research software, **not** a certified universal physics solver or an unrestricted theorem prover. Local or hosted test success is not proof of global physical results or experimental validity. The v1.2 generalized-harmonic Einstein well-posedness proof/release holds remain in force. Unsupported questions and claims must be explicitly refused or held.
+
+**Version map:** **2.0 Alpha** = current mainline research solver; **v1.2** = integrated experimental physics backends with explicitly documented release restrictions; **v1.1 and earlier** = retained historical verification components and papers. The separate [PHYSQED-Q](https://github.com/tonynewton79-web/PHYSQED-Q) repository contains the bounded quantum-circuit compiler and workbench.
+
+---
+
 **Copyright © 2026 Tony Newton.** See [copyright notice](COPYRIGHT.md).
 
-## Associated research paper and citation
+## Historical research paper and citation (v1.1)
+
+**Citation scope:** The associated paper below documents earlier restricted exact-certificate work. Its DOI is **not** a Research Solver 2.0 Alpha software-release DOI.
 
 [![PHYSQED paper DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23837777.svg)](https://doi.org/10.5281/zenodo.23837777)
 
@@ -17,7 +39,7 @@ repository is enabled in Zenodo and a new release is archived.
 See [`CITATION.cff`](CITATION.cff) for machine-readable citation metadata.
 
 ---
-## PHYSQED Research Solver 2.0 Alpha — bounded multidisciplinary research
+## Research Solver 2.0 Alpha — bounded multidisciplinary research (technical scope)
 
 **Integrated research front end (not a certified universal physics solver).**
 The new typed solver records explicit provenance, assumptions, units and coordinate scope;
