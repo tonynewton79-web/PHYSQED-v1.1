@@ -1,0 +1,33 @@
+name: PHYSQED 3D momentum and causal radiation structural research gate
+
+on:
+  push:
+    paths:
+      - "projects/physqed/research/physqed_3d_exact_structural_gate.py"
+      - ".github/workflows/physqed-inflaton-3d-structural.yml"
+  pull_request:
+    paths:
+      - "projects/physqed/research/physqed_3d_exact_structural_gate.py"
+      - ".github/workflows/physqed-inflaton-3d-structural.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-3d-structure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned exact algebra package
+        run: python -m pip install sympy==1.14.0
+      - name: Exact noncurlfree momentum vector-potential and six-stream causal gates
+        run: python projects/physqed/research/physqed_3d_exact_structural_gate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: physqed-3d-exact-structural-receipt
+          path: physqed_3d_exact_structural_receipt.json

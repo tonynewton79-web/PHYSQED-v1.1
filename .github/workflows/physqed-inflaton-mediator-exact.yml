@@ -1,0 +1,30 @@
+name: PHYSQED dynamical mediator exact research gate
+on:
+  push:
+    paths:
+      - "projects/physqed/research/inflaton_mediator_exact_gate.py"
+      - ".github/workflows/physqed-inflaton-mediator-exact.yml"
+  pull_request:
+    paths:
+      - "projects/physqed/research/inflaton_mediator_exact_gate.py"
+      - ".github/workflows/physqed-inflaton-mediator-exact.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mediator-exact-structure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned symbolic backend
+        run: python -m pip install sympy==1.14.0
+      - name: Exact three-scalar completion, six-stream source and refusal gates
+        run: python projects/physqed/research/inflaton_mediator_exact_gate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inflaton-mediator-exact-scoped-certificate
+          path: inflaton_mediator_exact_receipt.json
